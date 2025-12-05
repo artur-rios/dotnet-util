@@ -32,7 +32,7 @@ jobs:
           TAG_NAME="${GITHUB_REF##*/}"
           # Strip optional leading 'v' from tag, e.g., v1.2.3 -> 1.2.3
           TAG_VERSION="${TAG_NAME#v}"
-          CS_PROJ_VERSION=$(grep -oP '<Version>\K[^<]+' src/ArturRios.Output.csproj)
+          CS_PROJ_VERSION=$(grep -oP '<Version>\K[^<]+' src/ArturRios.Util.csproj)
           echo "Tag version: $TAG_VERSION"
           echo "csproj version: $CS_PROJ_VERSION"
           if [ "$TAG_VERSION" != "$CS_PROJ_VERSION" ]; then
