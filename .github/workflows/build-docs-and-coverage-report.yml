@@ -41,7 +41,7 @@ jobs:
           set -e
           cd docs
 
-          # Preserve any existing generated site so we can fall back if Hugo fails
+          # Preserve any existing generated site so we can inspect it later if needed
           if [ -d public ]; then
             echo "Preserving existing docs/public to /tmp/preserved_public"
             rm -rf /tmp/preserved_public || true
@@ -49,24 +49,19 @@ jobs:
             rsync -a public/ /tmp/preserved_public/ || true
           fi
 
-          # Remove previous output directories (we will restore from preserved copy on failure)
+          # Remove previous output directories (we will not auto-restore on failure)
           rm -rf publish public || true
 
           echo "Running hugo --verbose --debug (HUGO_ENV=$HUGO_ENV)"
-          # Run Hugo; on failure, try to restore the preserved public copy if present
-          if ! hugo --verbose --debug; then
+          # Run Hugo; on failure, dump diagnostics and exit non-zero so the workflow fails visibly
+          if ! hugo --minify --baseURL "https://artur-rios.github.io/dotnet-util/" --environment production --verbose --debug; then
             HUGO_EXIT=$?
             echo "Hugo exited with code $HUGO_EXIT"
-            if [ -d /tmp/preserved_public ]; then
-              echo "Restoring preserved docs/public because Hugo failed to produce output"
-              mkdir -p public
-              rsync -a /tmp/preserved_public/ public/
-            else
-              echo "No preserved docs/public available to restore"
-              echo "Contents of docs after failed hugo:"
-              find . -maxdepth 3 -type f -print || true
-              exit $HUGO_EXIT
-            fi
+            echo "=== diagnostics: list of files under docs (depth 4) ==="
+            find . -maxdepth 4 -type f -print || true
+            echo "=== end diagnostics ==="
+            echo "You may inspect /tmp/preserved_public in the runner workspace for the previously preserved generated site."
+            exit $HUGO_EXIT
           fi
 
           echo "Built site directories (post-build):"

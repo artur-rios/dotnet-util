@@ -1,4 +1,5 @@
 baseURL = 'https://artur-rios.github.io/dotnet-util/'
+canonifyURLs = true
 languageCode = 'en-us'
 title = 'Dotnet Output'
 theme = 'hugo-theme-re-terminal'
@@ -19,4 +20,3 @@ theme = 'hugo-theme-re-terminal'
     identifier = "test-coverage"
     name = "Test Coverage"
     url = "https://artur-rios.github.io/dotnet-util/coverage-report"
-
