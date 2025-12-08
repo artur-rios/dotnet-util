@@ -4,8 +4,13 @@ languageCode = 'en-us'
 title = 'Dotnet Output'
 theme = 'hugo-theme-re-terminal'
 
+[module]
+  [[module.mounts]]
+      source = 'coverage-report'
+      target = 'static/coverage-report'
+
 [params.logo]
-    logoText = 'Dotnet Output'
+  logoText = 'Dotnet Output'
 
 [menu]
   [[menu.main]]
