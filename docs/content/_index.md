@@ -1,3 +1,7 @@
++++
+title = 'Dotnet Util'
++++
+
 # Dotnet Util
 
 Utilities for common development tasks in .NET: flow control (conditions, retries and waiters), hashing (Argon2id), file I/O helpers, random values and strings, regex helpers, and small collections.
@@ -10,6 +14,7 @@ Utilities for common development tasks in .NET: flow control (conditions, retrie
     - dotnet CLI: `dotnet add package ArturRios.Util`
     - Or reference locally:
       - Add a project reference to `src/ArturRios.Util.csproj` in your `.csproj`:
+
         ```xml
         <ItemGroup>
           <ProjectReference Include="..\src\ArturRios.Util.csproj" />
@@ -23,6 +28,7 @@ Utilities for common development tasks in .NET: flow control (conditions, retrie
   - Character pools: `Characters.Digits + Characters.UpperLetters`
 - FlowControl
   - Condition:
+
     ```csharp
     using ArturRios.Util.FlowControl;
     Condition.Create
@@ -30,13 +36,17 @@ Utilities for common development tasks in .NET: flow control (conditions, retrie
       .True(emailValid).FailsWith("Invalid email")
       .ThrowIfNotSatisfied();
     ```
+
   - Retry:
+
     ```csharp
     using ArturRios.Util.FlowControl;
     Retry.New.MaxAttempts(3).DelayMilliseconds(200).Execute(() => DoFragileWork());
     var result = Retry.New.MaxAttempts(5).Execute(() => Compute());
     ```
+
   - Jittered waiter:
+
     ```csharp
     using ArturRios.Util.FlowControl.Waiter;
     var waiter = new JitteredWaiter(maxRetryCount: 5);
@@ -46,13 +56,17 @@ Utilities for common development tasks in .NET: flow control (conditions, retrie
         catch { await waiter.Wait(); }
     }
     ```
+
 - Hashing (Argon2id)
+
   ```csharp
   using ArturRios.Util.Hashing;
   var hash = Hash.EncodeWithRandomSalt("secret", out var salt);
   var ok = Hash.TextMatches("secret", hash, salt);
   ```
+
 - IO
+
   ```csharp
   using ArturRios.Util.IO;
   var text = FileReader.Read(path);
@@ -61,14 +75,18 @@ Utilities for common development tasks in .NET: flow control (conditions, retrie
   var obj = FileReader.ReadAndDeserialize<MyType>(jsonPath);
   // Async variants available on FileReaderAsync
   ```
+
 - Random
+
   ```csharp
   using ArturRios.Util.Random;
   var n1 = CustomRandom.NumberFromRng(1, 10);
   var n2 = CustomRandom.NumberFromSystemRandom(0, 100, differentFrom: 42);
   var pwd = CustomRandom.Text(new RandomStringOptions { Length = 16, IncludeSpecialCharacters = true });
   ```
+
 - RegularExpressions
+
   ```csharp
   using ArturRios.Util.RegularExpressions;
   var isEmail = RegexCollection.Email().IsMatch("john@doe.com");
@@ -91,10 +109,12 @@ Utilities for common development tasks in .NET: flow control (conditions, retrie
 ## Collections
 
 Features:
+
 - `AnsiColors`: constants for console foreground colors via ANSI escape codes.
 - `Characters`: constants for digits, lower/upper letters, special characters, and union `All`.
 
 Mermaid class diagram:
+
 ```mermaid
 classDiagram
     namespace Collections {
@@ -125,12 +145,14 @@ classDiagram
 ## FlowControl
 
 Features:
+
 - `Condition`: fluent condition aggregator with failure messages; can throw or convert to process output.
 - `Retry`: simple retry utility with max attempts and fixed delay; supports `Action` and `Func<T>`.
 - `Waiter/JitteredWaiter`: exponential backoff with jitter; guards with `CanRetry` and throws `MaxRetriesReachedException` when exceeded.
 - `Waiter/MaxRetriesReachedException`: custom exception for retry exhaustion.
 
 Mermaid class diagram:
+
 ```mermaid
 classDiagram
     namespace FlowControl {
@@ -178,10 +200,12 @@ classDiagram
 ## Hashing
 
 Features:
+
 - `Hash`: Argon2id helpers to encode with provided or random salt, and verify matches.
 - `HashConfiguration`: configurable cost parameters: degree of parallelism, iterations, memory in KB.
 
 Mermaid class diagram:
+
 ```mermaid
 classDiagram
     namespace Hashing {
@@ -210,10 +234,12 @@ classDiagram
 ## IO
 
 Features:
+
 - `FileReader` (sync): read text, lines, CSV-like to dictionary, JSON to object.
 - `FileReaderAsync` (async): same operations asynchronously.
 
 Mermaid class diagram:
+
 ```mermaid
 classDiagram
     namespace IO {
@@ -239,10 +265,12 @@ classDiagram
 ## Random
 
 Features:
+
 - `CustomRandom`: random integers via RNG or System.Random, and constrained random strings.
 - `RandomStringOptions`: options for length and inclusion of lowercase, uppercase, digits, and special characters.
 
 Mermaid class diagram:
+
 ```mermaid
 classDiagram
     namespace Random {
@@ -267,11 +295,13 @@ classDiagram
 ## RegularExpressions
 
 Features:
+
 - `RegexCollection`: common patterns with source-generated compiled regex methods.
   - Email, has number, has lower, has upper, has number+lower+upper.
 - `RegexExtensions`: convenience extension to remove all matches via `Regex.Remove`.
 
 Mermaid class diagram:
+
 ```mermaid
 classDiagram
     namespace RegularExpressions {
@@ -304,6 +334,6 @@ classDiagram
 
 ## Legal Details
 
-This project is licensed under the [MIT License](https://en.wikipedia.org/wiki/MIT_License). A copy of the license is available at [LICENSE](./LICENSE) in the repository.
+This project is licensed under the [MIT License](https://en.wikipedia.org/wiki/MIT_License). A copy of the license is available at [LICENSE](https://github.com/artur-rios/dotnet-util/blob/main/LICENSE).
 
 ---
