@@ -17,6 +17,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ArturRios.Output" Version="1.0.1"/>
