@@ -209,7 +209,7 @@ public class FileReaderTests
     [Fact]
     public void Should_ReadAndDeserialize_ReturnTypedObject()
     {
-        var obj = new Person("Alice", 30);
+        var obj = new Person { Name = "Alice", Age = 30, Home = new Address { Street = "Main", Number = 100 } };
         var json = JsonSerializer.Serialize(obj);
         var path = FileTestHelper.CreateTempFile(json);
 
@@ -220,6 +220,8 @@ public class FileReaderTests
             Assert.NotNull(result);
             Assert.Equal("Alice", result.Name);
             Assert.Equal(30, result.Age);
+            Assert.Equal("Main", result.Home.Street);
+            Assert.Equal(100, result.Home.Number);
         }
         finally
         {

@@ -1,3 +1,8 @@
 ﻿namespace ArturRios.Util.Tests.Setup;
 
-public record Person(string Name, int Age);
+public class Person
+{
+    public string Name { get; set; } = string.Empty;
+    public int Age { get; set; }
+    public Address Home { get; set; } = new();
+}
