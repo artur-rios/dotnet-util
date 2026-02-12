@@ -46,7 +46,7 @@ public class RegexCollectionTests
 
     [Theory]
     [MemberData(nameof(ValidEmails))]
-    public void Should_MatchValidEmails(string email)
+    public void GivenValidEmails_WhenEmailRegex_ThenMatch(string email)
     {
         var result = RegexCollection.Email().IsMatch(email);
 
@@ -56,7 +56,7 @@ public class RegexCollectionTests
 
     [Theory]
     [MemberData(nameof(InvalidEmails))]
-    public void ShouldNot_MatchInvalidEmails(string email)
+    public void GivenInvalidEmails_WhenEmailRegex_ThenNotMatch(string email)
     {
         var result = RegexCollection.Email().IsMatch(email);
 
@@ -66,7 +66,7 @@ public class RegexCollectionTests
     [Theory]
     [InlineData("")]
     [InlineData(" ")]
-    public void ShouldNot_MatchEmptyOrWhiteSpaceEmails(string email)
+    public void GivenEmptyOrWhiteSpaceEmails_WhenEmailRegex_ThenNotMatch(string email)
     {
         var result = RegexCollection.Email().IsMatch(email);
 
@@ -74,7 +74,7 @@ public class RegexCollectionTests
     }
 
     [Fact]
-    public void Should_MatchStringWithNumber()
+    public void GivenStringWithNumber_WhenHasNumberRegex_ThenMatch()
     {
         var result = RegexCollection.HasNumber().IsMatch("ABC123");
 
@@ -82,7 +82,7 @@ public class RegexCollectionTests
     }
 
     [Fact]
-    public void ShouldNot_MatchStringWithNoNumber()
+    public void GivenStringWithNoNumber_WhenHasNumberRegex_ThenNotMatch()
     {
         var result = RegexCollection.HasNumber().IsMatch("ABC");
 
@@ -90,7 +90,7 @@ public class RegexCollectionTests
     }
 
     [Fact]
-    public void Should_Match_StringWithLowerChar()
+    public void GivenStringWithLowerChar_WhenHasLowerCharRegex_ThenMatch()
     {
         var result = RegexCollection.HasLowerChar().IsMatch("ABCabc");
 
@@ -98,7 +98,7 @@ public class RegexCollectionTests
     }
 
     [Fact]
-    public void ShouldNot_MatchStringWithNoLowerChar()
+    public void GivenStringWithNoLowerChar_WhenHasLowerCharRegex_ThenNotMatch()
     {
         var result = RegexCollection.HasLowerChar().IsMatch("ABC");
 
@@ -106,7 +106,7 @@ public class RegexCollectionTests
     }
 
     [Fact]
-    public void Should_MatchStringWithUpperChar()
+    public void GivenStringWithUpperChar_WhenHasUpperCharRegex_ThenMatch()
     {
         var result = RegexCollection.HasUpperChar().IsMatch("abcABC");
 
@@ -114,7 +114,7 @@ public class RegexCollectionTests
     }
 
     [Fact]
-    public void ShouldNot_MatchStringWithNoUpperChar()
+    public void GivenStringWithNoUpperChar_WhenHasUpperCharRegex_ThenNotMatch()
     {
         var result = RegexCollection.HasUpperChar().IsMatch("abc");
 
@@ -122,7 +122,7 @@ public class RegexCollectionTests
     }
 
     [Fact]
-    public void Should_MatchStringWithNumberLowerAndUpperChar()
+    public void GivenStringWithNumberLowerAndUpperChar_WhenCompositeRegex_ThenMatch()
     {
         var result = RegexCollection.HasNumberLowerAndUpperChar().IsMatch("abcABC123");
 
@@ -135,7 +135,7 @@ public class RegexCollectionTests
     [InlineData("ABCabc")]
     [InlineData("abc123")]
     [InlineData("ABC123")]
-    public void ShouldNot_Match_StringWithNoNumberLowerAndUpperChar(string @string)
+    public void GivenStringWithoutNumberLowerAndUpperChar_WhenCompositeRegex_ThenNotMatch(string @string)
     {
         var result = RegexCollection.HasNumberLowerAndUpperChar().IsMatch(@string);
 

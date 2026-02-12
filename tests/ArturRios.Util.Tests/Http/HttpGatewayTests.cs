@@ -19,7 +19,7 @@ public class HttpGatewayTests
     public record SampleDto(string Message, int Value);
 
     [Fact]
-    public async Task Should_ReturnDeserializedBodyAndStatus()
+    public async Task GivenGetRequest_WhenReceivingJsonResponse_ThenReturnDeserializedBodyAndStatus()
     {
         const string bodyJson = "{\"Message\":\"hello\",\"Value\":42}";
 
@@ -39,7 +39,7 @@ public class HttpGatewayTests
     }
 
     [Fact]
-    public async Task Should_SendJsonPayloadAndDeserializeResponse()
+    public async Task GivenPostRequest_WhenSendingJsonPayload_ThenDeserializeResponseAndCaptureRequestBody()
     {
         string? capturedRequestBody = null;
 
@@ -66,7 +66,7 @@ public class HttpGatewayTests
     }
 
     [Fact]
-    public async Task Should_HandleNullPayload()
+    public async Task GivenPatchRequest_WhenPayloadIsNull_ThenHandleNullPayload()
     {
         var client = CreateClient(_ => new HttpResponseMessage(HttpStatusCode.NoContent)
         {
@@ -82,7 +82,7 @@ public class HttpGatewayTests
     }
 
     [Fact]
-    public async Task Should_SendPayload()
+    public async Task GivenPutRequest_WhenSendingPayload_ThenCaptureRequestBodyAndReturnResponse()
     {
         string? capturedRequestBody = null;
 
@@ -105,7 +105,7 @@ public class HttpGatewayTests
     }
 
     [Fact]
-    public async Task Should_ReturnStatusAndBody()
+    public async Task GivenDeleteRequest_WhenReceivingJsonResponse_ThenReturnStatusAndBody()
     {
         var client = CreateClient(_ => new HttpResponseMessage(HttpStatusCode.OK)
         {

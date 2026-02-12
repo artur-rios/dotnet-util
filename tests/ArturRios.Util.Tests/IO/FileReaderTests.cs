@@ -7,7 +7,7 @@ namespace ArturRios.Util.Tests.IO;
 public class FileReaderTests
 {
     [Fact]
-    public void Should_ReturnFileContent()
+    public void GivenValidPath_WhenRead_ThenReturnFileContent()
     {
         var path = FileTestHelper.CreateTempFile("Hello World");
 
@@ -31,7 +31,7 @@ public class FileReaderTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData(" ")]
-    public void Should_ThrowArgumentException_WhenPathIsNullOrWhitespace(string? path)
+    public void GivenNullOrWhitespacePath_WhenRead_ThenThrowArgumentException(string? path)
     {
         var exception = Assert.Throws<ArgumentException>(() => FileReader.Read(path!));
 
@@ -40,7 +40,7 @@ public class FileReaderTests
     }
 
     [Fact]
-    public void Should_ThrowFileNotFoundException_WhenFileDoesNotExist()
+    public void GivenMissingFile_WhenRead_ThenThrowFileNotFoundException()
     {
         var missingPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".missing");
 
@@ -50,7 +50,7 @@ public class FileReaderTests
     }
 
     [Fact]
-    public void Should_ReturnAllLines()
+    public void GivenValidPath_WhenReadLines_ThenReturnAllLines()
     {
         var path = FileTestHelper.CreateTempFile("line1\nline2\nline3");
 
@@ -73,7 +73,7 @@ public class FileReaderTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData(" ")]
-    public void Should_ThrowArgumentExceptionOnReadLines_WhenPathIsNullOrWhitespace(string? path)
+    public void GivenNullOrWhitespacePath_WhenReadLines_ThenThrowArgumentException(string? path)
     {
         var exception = Assert.Throws<ArgumentException>(() => FileReader.ReadLines(path!));
 
@@ -82,7 +82,7 @@ public class FileReaderTests
     }
 
     [Fact]
-    public void Should_ThrowFileNotFoundExceptionOnReadLines_WhenFileDoesNotExist()
+    public void GivenMissingFile_WhenReadLines_ThenThrowFileNotFoundException()
     {
         var missingPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".missing");
 
@@ -92,7 +92,7 @@ public class FileReaderTests
     }
 
     [Fact]
-    public void Should_ReadAsDictionary()
+    public void GivenValidCsv_WhenReadAsDictionary_ThenReturnDictionary()
     {
         var content = string.Join('\n', "Key1,Key2,Key3", "A,B,C", "D,E,F");
 
@@ -118,7 +118,7 @@ public class FileReaderTests
     }
 
     [Fact]
-    public void Should_HandleMissingValuesInLaterLines()
+    public void GivenMissingValuesInLaterLines_WhenReadAsDictionary_ThenHandleMissingValues()
     {
         var content = string.Join('\n', "Key1,Key2,Key3", "A,B,C", "Z");
 
@@ -142,7 +142,7 @@ public class FileReaderTests
     }
 
     [Fact]
-    public void Should_IgnoreExtraValuesBeyondHeaders()
+    public void GivenExtraValuesBeyondHeaders_WhenReadAsDictionary_ThenIgnoreExtras()
     {
         var content = string.Join('\n', "Key1,Key2", "1,2,3", "4,5,6");
 
@@ -165,7 +165,7 @@ public class FileReaderTests
     }
 
     [Fact]
-    public void Should_ThrowExceptionWhenFileHasLessThanTwoLines()
+    public void GivenFileWithOnlyHeader_WhenReadAsDictionary_ThenThrowException()
     {
         var path = FileTestHelper.CreateTempFile("Header1,Header2,Header3");
 
@@ -188,7 +188,7 @@ public class FileReaderTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData(" ")]
-    public void Should_ThrowArgumentExceptionOnReadAsDictionary_WhenPathIsNullOrWhitespace(string? path)
+    public void GivenNullOrWhitespacePath_WhenReadAsDictionary_ThenThrowArgumentException(string? path)
     {
         var exception = Assert.Throws<ArgumentException>(() => FileReader.ReadAsDictionary(path!, ','));
 
@@ -196,7 +196,7 @@ public class FileReaderTests
     }
 
     [Fact]
-    public void Should_ThrowFileNotFoundExceptionOnReadAsDictionary_WhenFileDoesNotExist()
+    public void GivenMissingFile_WhenReadAsDictionary_ThenThrowFileNotFoundException()
     {
         var missingPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".missing");
 
@@ -207,7 +207,7 @@ public class FileReaderTests
 
 
     [Fact]
-    public void Should_ReadAndDeserialize_ReturnTypedObject()
+    public void GivenValidJsonFile_WhenReadAndDeserialize_ThenReturnTypedObject()
     {
         var obj = new Person { Name = "Alice", Age = 30, Home = new Address { Street = "Main", Number = 100 } };
         var json = JsonSerializer.Serialize(obj);
@@ -236,7 +236,7 @@ public class FileReaderTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData(" ")]
-    public void Should_ReadAndDeserialize_ThrowArgumentException_WhenPathIsNullOrWhitespace(string? path)
+    public void GivenNullOrWhitespacePath_WhenReadAndDeserialize_ThenThrowArgumentException(string? path)
     {
         var exception = Assert.Throws<ArgumentException>(() => FileReader.ReadAndDeserialize<Person>(path!));
 
@@ -244,7 +244,7 @@ public class FileReaderTests
     }
 
     [Fact]
-    public void Should_ReadAndDeserialize_ThrowFileNotFoundException_WhenFileDoesNotExist()
+    public void GivenMissingFile_WhenReadAndDeserialize_ThenThrowFileNotFoundException()
     {
         var missingPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".missing");
 
@@ -254,7 +254,7 @@ public class FileReaderTests
     }
 
     [Fact]
-    public void Should_ReadAndDeserialize_ThrowJsonException_ForInvalidJson()
+    public void GivenInvalidJsonFile_WhenReadAndDeserialize_ThenThrowJsonException()
     {
         var path = FileTestHelper.CreateTempFile("{ invalid json }");
 

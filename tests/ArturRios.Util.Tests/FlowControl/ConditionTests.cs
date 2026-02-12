@@ -5,7 +5,7 @@ namespace ArturRios.Util.Tests.FlowControl;
 public class ConditionTests
 {
     [Fact]
-    public void Should_Succeed()
+    public void GivenTrueCondition_WhenToProcessOutput_ThenSucceed()
     {
         var output = Condition.Create.True(true).FailsWith("Condition should be true").ToProcessOutput();
 
@@ -13,7 +13,7 @@ public class ConditionTests
     }
 
     [Fact]
-    public void Should_Succeed_When_ThereAreMultipleTrueExpressions()
+    public void GivenMultipleTrueExpressions_WhenToProcessOutput_ThenSucceed()
     {
         var output = Condition.Create
             .True(true).FailsWith("Condition 1 should be true")
@@ -24,7 +24,7 @@ public class ConditionTests
     }
 
     [Fact]
-    public void ShouldNot_Succeed()
+    public void GivenFalseCondition_WhenToProcessOutput_ThenNotSucceed()
     {
         var output = Condition.Create.True(false).FailsWith("Condition should be true").ToProcessOutput();
 
@@ -32,7 +32,7 @@ public class ConditionTests
     }
 
     [Fact]
-    public void ShouldNot_Succeed_When_OneExpressionIsFalse()
+    public void GivenMixedExpressions_WhenToProcessOutput_ThenNotSucceedAndReturnFirstError()
     {
         var output = Condition.Create
             .True(true).FailsWith("Condition 1 should be true")

@@ -7,7 +7,7 @@ namespace ArturRios.Util.Tests.IO;
 public class FileReaderAsyncTests
 {
     [Fact]
-    public async Task Should_ReturnFileContent()
+    public async Task GivenValidPath_WhenReadAsync_ThenReturnFileContent()
     {
         var path = FileTestHelper.CreateTempFile("Hello World");
 
@@ -31,7 +31,7 @@ public class FileReaderAsyncTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData(" ")]
-    public async Task Should_ThrowArgumentException_WhenPathIsNullOrWhitespace(string? path)
+    public async Task GivenNullOrWhitespacePath_WhenReadAsync_ThenThrowArgumentException(string? path)
     {
         var exception = await Assert.ThrowsAsync<ArgumentException>(() => FileReaderAsync.ReadAsync(path!));
 
@@ -40,7 +40,7 @@ public class FileReaderAsyncTests
     }
 
     [Fact]
-    public async Task Should_ThrowFileNotFoundException_WhenFileDoesNotExist()
+    public async Task GivenMissingFile_WhenReadAsync_ThenThrowFileNotFoundException()
     {
         var missingPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".missing");
 
@@ -50,7 +50,7 @@ public class FileReaderAsyncTests
     }
 
     [Fact]
-    public async Task Should_ReturnAllLines()
+    public async Task GivenValidPath_WhenReadLinesAsync_ThenReturnAllLines()
     {
         var path = FileTestHelper.CreateTempFile("line1\nline2\nline3");
 
@@ -73,7 +73,7 @@ public class FileReaderAsyncTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData(" ")]
-    public async Task Should_ThrowArgumentExceptionOnReadLines_WhenPathIsNullOrWhitespace(string? path)
+    public async Task GivenNullOrWhitespacePath_WhenReadLinesAsync_ThenThrowArgumentException(string? path)
     {
         var exception = await Assert.ThrowsAsync<ArgumentException>(() => FileReaderAsync.ReadLinesAsync(path!));
 
@@ -82,7 +82,7 @@ public class FileReaderAsyncTests
     }
 
     [Fact]
-    public async Task Should_ThrowFileNotFoundExceptionOnReadLines_WhenFileDoesNotExist()
+    public async Task GivenMissingFile_WhenReadLinesAsync_ThenThrowFileNotFoundException()
     {
         var missingPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".missing");
 
@@ -93,7 +93,7 @@ public class FileReaderAsyncTests
     }
 
     [Fact]
-    public async Task Should_ReadAsDictionary()
+    public async Task GivenValidCsv_WhenReadAsDictionaryAsync_ThenReturnDictionary()
     {
         var content = string.Join('\n', "Key1,Key2,Key3", "A,B,C", "D,E,F");
 
@@ -119,7 +119,7 @@ public class FileReaderAsyncTests
     }
 
     [Fact]
-    public async Task Should_HandleMissingValuesInLaterLines()
+    public async Task GivenMissingValuesInLaterLines_WhenReadAsDictionaryAsync_ThenHandleMissingValues()
     {
         var content = string.Join('\n', "Key1,Key2,Key3", "A,B,C", "Z");
 
@@ -143,7 +143,7 @@ public class FileReaderAsyncTests
     }
 
     [Fact]
-    public async Task Should_IgnoreExtraValuesBeyondHeaders()
+    public async Task GivenExtraValuesBeyondHeaders_WhenReadAsDictionaryAsync_ThenIgnoreExtras()
     {
         var content = string.Join('\n', "Key1,Key2", "1,2,3", "4,5,6");
 
@@ -166,7 +166,7 @@ public class FileReaderAsyncTests
     }
 
     [Fact]
-    public async Task Should_ThrowExceptionWhenFileHasLessThanTwoLines()
+    public async Task GivenFileWithOnlyHeader_WhenReadAsDictionaryAsync_ThenThrowException()
     {
         var path = FileTestHelper.CreateTempFile("Header1,Header2,Header3");
 
@@ -191,7 +191,7 @@ public class FileReaderAsyncTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData(" ")]
-    public async Task Should_ThrowArgumentExceptionOnReadAsDictionary_WhenPathIsNullOrWhitespace(string? path)
+    public async Task GivenNullOrWhitespacePath_WhenReadAsDictionaryAsync_ThenThrowArgumentException(string? path)
     {
         var exception =
             await Assert.ThrowsAsync<ArgumentException>(() => FileReaderAsync.ReadAsDictionaryAsync(path!, ','));
@@ -200,7 +200,7 @@ public class FileReaderAsyncTests
     }
 
     [Fact]
-    public async Task Should_ThrowFileNotFoundExceptionOnReadAsDictionary_WhenFileDoesNotExist()
+    public async Task GivenMissingFile_WhenReadAsDictionaryAsync_ThenThrowFileNotFoundException()
     {
         var missingPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".missing");
 
@@ -212,7 +212,7 @@ public class FileReaderAsyncTests
     }
 
     [Fact]
-    public async Task Should_ReadAndDeserialize_ReturnTypedObject()
+    public async Task GivenValidJsonFile_WhenReadAndDeserializeAsync_ThenReturnTypedObject()
     {
         var obj = new Person { Name = "Alice", Age = 30, Home = new Address { Street = "Main", Number = 100 } };
         var json = JsonSerializer.Serialize(obj);
@@ -241,7 +241,7 @@ public class FileReaderAsyncTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData(" ")]
-    public async Task Should_ReadAndDeserialize_ThrowArgumentException_WhenPathIsNullOrWhitespace(string? path)
+    public async Task GivenNullOrWhitespacePath_WhenReadAndDeserializeAsync_ThenThrowArgumentException(string? path)
     {
         var exception =
             await Assert.ThrowsAsync<ArgumentException>(() => FileReaderAsync.ReadAndDeserializeAsync<Person>(path!));
@@ -250,7 +250,7 @@ public class FileReaderAsyncTests
     }
 
     [Fact]
-    public async Task Should_ReadAndDeserialize_ThrowFileNotFoundException_WhenFileDoesNotExist()
+    public async Task GivenMissingFile_WhenReadAndDeserializeAsync_ThenThrowFileNotFoundException()
     {
         var missingPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".missing");
 
@@ -262,7 +262,7 @@ public class FileReaderAsyncTests
     }
 
     [Fact]
-    public async Task Should_ReadAndDeserialize_ThrowJsonException_ForInvalidJson()
+    public async Task GivenInvalidJsonFile_WhenReadAndDeserializeAsync_ThenThrowJsonException()
     {
         var path = FileTestHelper.CreateTempFile("{ invalid json }");
 

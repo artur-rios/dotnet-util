@@ -7,7 +7,7 @@ namespace ArturRios.Util.Tests.Http;
 public class HttpOutputTests
 {
     [Fact]
-    public async Task Should_DeserializeJsonIntoBody()
+    public async Task GivenJsonResponse_WhenReadContent_ThenDeserializeIntoBody()
     {
         const string json = "{\"name\":\"john\",\"age\":30}";
 
@@ -27,7 +27,7 @@ public class HttpOutputTests
     }
 
     [Fact]
-    public async Task Should_HandleInvalidJsonByReturningDefault()
+    public async Task GivenInvalidJsonResponse_WhenReadContent_ThenReturnDefault()
     {
         var response = new HttpResponseMessage(HttpStatusCode.OK)
         {

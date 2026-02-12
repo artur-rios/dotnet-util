@@ -7,7 +7,7 @@ namespace ArturRios.Util.Tests.Http;
 public class HttpExtensionsTests
 {
     [Fact]
-    public async Task Should_CreateValidJsonStringContent()
+    public async Task GivenObject_WhenToJsonStringContent_ThenCreateValidJsonStringContent()
     {
         var person = new Person { Name = "Alice", Age = 30, Home = new Address { Street = "Main", Number = 100 } };
 

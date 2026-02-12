@@ -6,7 +6,7 @@ using ArturRios.Util.Collections;
 public class CustomRandomTests
 {
     [Fact]
-    public void Should_ReturnValueWithinRange()
+    public void GivenRngRange_WhenNumberFromRng_ThenReturnValueWithinRange()
     {
         const int start = 5;
         const int end = 10;
@@ -17,7 +17,7 @@ public class CustomRandomTests
     }
 
     [Fact]
-    public void Should_ReturnDifferentValueFromExcluded()
+    public void GivenRngRangeWithExcluded_WhenNumberFromRng_ThenReturnDifferentValueFromExcluded()
     {
         const int start = 1;
         const int end = 3;
@@ -30,7 +30,7 @@ public class CustomRandomTests
     }
 
     [Fact]
-    public void Should_ReturnValueWithinRangeOnNumberFromSystemRandom()
+    public void GivenSystemRandomRange_WhenNumberFromSystemRandom_ThenReturnValueWithinRange()
     {
         const int start = 0;
         const int end = 100;
@@ -41,7 +41,7 @@ public class CustomRandomTests
     }
 
     [Fact]
-    public void Should_ReturnDifferentValueFromExcludedOnNumberFromSystemRandom()
+    public void GivenSystemRandomRangeWithExcluded_WhenNumberFromSystemRandom_ThenReturnDifferentValueFromExcluded()
     {
         const int start = 10;
         const int end = 20;
@@ -54,7 +54,7 @@ public class CustomRandomTests
     }
 
     [Fact]
-    public void Should_ReturnStringWithRequestedLength()
+    public void GivenOptions_WhenText_ThenReturnStringWithRequestedLength()
     {
         var options = new RandomStringOptions { Length = 25 };
         
@@ -64,7 +64,7 @@ public class CustomRandomTests
     }
 
     [Fact]
-    public void Should_ContainAtLeastOneCharacterFromEachIncludedSet()
+    public void GivenAllCharacterSetsIncluded_WhenText_ThenContainAtLeastOneFromEachSet()
     {
         var options = new RandomStringOptions
         {
@@ -84,7 +84,7 @@ public class CustomRandomTests
     }
 
     [Fact]
-    public void ShouldNot_ReturnAnyExcludedStrings()
+    public void GivenExcludedStrings_WhenText_ThenNotReturnAnyExcludedStrings()
     {
         var options = new RandomStringOptions { Length = 16 };
 

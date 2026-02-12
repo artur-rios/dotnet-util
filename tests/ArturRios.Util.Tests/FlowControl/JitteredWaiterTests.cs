@@ -9,7 +9,7 @@ public class JitteredWaiterTests
     [InlineData(0, 500, 500)]
     [InlineData(1, 1250, 1999)]
     [InlineData(2, 2250, 3999)]
-    public async Task Should_WaitWithinExpectedRangeForAttempt(int attemptIndex, int expectedMinMs, int expectedMaxMs)
+    public async Task GivenAttemptIndex_WhenWait_ThenElapsedWithinExpectedRange(int attemptIndex, int expectedMinMs, int expectedMaxMs)
     {
         var waiter = new JitteredWaiter(maxRetryCount: 10);
         
@@ -32,7 +32,7 @@ public class JitteredWaiterTests
     }
 
     [Fact]
-    public async Task Should_UpdateCanRetryPropertyCorrectly()
+    public async Task GivenMaxRetryCount_WhenWait_ThenUpdateCanRetryPropertyCorrectly()
     {
         var waiter = new JitteredWaiter(2);
 
@@ -48,7 +48,7 @@ public class JitteredWaiterTests
     }
 
     [Fact]
-    public async Task Should_ThrowExceptionAfterExceedingMaxRetryCount()
+    public async Task GivenMaxRetryCount_WhenExceedingRetries_ThenThrowException()
     {
         var waiter = new JitteredWaiter(2);
         
@@ -59,7 +59,7 @@ public class JitteredWaiterTests
     }
 
     [Fact]
-    public async Task Should_ThrowImmediatelyWhenMaxRetryCountIsZero()
+    public async Task GivenZeroMaxRetryCount_WhenWait_ThenThrowImmediately()
     {
         var waiter = new JitteredWaiter(0);
         

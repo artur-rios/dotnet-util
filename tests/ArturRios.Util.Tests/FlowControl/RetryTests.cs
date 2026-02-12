@@ -7,7 +7,7 @@ public class RetryTests
     private int _attemptCount;
 
     [Fact]
-    public void Should_RetryWithResult()
+    public void GivenFailingOperation_WhenRetryWithResult_ThenReturnFinalAttempt()
     {
         const int maxAttempts = 3;
         const int delayMilliseconds = 1000;
@@ -21,7 +21,7 @@ public class RetryTests
     }
 
     [Fact]
-    public void Should_RetryVoidMethod()
+    public void GivenFailingVoidOperation_WhenRetryVoidMethod_ThenNoException()
     {
         const int maxAttempts = 3;
         const int delayMilliseconds = 1000;

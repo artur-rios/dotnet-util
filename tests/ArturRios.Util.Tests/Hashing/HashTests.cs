@@ -5,7 +5,7 @@ namespace ArturRios.Util.Tests.Hashing;
 public class HashTests
 {
     [Fact]
-    public void Should_MatchHash()
+    public void GivenTextSalt_WhenTextMatches_ThenMatchHash()
     {
         const string text = "HelloWorld";
 
@@ -16,7 +16,7 @@ public class HashTests
     }
 
     [Fact]
-    public void Should_ProduceSameHash_When_HashesAreFromSameTextAndSalt()
+    public void GivenSameTextAndSalt_WhenEncode_ThenProduceSameHash()
     {
         const string text = "HelloWorld";
 
@@ -29,7 +29,7 @@ public class HashTests
     }
 
     [Fact]
-    public void Should_ProduceDifferentHashes_When_TextSameButSaltIsDifferent()
+    public void GivenSameText_WhenSaltsAreDifferent_ThenProduceDifferentHashes()
     {
         const string text = "HelloWorld";
 
@@ -41,7 +41,7 @@ public class HashTests
     }
 
     [Fact]
-    public void ShouldNot_MatchHash()
+    public void GivenDifferentTextSalt_WhenTextMatches_ThenNotMatchHash()
     {
         const string text1 = "HelloWorld";
         const string text2 = "GoodbyeWorld";

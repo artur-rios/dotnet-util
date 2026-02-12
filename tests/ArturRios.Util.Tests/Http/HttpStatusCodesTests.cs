@@ -5,7 +5,7 @@ namespace ArturRios.Util.Tests.Http;
 public class HttpStatusCodesTests
 {
     [Fact]
-    public void Should_Contain2xxCodes()
+    public void GivenStatusCodes_WhenAccessingSuccessGroup_ThenContains2xxCodes()
     {
         Assert.Contains(HttpStatusCodes.Ok, HttpStatusCodes.Success);
         Assert.Contains(HttpStatusCodes.Created, HttpStatusCodes.Success);
@@ -13,7 +13,7 @@ public class HttpStatusCodesTests
     }
 
     [Fact]
-    public void Should_Contain4xxCodes()
+    public void GivenStatusCodes_WhenAccessingClientErrorGroup_ThenContains4xxCodes()
     {
         Assert.Contains(HttpStatusCodes.BadRequest, HttpStatusCodes.ClientError);
         Assert.Contains(HttpStatusCodes.Unauthorized, HttpStatusCodes.ClientError);
@@ -22,7 +22,7 @@ public class HttpStatusCodesTests
     }
 
     [Fact]
-    public void Should_Contain5xxCodes()
+    public void GivenStatusCodes_WhenAccessingServerErrorGroup_ThenContains5xxCodes()
     {
         Assert.Contains(HttpStatusCodes.InternalServerError, HttpStatusCodes.ServerError);
         Assert.Contains(HttpStatusCodes.NotImplemented, HttpStatusCodes.ServerError);
@@ -30,7 +30,7 @@ public class HttpStatusCodesTests
     }
 
     [Fact]
-    public void Should_AggregateAllGroups()
+    public void GivenStatusCodes_WhenAccessingAllGroup_ThenContainsAllCodes()
     {
         var expectedCount = HttpStatusCodes.Success.Length + HttpStatusCodes.ClientError.Length + HttpStatusCodes.ServerError.Length;
 
