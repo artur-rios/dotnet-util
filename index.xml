@@ -1,1 +1,969 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Dotnet Util on Dotnet Output</title><link>https://artur-rios.github.io/dotnet-util/</link><description>Recent content in Dotnet Util on Dotnet Output</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://artur-rios.github.io/dotnet-util/index.xml" rel="self" type="application/rss+xml"/></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Dotnet Util on Dotnet Output</title><link>https://artur-rios.github.io/dotnet-util/</link><description>Recent content in Dotnet Util on Dotnet Output</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><atom:link href="https://artur-rios.github.io/dotnet-util/index.xml" rel="self" type="application/rss+xml"/><item><title>Collections</title><link>https://artur-rios.github.io/dotnet-util/collections/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://artur-rios.github.io/dotnet-util/collections/</guid><description>&lt;h2 id="features"&gt;Features&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;AnsiColors&lt;/code&gt;: static class with ANSI escape code string constants for console foreground colors (DarkGray, Cyan, White, Yellow, Red, Magenta, BrightRed, Green).&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Characters&lt;/code&gt;: static class with string constants for character pools — digits, lowercase letters, uppercase letters, special characters, and the union &lt;code&gt;All&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="class-diagram"&gt;Class Diagram&lt;/h2&gt;
+&lt;pre class="mermaid"&gt;classDiagram
+namespace Collections {
+class AnsiColors {
+&amp;lt;&amp;lt;static&amp;gt;&amp;gt;
++string DarkGray
++string Cyan
++string White
++string Yellow
++string Red
++string Magenta
++string BrightRed
++string Green
+}
+class Characters {
+&amp;lt;&amp;lt;static&amp;gt;&amp;gt;
++string Digits
++string LowerLetters
++string UpperLetters
++string Special
++string All
+}
+}
+&lt;/pre&gt;
+&lt;h2 id="usage"&gt;Usage&lt;/h2&gt;
+&lt;h3 id="ansi-colors"&gt;ANSI Colors&lt;/h3&gt;
+&lt;p&gt;Wrap text in a color constant and reset with &lt;code&gt;\x1b[0m&lt;/code&gt;:&lt;/p&gt;</description><content>&lt;h2 id="features"&gt;Features&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;AnsiColors&lt;/code&gt;: static class with ANSI escape code string constants for console foreground colors (DarkGray, Cyan, White, Yellow, Red, Magenta, BrightRed, Green).&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Characters&lt;/code&gt;: static class with string constants for character pools — digits, lowercase letters, uppercase letters, special characters, and the union &lt;code&gt;All&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="class-diagram"&gt;Class Diagram&lt;/h2&gt;
+&lt;pre class="mermaid"&gt;classDiagram
+namespace Collections {
+class AnsiColors {
+&amp;lt;&amp;lt;static&amp;gt;&amp;gt;
++string DarkGray
++string Cyan
++string White
++string Yellow
++string Red
++string Magenta
++string BrightRed
++string Green
+}
+class Characters {
+&amp;lt;&amp;lt;static&amp;gt;&amp;gt;
++string Digits
++string LowerLetters
++string UpperLetters
++string Special
++string All
+}
+}
+&lt;/pre&gt;
+&lt;h2 id="usage"&gt;Usage&lt;/h2&gt;
+&lt;h3 id="ansi-colors"&gt;ANSI Colors&lt;/h3&gt;
+&lt;p&gt;Wrap text in a color constant and reset with &lt;code&gt;\x1b[0m&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; ArturRios.Util.Collections;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Console.WriteLine(&lt;span style="color:#e6db74"&gt;$&amp;#34;{AnsiColors.Green}Success!\x1b[0m&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Console.WriteLine(&lt;span style="color:#e6db74"&gt;$&amp;#34;{AnsiColors.Red}Error: something went wrong.\x1b[0m&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Console.WriteLine(&lt;span style="color:#e6db74"&gt;$&amp;#34;{AnsiColors.Yellow}Warning: disk usage is high.\x1b[0m&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Console.WriteLine(&lt;span style="color:#e6db74"&gt;$&amp;#34;{AnsiColors.Cyan}Info: process started.\x1b[0m&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="character-pools"&gt;Character Pools&lt;/h3&gt;
+&lt;p&gt;Combine pools with string concatenation:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; ArturRios.Util.Collections;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;string&lt;/span&gt; alphanumeric = Characters.Digits + Characters.LowerLetters + Characters.UpperLetters;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; isDigit = Characters.Digits.Contains(&lt;span style="color:#e6db74"&gt;&amp;#39;5&amp;#39;&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Use Characters.All for the widest possible pool&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;string&lt;/span&gt; fullPool = Characters.All;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content></item><item><title>Flow Control</title><link>https://artur-rios.github.io/dotnet-util/flow-control/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://artur-rios.github.io/dotnet-util/flow-control/</guid><description>&lt;h2 id="features"&gt;Features&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Condition&lt;/code&gt;: fluent condition aggregator; collects failure messages and can throw &lt;code&gt;ConditionFailedException&lt;/code&gt; or convert to a process output.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ConditionFailedException&lt;/code&gt;: exception carrying all collected error messages as &lt;code&gt;string[]&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Retry&lt;/code&gt;: simple retry with configurable max attempts and fixed delay; supports &lt;code&gt;Action&lt;/code&gt; and &lt;code&gt;Func&amp;lt;T&amp;gt;&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;JitteredWaiter&lt;/code&gt;: exponential backoff with jitter; exposes &lt;code&gt;CanRetry&lt;/code&gt; and throws &lt;code&gt;MaxRetriesReachedException&lt;/code&gt; when retries are exhausted.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;MaxRetriesReachedException&lt;/code&gt;: exception thrown when &lt;code&gt;JitteredWaiter&lt;/code&gt; exceeds its retry limit.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="class-diagram"&gt;Class Diagram&lt;/h2&gt;
+&lt;pre class="mermaid"&gt;classDiagram
+namespace FlowControl {
+class Condition {
+-HashSet~string~ _failedConditions
+-bool _expression
++static Condition Create
++string[] FailedConditions
++bool IsSatisfied
++Condition True(bool expression)
++Condition False(bool expression)
++Condition FailsWith(string error)
++void ThrowIfNotSatisfied()
++ProcessOutput ToProcessOutput()
+}
+class ConditionFailedException {
++string[] Errors
+}
+class Retry {
+-int _delayMilliseconds
+-int _maxAttempts
++static Retry New
++Retry MaxAttempts(int maxAttempts)
++Retry DelayMilliseconds(int delayMilliseconds)
++void Execute(Action action)
++T Execute~T~(Func~T~ func)
+}
+}
+namespace FlowControl_Waiter {
+class JitteredWaiter {
+-const int FixedWaitDelay
++int MaxRetryCount
+-int Count
++bool CanRetry
++Task Wait()
+}
+class MaxRetriesReachedException
+}
+Condition ..&amp;gt; ConditionFailedException : throws
+JitteredWaiter ..&amp;gt; MaxRetriesReachedException : throws
+&lt;/pre&gt;
+&lt;h2 id="usage"&gt;Usage&lt;/h2&gt;
+&lt;h3 id="condition"&gt;Condition&lt;/h3&gt;
+&lt;p&gt;Chain boolean assertions — all failures are collected before throwing:&lt;/p&gt;</description><content>&lt;h2 id="features"&gt;Features&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Condition&lt;/code&gt;: fluent condition aggregator; collects failure messages and can throw &lt;code&gt;ConditionFailedException&lt;/code&gt; or convert to a process output.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ConditionFailedException&lt;/code&gt;: exception carrying all collected error messages as &lt;code&gt;string[]&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Retry&lt;/code&gt;: simple retry with configurable max attempts and fixed delay; supports &lt;code&gt;Action&lt;/code&gt; and &lt;code&gt;Func&amp;lt;T&amp;gt;&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;JitteredWaiter&lt;/code&gt;: exponential backoff with jitter; exposes &lt;code&gt;CanRetry&lt;/code&gt; and throws &lt;code&gt;MaxRetriesReachedException&lt;/code&gt; when retries are exhausted.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;MaxRetriesReachedException&lt;/code&gt;: exception thrown when &lt;code&gt;JitteredWaiter&lt;/code&gt; exceeds its retry limit.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="class-diagram"&gt;Class Diagram&lt;/h2&gt;
+&lt;pre class="mermaid"&gt;classDiagram
+namespace FlowControl {
+class Condition {
+-HashSet~string~ _failedConditions
+-bool _expression
++static Condition Create
++string[] FailedConditions
++bool IsSatisfied
++Condition True(bool expression)
++Condition False(bool expression)
++Condition FailsWith(string error)
++void ThrowIfNotSatisfied()
++ProcessOutput ToProcessOutput()
+}
+class ConditionFailedException {
++string[] Errors
+}
+class Retry {
+-int _delayMilliseconds
+-int _maxAttempts
++static Retry New
++Retry MaxAttempts(int maxAttempts)
++Retry DelayMilliseconds(int delayMilliseconds)
++void Execute(Action action)
++T Execute~T~(Func~T~ func)
+}
+}
+namespace FlowControl_Waiter {
+class JitteredWaiter {
+-const int FixedWaitDelay
++int MaxRetryCount
+-int Count
++bool CanRetry
++Task Wait()
+}
+class MaxRetriesReachedException
+}
+Condition ..&amp;gt; ConditionFailedException : throws
+JitteredWaiter ..&amp;gt; MaxRetriesReachedException : throws
+&lt;/pre&gt;
+&lt;h2 id="usage"&gt;Usage&lt;/h2&gt;
+&lt;h3 id="condition"&gt;Condition&lt;/h3&gt;
+&lt;p&gt;Chain boolean assertions — all failures are collected before throwing:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; ArturRios.Util.FlowControl;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Condition.Create
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; .True(user &lt;span style="color:#66d9ef"&gt;is&lt;/span&gt; not &lt;span style="color:#66d9ef"&gt;null&lt;/span&gt;).FailsWith(&lt;span style="color:#e6db74"&gt;&amp;#34;User is required&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; .True(emailValid).FailsWith(&lt;span style="color:#e6db74"&gt;&amp;#34;Invalid email format&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; .False(&lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;.IsNullOrEmpty(username)).FailsWith(&lt;span style="color:#e6db74"&gt;&amp;#34;Username cannot be empty&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; .ThrowIfNotSatisfied();
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Convert to a process output instead of throwing:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; result = Condition.Create
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; .True(age &amp;gt;= &lt;span style="color:#ae81ff"&gt;18&lt;/span&gt;).FailsWith(&lt;span style="color:#e6db74"&gt;&amp;#34;Must be 18 or older&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; .ToProcessOutput();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (!result.Success)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Console.WriteLine(&lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;.Join(&lt;span style="color:#e6db74"&gt;&amp;#34;, &amp;#34;&lt;/span&gt;, result.Errors));
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="retry"&gt;Retry&lt;/h3&gt;
+&lt;p&gt;Retry a void action:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; ArturRios.Util.FlowControl;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Retry.New
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; .MaxAttempts(&lt;span style="color:#ae81ff"&gt;3&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; .DelayMilliseconds(&lt;span style="color:#ae81ff"&gt;200&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; .Execute(() =&amp;gt; SendEmail(recipient));
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Retry a function that returns a value:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; data = Retry.New
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; .MaxAttempts(&lt;span style="color:#ae81ff"&gt;5&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; .DelayMilliseconds(&lt;span style="color:#ae81ff"&gt;500&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; .Execute(() =&amp;gt; FetchDataFromApi());
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="jitteredwaiter"&gt;JitteredWaiter&lt;/h3&gt;
+&lt;p&gt;Use in a polling or retry loop with exponential backoff:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; ArturRios.Util.FlowControl.Waiter;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; waiter = &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; JitteredWaiter(maxRetryCount: &lt;span style="color:#ae81ff"&gt;5&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;while&lt;/span&gt; (waiter.CanRetry)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;try&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; TryOperationAsync();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;break&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;catch&lt;/span&gt; (TransientException)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; waiter.Wait();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content></item><item><title>Hashing</title><link>https://artur-rios.github.io/dotnet-util/hashing/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://artur-rios.github.io/dotnet-util/hashing/</guid><description>&lt;h2 id="features"&gt;Features&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Hash&lt;/code&gt;: static helpers for Argon2id password hashing — encode with a provided or randomly generated salt, and verify plaintext against a stored hash.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;HashConfiguration&lt;/code&gt;: configures Argon2id cost parameters — degree of parallelism, number of iterations, and memory usage in KB. Ships with sensible defaults.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="class-diagram"&gt;Class Diagram&lt;/h2&gt;
+&lt;pre class="mermaid"&gt;classDiagram
+namespace Hashing {
+class Hash {
+&amp;lt;&amp;lt;static&amp;gt;&amp;gt;
+-const int Argon2IdKeyBytes
+-const int SaltByteSize
+-byte[] CreateSalt()
++byte[] EncodeWithSalt(string text, byte[] salt, HashConfiguration? configuration)
++byte[] EncodeWithRandomSalt(string text, out byte[] salt, HashConfiguration? configuration)
++bool TextMatches(string text, byte[] hash, byte[] salt)
+}
+class HashConfiguration {
++const int DefaultDegreeOfParallelism
++const int DefaultNumberOfIterations
++const int DefaultMemoryToUseInKb
++int DegreeOfParallelism
++int NumberOfIterations
++int MemoryToUseInKb
+}
+}
+Hash ..&amp;gt; HashConfiguration : uses
+&lt;/pre&gt;
+&lt;h2 id="usage"&gt;Usage&lt;/h2&gt;
+&lt;h3 id="hash-a-password-with-a-random-salt"&gt;Hash a password with a random salt&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; ArturRios.Util.Hashing;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Encode — store both hash and salt&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;byte&lt;/span&gt;[] hash = Hash.EncodeWithRandomSalt(&lt;span style="color:#e6db74"&gt;&amp;#34;my-secret-password&amp;#34;&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;out&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;byte&lt;/span&gt;[] salt);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Verify later&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; matches = Hash.TextMatches(&lt;span style="color:#e6db74"&gt;&amp;#34;my-secret-password&amp;#34;&lt;/span&gt;, hash, salt); &lt;span style="color:#75715e"&gt;// true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; wrong = Hash.TextMatches(&lt;span style="color:#e6db74"&gt;&amp;#34;wrong-password&amp;#34;&lt;/span&gt;, hash, salt); &lt;span style="color:#75715e"&gt;// false&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="hash-with-a-known-salt"&gt;Hash with a known salt&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;byte&lt;/span&gt;[] salt = GetSaltFromStorage();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;byte&lt;/span&gt;[] hash = Hash.EncodeWithSalt(&lt;span style="color:#e6db74"&gt;&amp;#34;my-secret-password&amp;#34;&lt;/span&gt;, salt);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="custom-cost-parameters"&gt;Custom cost parameters&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; config = &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; HashConfiguration
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; DegreeOfParallelism = &lt;span style="color:#ae81ff"&gt;4&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; NumberOfIterations = &lt;span style="color:#ae81ff"&gt;3&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; MemoryToUseInKb = &lt;span style="color:#ae81ff"&gt;65536&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;byte&lt;/span&gt;[] hash = Hash.EncodeWithRandomSalt(&lt;span style="color:#e6db74"&gt;&amp;#34;my-secret-password&amp;#34;&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;out&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;byte&lt;/span&gt;[] salt, config);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description><content>&lt;h2 id="features"&gt;Features&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Hash&lt;/code&gt;: static helpers for Argon2id password hashing — encode with a provided or randomly generated salt, and verify plaintext against a stored hash.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;HashConfiguration&lt;/code&gt;: configures Argon2id cost parameters — degree of parallelism, number of iterations, and memory usage in KB. Ships with sensible defaults.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="class-diagram"&gt;Class Diagram&lt;/h2&gt;
+&lt;pre class="mermaid"&gt;classDiagram
+namespace Hashing {
+class Hash {
+&amp;lt;&amp;lt;static&amp;gt;&amp;gt;
+-const int Argon2IdKeyBytes
+-const int SaltByteSize
+-byte[] CreateSalt()
++byte[] EncodeWithSalt(string text, byte[] salt, HashConfiguration? configuration)
++byte[] EncodeWithRandomSalt(string text, out byte[] salt, HashConfiguration? configuration)
++bool TextMatches(string text, byte[] hash, byte[] salt)
+}
+class HashConfiguration {
++const int DefaultDegreeOfParallelism
++const int DefaultNumberOfIterations
++const int DefaultMemoryToUseInKb
++int DegreeOfParallelism
++int NumberOfIterations
++int MemoryToUseInKb
+}
+}
+Hash ..&amp;gt; HashConfiguration : uses
+&lt;/pre&gt;
+&lt;h2 id="usage"&gt;Usage&lt;/h2&gt;
+&lt;h3 id="hash-a-password-with-a-random-salt"&gt;Hash a password with a random salt&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; ArturRios.Util.Hashing;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Encode — store both hash and salt&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;byte&lt;/span&gt;[] hash = Hash.EncodeWithRandomSalt(&lt;span style="color:#e6db74"&gt;&amp;#34;my-secret-password&amp;#34;&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;out&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;byte&lt;/span&gt;[] salt);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Verify later&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; matches = Hash.TextMatches(&lt;span style="color:#e6db74"&gt;&amp;#34;my-secret-password&amp;#34;&lt;/span&gt;, hash, salt); &lt;span style="color:#75715e"&gt;// true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; wrong = Hash.TextMatches(&lt;span style="color:#e6db74"&gt;&amp;#34;wrong-password&amp;#34;&lt;/span&gt;, hash, salt); &lt;span style="color:#75715e"&gt;// false&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="hash-with-a-known-salt"&gt;Hash with a known salt&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;byte&lt;/span&gt;[] salt = GetSaltFromStorage();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;byte&lt;/span&gt;[] hash = Hash.EncodeWithSalt(&lt;span style="color:#e6db74"&gt;&amp;#34;my-secret-password&amp;#34;&lt;/span&gt;, salt);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="custom-cost-parameters"&gt;Custom cost parameters&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; config = &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; HashConfiguration
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; DegreeOfParallelism = &lt;span style="color:#ae81ff"&gt;4&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; NumberOfIterations = &lt;span style="color:#ae81ff"&gt;3&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; MemoryToUseInKb = &lt;span style="color:#ae81ff"&gt;65536&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;byte&lt;/span&gt;[] hash = Hash.EncodeWithRandomSalt(&lt;span style="color:#e6db74"&gt;&amp;#34;my-secret-password&amp;#34;&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;out&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;byte&lt;/span&gt;[] salt, config);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content></item><item><title>Http</title><link>https://artur-rios.github.io/dotnet-util/http/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://artur-rios.github.io/dotnet-util/http/</guid><description>&lt;h2 id="features"&gt;Features&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;HttpGateway&lt;/code&gt;: wraps &lt;code&gt;HttpClient&lt;/code&gt; with typed async methods for GET, POST, PUT, PATCH, and DELETE. Each method deserializes the response body into the specified type and returns an &lt;code&gt;HttpOutput&amp;lt;TBody&amp;gt;&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;HttpOutput&amp;lt;TBody&amp;gt;&lt;/code&gt;: typed HTTP response container carrying the status code, response headers, and deserialized body.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;HttpExtensions&lt;/code&gt;: extension on &lt;code&gt;object&lt;/code&gt; providing &lt;code&gt;ToJsonStringContent()&lt;/code&gt; to serialize any object into a &lt;code&gt;StringContent&lt;/code&gt; suitable for request payloads.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;HttpStatusCodes&lt;/code&gt;: static constants for common HTTP status codes (200, 201, 204, 400, 401, 403, 404, 500, 501, 502) plus grouped collections (&lt;code&gt;Success&lt;/code&gt;, &lt;code&gt;ClientError&lt;/code&gt;, &lt;code&gt;ServerError&lt;/code&gt;, &lt;code&gt;All&lt;/code&gt;).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="class-diagram"&gt;Class Diagram&lt;/h2&gt;
+&lt;pre class="mermaid"&gt;classDiagram
+namespace Http {
+class HttpGateway {
++HttpClient Client
++Task~HttpOutput~TBody~~ GetAsync~TBody~(string route)
++Task~HttpOutput~TBody~~ PostAsync~TBody~(string route, object? payloadObject)
++Task~HttpOutput~TBody~~ PutAsync~TBody~(string route, object? payloadObject)
++Task~HttpOutput~TBody~~ PatchAsync~TBody~(string route, object? payloadObject)
++Task~HttpOutput~TBody~~ DeleteAsync~TBody~(string route)
+}
+class HttpOutput~TBody~ {
++HttpStatusCode StatusCode
++HttpResponseHeaders Headers
++TBody? Body
++Task ReadContent()
+}
+class HttpExtensions {
+&amp;lt;&amp;lt;static&amp;gt;&amp;gt;
++StringContent ToJsonStringContent(object @object)
+}
+class HttpStatusCodes {
+&amp;lt;&amp;lt;static&amp;gt;&amp;gt;
++const int Ok
++const int Created
++const int NoContent
++const int BadRequest
++const int Unauthorized
++const int Forbidden
++const int NotFound
++const int InternalServerError
++const int NotImplemented
++const int BadGateway
++int[] Success
++int[] ClientError
++int[] ServerError
++int[] All
+}
+}
+HttpGateway --&amp;gt; HttpOutput : returns
+HttpGateway ..&amp;gt; HttpExtensions : uses
+&lt;/pre&gt;
+&lt;h2 id="usage"&gt;Usage&lt;/h2&gt;
+&lt;h3 id="basic-get-request"&gt;Basic GET request&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; ArturRios.Util.Http;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; client = &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; HttpClient { BaseAddress = &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; Uri(&lt;span style="color:#e6db74"&gt;&amp;#34;https://api.example.com&amp;#34;&lt;/span&gt;) };
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; gateway = &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; HttpGateway(client);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; output = &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; gateway.GetAsync&amp;lt;List&amp;lt;Product&amp;gt;&amp;gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;/products&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; ((&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;)output.StatusCode == HttpStatusCodes.Ok)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;foreach&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; product &lt;span style="color:#66d9ef"&gt;in&lt;/span&gt; output.Body!)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Console.WriteLine(product.Name);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="post-with-a-payload"&gt;POST with a payload&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; newProduct = &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; { Name = &lt;span style="color:#e6db74"&gt;&amp;#34;Widget&amp;#34;&lt;/span&gt;, Price = &lt;span style="color:#ae81ff"&gt;9.99&lt;/span&gt; };
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; output = &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; gateway.PostAsync&amp;lt;Product&amp;gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;/products&amp;#34;&lt;/span&gt;, newProduct);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; ((&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;)output.StatusCode == HttpStatusCodes.Created)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Console.WriteLine(&lt;span style="color:#e6db74"&gt;$&amp;#34;Created: {output.Body!.Id}&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="put-and-patch"&gt;PUT and PATCH&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; update = &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; { Name = &lt;span style="color:#e6db74"&gt;&amp;#34;Updated Widget&amp;#34;&lt;/span&gt; };
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; gateway.PutAsync&amp;lt;Product&amp;gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;/products/42&amp;#34;&lt;/span&gt;, update);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; gateway.PatchAsync&amp;lt;Product&amp;gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;/products/42&amp;#34;&lt;/span&gt;, update);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="delete"&gt;DELETE&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; output = &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; gateway.DeleteAsync&amp;lt;&lt;span style="color:#66d9ef"&gt;object&lt;/span&gt;&amp;gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;/products/42&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; ((&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;)output.StatusCode == HttpStatusCodes.NoContent)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Console.WriteLine(&lt;span style="color:#e6db74"&gt;&amp;#34;Deleted.&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="status-code-groups"&gt;Status code groups&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; code = (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;)output.StatusCode;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (HttpStatusCodes.Success.Contains(code))
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Console.WriteLine(&lt;span style="color:#e6db74"&gt;&amp;#34;Request succeeded.&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;else&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (HttpStatusCodes.ClientError.Contains(code))
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Console.WriteLine(&lt;span style="color:#e6db74"&gt;&amp;#34;Client error — check your request.&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;else&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (HttpStatusCodes.ServerError.Contains(code))
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Console.WriteLine(&lt;span style="color:#e6db74"&gt;&amp;#34;Server error — try again later.&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="serialize-a-payload-manually"&gt;Serialize a payload manually&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; payload = &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; UpdateRequest { Name = &lt;span style="color:#e6db74"&gt;&amp;#34;New Name&amp;#34;&lt;/span&gt; };
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;StringContent content = payload.ToJsonStringContent();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// UTF-8, application/json&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description><content>&lt;h2 id="features"&gt;Features&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;HttpGateway&lt;/code&gt;: wraps &lt;code&gt;HttpClient&lt;/code&gt; with typed async methods for GET, POST, PUT, PATCH, and DELETE. Each method deserializes the response body into the specified type and returns an &lt;code&gt;HttpOutput&amp;lt;TBody&amp;gt;&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;HttpOutput&amp;lt;TBody&amp;gt;&lt;/code&gt;: typed HTTP response container carrying the status code, response headers, and deserialized body.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;HttpExtensions&lt;/code&gt;: extension on &lt;code&gt;object&lt;/code&gt; providing &lt;code&gt;ToJsonStringContent()&lt;/code&gt; to serialize any object into a &lt;code&gt;StringContent&lt;/code&gt; suitable for request payloads.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;HttpStatusCodes&lt;/code&gt;: static constants for common HTTP status codes (200, 201, 204, 400, 401, 403, 404, 500, 501, 502) plus grouped collections (&lt;code&gt;Success&lt;/code&gt;, &lt;code&gt;ClientError&lt;/code&gt;, &lt;code&gt;ServerError&lt;/code&gt;, &lt;code&gt;All&lt;/code&gt;).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="class-diagram"&gt;Class Diagram&lt;/h2&gt;
+&lt;pre class="mermaid"&gt;classDiagram
+namespace Http {
+class HttpGateway {
++HttpClient Client
++Task~HttpOutput~TBody~~ GetAsync~TBody~(string route)
++Task~HttpOutput~TBody~~ PostAsync~TBody~(string route, object? payloadObject)
++Task~HttpOutput~TBody~~ PutAsync~TBody~(string route, object? payloadObject)
++Task~HttpOutput~TBody~~ PatchAsync~TBody~(string route, object? payloadObject)
++Task~HttpOutput~TBody~~ DeleteAsync~TBody~(string route)
+}
+class HttpOutput~TBody~ {
++HttpStatusCode StatusCode
++HttpResponseHeaders Headers
++TBody? Body
++Task ReadContent()
+}
+class HttpExtensions {
+&amp;lt;&amp;lt;static&amp;gt;&amp;gt;
++StringContent ToJsonStringContent(object @object)
+}
+class HttpStatusCodes {
+&amp;lt;&amp;lt;static&amp;gt;&amp;gt;
++const int Ok
++const int Created
++const int NoContent
++const int BadRequest
++const int Unauthorized
++const int Forbidden
++const int NotFound
++const int InternalServerError
++const int NotImplemented
++const int BadGateway
++int[] Success
++int[] ClientError
++int[] ServerError
++int[] All
+}
+}
+HttpGateway --&amp;gt; HttpOutput : returns
+HttpGateway ..&amp;gt; HttpExtensions : uses
+&lt;/pre&gt;
+&lt;h2 id="usage"&gt;Usage&lt;/h2&gt;
+&lt;h3 id="basic-get-request"&gt;Basic GET request&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; ArturRios.Util.Http;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; client = &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; HttpClient { BaseAddress = &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; Uri(&lt;span style="color:#e6db74"&gt;&amp;#34;https://api.example.com&amp;#34;&lt;/span&gt;) };
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; gateway = &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; HttpGateway(client);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; output = &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; gateway.GetAsync&amp;lt;List&amp;lt;Product&amp;gt;&amp;gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;/products&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; ((&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;)output.StatusCode == HttpStatusCodes.Ok)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;foreach&lt;/span&gt; (&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; product &lt;span style="color:#66d9ef"&gt;in&lt;/span&gt; output.Body!)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Console.WriteLine(product.Name);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="post-with-a-payload"&gt;POST with a payload&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; newProduct = &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; { Name = &lt;span style="color:#e6db74"&gt;&amp;#34;Widget&amp;#34;&lt;/span&gt;, Price = &lt;span style="color:#ae81ff"&gt;9.99&lt;/span&gt; };
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; output = &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; gateway.PostAsync&amp;lt;Product&amp;gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;/products&amp;#34;&lt;/span&gt;, newProduct);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; ((&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;)output.StatusCode == HttpStatusCodes.Created)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Console.WriteLine(&lt;span style="color:#e6db74"&gt;$&amp;#34;Created: {output.Body!.Id}&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="put-and-patch"&gt;PUT and PATCH&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; update = &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; { Name = &lt;span style="color:#e6db74"&gt;&amp;#34;Updated Widget&amp;#34;&lt;/span&gt; };
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; gateway.PutAsync&amp;lt;Product&amp;gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;/products/42&amp;#34;&lt;/span&gt;, update);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; gateway.PatchAsync&amp;lt;Product&amp;gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;/products/42&amp;#34;&lt;/span&gt;, update);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="delete"&gt;DELETE&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; output = &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; gateway.DeleteAsync&amp;lt;&lt;span style="color:#66d9ef"&gt;object&lt;/span&gt;&amp;gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;/products/42&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; ((&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;)output.StatusCode == HttpStatusCodes.NoContent)
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Console.WriteLine(&lt;span style="color:#e6db74"&gt;&amp;#34;Deleted.&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="status-code-groups"&gt;Status code groups&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; code = (&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;)output.StatusCode;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (HttpStatusCodes.Success.Contains(code))
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Console.WriteLine(&lt;span style="color:#e6db74"&gt;&amp;#34;Request succeeded.&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;else&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (HttpStatusCodes.ClientError.Contains(code))
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Console.WriteLine(&lt;span style="color:#e6db74"&gt;&amp;#34;Client error — check your request.&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;else&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; (HttpStatusCodes.ServerError.Contains(code))
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Console.WriteLine(&lt;span style="color:#e6db74"&gt;&amp;#34;Server error — try again later.&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="serialize-a-payload-manually"&gt;Serialize a payload manually&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; payload = &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; UpdateRequest { Name = &lt;span style="color:#e6db74"&gt;&amp;#34;New Name&amp;#34;&lt;/span&gt; };
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;StringContent content = payload.ToJsonStringContent();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// UTF-8, application/json&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content></item><item><title>IO</title><link>https://artur-rios.github.io/dotnet-util/io/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://artur-rios.github.io/dotnet-util/io/</guid><description>&lt;h2 id="features"&gt;Features&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;FileReader&lt;/code&gt; (synchronous): read a file as a string, as an array of lines, as a separator-delimited dictionary, or deserialize its JSON content into a typed object.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;FileReaderAsync&lt;/code&gt; (asynchronous): the same four operations as &lt;code&gt;FileReader&lt;/code&gt;, returning &lt;code&gt;Task&lt;/code&gt;-wrapped results.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="class-diagram"&gt;Class Diagram&lt;/h2&gt;
+&lt;pre class="mermaid"&gt;classDiagram
+namespace IO {
+class FileReader {
+&amp;lt;&amp;lt;static&amp;gt;&amp;gt;
++string Read(string path)
++string[] ReadLines(string path)
++Dictionary~string, string[]~ ReadAsDictionary(string path, char separator)
++T ReadAndDeserialize~T~(string path)
+}
+class FileReaderAsync {
+&amp;lt;&amp;lt;static&amp;gt;&amp;gt;
++Task~string~ ReadAsync(string path)
++Task~string[]~ ReadLinesAsync(string path)
++Task~Dictionary~string, string[]~~ ReadAsDictionaryAsync(string path, char separator)
++Task~T~ ReadAndDeserializeAsync~T~(string path)
+}
+}
+&lt;/pre&gt;
+&lt;h2 id="usage"&gt;Usage&lt;/h2&gt;
+&lt;h3 id="synchronous"&gt;Synchronous&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; ArturRios.Util.IO;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Entire file as a single string&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;string&lt;/span&gt; content = FileReader.Read(&lt;span style="color:#e6db74"&gt;&amp;#34;/data/notes.txt&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Array of lines&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;[] lines = FileReader.ReadLines(&lt;span style="color:#e6db74"&gt;&amp;#34;/data/notes.txt&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Separator-delimited file → dictionary&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Key = first column value, Value = remaining columns as string[]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Dictionary&amp;lt;&lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;[]&amp;gt; table = FileReader.ReadAsDictionary(&lt;span style="color:#e6db74"&gt;&amp;#34;/data/config.csv&amp;#34;&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#39;,&amp;#39;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// JSON file → typed object (uses Newtonsoft.Json)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;AppConfig config = FileReader.ReadAndDeserialize&amp;lt;AppConfig&amp;gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;/data/config.json&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="asynchronous"&gt;Asynchronous&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; ArturRios.Util.IO;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;string&lt;/span&gt; content = &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; FileReaderAsync.ReadAsync(&lt;span style="color:#e6db74"&gt;&amp;#34;/data/notes.txt&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;[] lines = &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; FileReaderAsync.ReadLinesAsync(&lt;span style="color:#e6db74"&gt;&amp;#34;/data/notes.txt&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Dictionary&amp;lt;&lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;[]&amp;gt; table =
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; FileReaderAsync.ReadAsDictionaryAsync(&lt;span style="color:#e6db74"&gt;&amp;#34;/data/config.csv&amp;#34;&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#39;,&amp;#39;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;AppConfig config =
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; FileReaderAsync.ReadAndDeserializeAsync&amp;lt;AppConfig&amp;gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;/data/config.json&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description><content>&lt;h2 id="features"&gt;Features&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;FileReader&lt;/code&gt; (synchronous): read a file as a string, as an array of lines, as a separator-delimited dictionary, or deserialize its JSON content into a typed object.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;FileReaderAsync&lt;/code&gt; (asynchronous): the same four operations as &lt;code&gt;FileReader&lt;/code&gt;, returning &lt;code&gt;Task&lt;/code&gt;-wrapped results.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="class-diagram"&gt;Class Diagram&lt;/h2&gt;
+&lt;pre class="mermaid"&gt;classDiagram
+namespace IO {
+class FileReader {
+&amp;lt;&amp;lt;static&amp;gt;&amp;gt;
++string Read(string path)
++string[] ReadLines(string path)
++Dictionary~string, string[]~ ReadAsDictionary(string path, char separator)
++T ReadAndDeserialize~T~(string path)
+}
+class FileReaderAsync {
+&amp;lt;&amp;lt;static&amp;gt;&amp;gt;
++Task~string~ ReadAsync(string path)
++Task~string[]~ ReadLinesAsync(string path)
++Task~Dictionary~string, string[]~~ ReadAsDictionaryAsync(string path, char separator)
++Task~T~ ReadAndDeserializeAsync~T~(string path)
+}
+}
+&lt;/pre&gt;
+&lt;h2 id="usage"&gt;Usage&lt;/h2&gt;
+&lt;h3 id="synchronous"&gt;Synchronous&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; ArturRios.Util.IO;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Entire file as a single string&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;string&lt;/span&gt; content = FileReader.Read(&lt;span style="color:#e6db74"&gt;&amp;#34;/data/notes.txt&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Array of lines&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;[] lines = FileReader.ReadLines(&lt;span style="color:#e6db74"&gt;&amp;#34;/data/notes.txt&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Separator-delimited file → dictionary&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Key = first column value, Value = remaining columns as string[]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Dictionary&amp;lt;&lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;[]&amp;gt; table = FileReader.ReadAsDictionary(&lt;span style="color:#e6db74"&gt;&amp;#34;/data/config.csv&amp;#34;&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#39;,&amp;#39;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// JSON file → typed object (uses Newtonsoft.Json)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;AppConfig config = FileReader.ReadAndDeserialize&amp;lt;AppConfig&amp;gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;/data/config.json&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="asynchronous"&gt;Asynchronous&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; ArturRios.Util.IO;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;string&lt;/span&gt; content = &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; FileReaderAsync.ReadAsync(&lt;span style="color:#e6db74"&gt;&amp;#34;/data/notes.txt&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;[] lines = &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; FileReaderAsync.ReadLinesAsync(&lt;span style="color:#e6db74"&gt;&amp;#34;/data/notes.txt&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Dictionary&amp;lt;&lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;, &lt;span style="color:#66d9ef"&gt;string&lt;/span&gt;[]&amp;gt; table =
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; FileReaderAsync.ReadAsDictionaryAsync(&lt;span style="color:#e6db74"&gt;&amp;#34;/data/config.csv&amp;#34;&lt;/span&gt;, &lt;span style="color:#e6db74"&gt;&amp;#39;,&amp;#39;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;AppConfig config =
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;await&lt;/span&gt; FileReaderAsync.ReadAndDeserializeAsync&amp;lt;AppConfig&amp;gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;/data/config.json&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content></item><item><title>Math</title><link>https://artur-rios.github.io/dotnet-util/math/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://artur-rios.github.io/dotnet-util/math/</guid><description>&lt;h2 id="features"&gt;Features&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;PrimeUtils&lt;/code&gt;: static primality tests for all standard integer types (&lt;code&gt;sbyte&lt;/code&gt;, &lt;code&gt;byte&lt;/code&gt;, &lt;code&gt;short&lt;/code&gt;, &lt;code&gt;ushort&lt;/code&gt;, &lt;code&gt;int&lt;/code&gt;, &lt;code&gt;uint&lt;/code&gt;, &lt;code&gt;long&lt;/code&gt;, &lt;code&gt;ulong&lt;/code&gt;) and &lt;code&gt;BigInteger&lt;/code&gt;. Uses trial division for 32-bit values and deterministic Miller-Rabin witnesses for 64-bit values. Also exposes &lt;code&gt;BigIntegerSqrt&lt;/code&gt; for computing the integer (floor) square root of a &lt;code&gt;BigInteger&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;PrimeGenerator&amp;lt;T&amp;gt;&lt;/code&gt;: generates an ascending, infinite sequence of prime numbers of the chosen integer type. Thread-safe; each instance maintains its own independent counter. Supported types: &lt;code&gt;sbyte&lt;/code&gt;, &lt;code&gt;byte&lt;/code&gt;, &lt;code&gt;short&lt;/code&gt;, &lt;code&gt;ushort&lt;/code&gt;, &lt;code&gt;int&lt;/code&gt;, &lt;code&gt;uint&lt;/code&gt;, &lt;code&gt;long&lt;/code&gt;, &lt;code&gt;ulong&lt;/code&gt;, &lt;code&gt;BigInteger&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="class-diagram"&gt;Class Diagram&lt;/h2&gt;
+&lt;pre class="mermaid"&gt;classDiagram
+namespace Math {
+class PrimeUtils {
+&amp;lt;&amp;lt;static&amp;gt;&amp;gt;
++bool IsPrimeNumber(sbyte value)
++bool IsPrimeNumber(byte value)
++bool IsPrimeNumber(short value)
++bool IsPrimeNumber(ushort value)
++bool IsPrimeNumber(int value)
++bool IsPrimeNumber(uint value)
++bool IsPrimeNumber(long value)
++bool IsPrimeNumber(ulong value)
++bool IsPrimeNumber(BigInteger value)
++BigInteger BigIntegerSqrt(BigInteger n)
+}
+class PrimeGenerator~T~ {
+-T _current
+-Lock _lock
++T Next()
+}
+}
+PrimeGenerator~T~ ..&amp;gt; PrimeUtils : uses
+&lt;/pre&gt;
+&lt;h2 id="usage"&gt;Usage&lt;/h2&gt;
+&lt;h3 id="primality-checks"&gt;Primality checks&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; ArturRios.Util.Math;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; a = PrimeUtils.IsPrimeNumber(&lt;span style="color:#ae81ff"&gt;7919&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; b = PrimeUtils.IsPrimeNumber(&lt;span style="color:#ae81ff"&gt;7920&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// false&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; c = PrimeUtils.IsPrimeNumber(&lt;span style="color:#ae81ff"&gt;1_000_000_007&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; d = PrimeUtils.IsPrimeNumber(&lt;span style="color:#ae81ff"&gt;9_223_372_036_854_775_783L&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// true (near long.MaxValue)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; e = PrimeUtils.IsPrimeNumber(&lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; BigInteger(&lt;span style="color:#ae81ff"&gt;999983&lt;/span&gt;));&lt;span style="color:#75715e"&gt;// true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="generating-primes-in-sequence"&gt;Generating primes in sequence&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; ArturRios.Util.Math;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; generator = &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; PrimeGenerator&amp;lt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&amp;gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Console.WriteLine(generator.Next()); &lt;span style="color:#75715e"&gt;// 2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Console.WriteLine(generator.Next()); &lt;span style="color:#75715e"&gt;// 3&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Console.WriteLine(generator.Next()); &lt;span style="color:#75715e"&gt;// 5&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Console.WriteLine(generator.Next()); &lt;span style="color:#75715e"&gt;// 7&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="using-other-integer-types"&gt;Using other integer types&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// byte — sequence ends when next prime would exceed 255&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; byteGen = &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; PrimeGenerator&amp;lt;&lt;span style="color:#66d9ef"&gt;byte&lt;/span&gt;&amp;gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;byte&lt;/span&gt; first = byteGen.Next(); &lt;span style="color:#75715e"&gt;// 2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// BigInteger — unbounded&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; bigGen = &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; PrimeGenerator&amp;lt;BigInteger&amp;gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;BigInteger p = bigGen.Next(); &lt;span style="color:#75715e"&gt;// 2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="integer-square-root"&gt;Integer square root&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;BigInteger root = PrimeUtils.BigIntegerSqrt(&lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; BigInteger(&lt;span style="color:#ae81ff"&gt;99&lt;/span&gt;)); &lt;span style="color:#75715e"&gt;// 9 (floor)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;BigInteger exact = PrimeUtils.BigIntegerSqrt(&lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; BigInteger(&lt;span style="color:#ae81ff"&gt;100&lt;/span&gt;)); &lt;span style="color:#75715e"&gt;// 10 (exact)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="thread-safe-independent-generators"&gt;Thread-safe independent generators&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; g1 = &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; PrimeGenerator&amp;lt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&amp;gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; g2 = &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; PrimeGenerator&amp;lt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&amp;gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;g1.Next(); &lt;span style="color:#75715e"&gt;// 2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;g1.Next(); &lt;span style="color:#75715e"&gt;// 3&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;g2.Next(); &lt;span style="color:#75715e"&gt;// 2 ← independent — starts from the beginning&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;g2.Next(); &lt;span style="color:#75715e"&gt;// 3&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description><content>&lt;h2 id="features"&gt;Features&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;PrimeUtils&lt;/code&gt;: static primality tests for all standard integer types (&lt;code&gt;sbyte&lt;/code&gt;, &lt;code&gt;byte&lt;/code&gt;, &lt;code&gt;short&lt;/code&gt;, &lt;code&gt;ushort&lt;/code&gt;, &lt;code&gt;int&lt;/code&gt;, &lt;code&gt;uint&lt;/code&gt;, &lt;code&gt;long&lt;/code&gt;, &lt;code&gt;ulong&lt;/code&gt;) and &lt;code&gt;BigInteger&lt;/code&gt;. Uses trial division for 32-bit values and deterministic Miller-Rabin witnesses for 64-bit values. Also exposes &lt;code&gt;BigIntegerSqrt&lt;/code&gt; for computing the integer (floor) square root of a &lt;code&gt;BigInteger&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;PrimeGenerator&amp;lt;T&amp;gt;&lt;/code&gt;: generates an ascending, infinite sequence of prime numbers of the chosen integer type. Thread-safe; each instance maintains its own independent counter. Supported types: &lt;code&gt;sbyte&lt;/code&gt;, &lt;code&gt;byte&lt;/code&gt;, &lt;code&gt;short&lt;/code&gt;, &lt;code&gt;ushort&lt;/code&gt;, &lt;code&gt;int&lt;/code&gt;, &lt;code&gt;uint&lt;/code&gt;, &lt;code&gt;long&lt;/code&gt;, &lt;code&gt;ulong&lt;/code&gt;, &lt;code&gt;BigInteger&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="class-diagram"&gt;Class Diagram&lt;/h2&gt;
+&lt;pre class="mermaid"&gt;classDiagram
+namespace Math {
+class PrimeUtils {
+&amp;lt;&amp;lt;static&amp;gt;&amp;gt;
++bool IsPrimeNumber(sbyte value)
++bool IsPrimeNumber(byte value)
++bool IsPrimeNumber(short value)
++bool IsPrimeNumber(ushort value)
++bool IsPrimeNumber(int value)
++bool IsPrimeNumber(uint value)
++bool IsPrimeNumber(long value)
++bool IsPrimeNumber(ulong value)
++bool IsPrimeNumber(BigInteger value)
++BigInteger BigIntegerSqrt(BigInteger n)
+}
+class PrimeGenerator~T~ {
+-T _current
+-Lock _lock
++T Next()
+}
+}
+PrimeGenerator~T~ ..&amp;gt; PrimeUtils : uses
+&lt;/pre&gt;
+&lt;h2 id="usage"&gt;Usage&lt;/h2&gt;
+&lt;h3 id="primality-checks"&gt;Primality checks&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; ArturRios.Util.Math;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; a = PrimeUtils.IsPrimeNumber(&lt;span style="color:#ae81ff"&gt;7919&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; b = PrimeUtils.IsPrimeNumber(&lt;span style="color:#ae81ff"&gt;7920&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// false&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; c = PrimeUtils.IsPrimeNumber(&lt;span style="color:#ae81ff"&gt;1_000_000_007&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; d = PrimeUtils.IsPrimeNumber(&lt;span style="color:#ae81ff"&gt;9_223_372_036_854_775_783L&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// true (near long.MaxValue)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; e = PrimeUtils.IsPrimeNumber(&lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; BigInteger(&lt;span style="color:#ae81ff"&gt;999983&lt;/span&gt;));&lt;span style="color:#75715e"&gt;// true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="generating-primes-in-sequence"&gt;Generating primes in sequence&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; ArturRios.Util.Math;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; generator = &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; PrimeGenerator&amp;lt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&amp;gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Console.WriteLine(generator.Next()); &lt;span style="color:#75715e"&gt;// 2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Console.WriteLine(generator.Next()); &lt;span style="color:#75715e"&gt;// 3&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Console.WriteLine(generator.Next()); &lt;span style="color:#75715e"&gt;// 5&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Console.WriteLine(generator.Next()); &lt;span style="color:#75715e"&gt;// 7&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="using-other-integer-types"&gt;Using other integer types&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// byte — sequence ends when next prime would exceed 255&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; byteGen = &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; PrimeGenerator&amp;lt;&lt;span style="color:#66d9ef"&gt;byte&lt;/span&gt;&amp;gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;byte&lt;/span&gt; first = byteGen.Next(); &lt;span style="color:#75715e"&gt;// 2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// BigInteger — unbounded&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; bigGen = &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; PrimeGenerator&amp;lt;BigInteger&amp;gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;BigInteger p = bigGen.Next(); &lt;span style="color:#75715e"&gt;// 2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="integer-square-root"&gt;Integer square root&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;BigInteger root = PrimeUtils.BigIntegerSqrt(&lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; BigInteger(&lt;span style="color:#ae81ff"&gt;99&lt;/span&gt;)); &lt;span style="color:#75715e"&gt;// 9 (floor)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;BigInteger exact = PrimeUtils.BigIntegerSqrt(&lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; BigInteger(&lt;span style="color:#ae81ff"&gt;100&lt;/span&gt;)); &lt;span style="color:#75715e"&gt;// 10 (exact)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="thread-safe-independent-generators"&gt;Thread-safe independent generators&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; g1 = &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; PrimeGenerator&amp;lt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&amp;gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; g2 = &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; PrimeGenerator&amp;lt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt;&amp;gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;g1.Next(); &lt;span style="color:#75715e"&gt;// 2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;g1.Next(); &lt;span style="color:#75715e"&gt;// 3&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;g2.Next(); &lt;span style="color:#75715e"&gt;// 2 ← independent — starts from the beginning&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;g2.Next(); &lt;span style="color:#75715e"&gt;// 3&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content></item><item><title>Random</title><link>https://artur-rios.github.io/dotnet-util/random/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://artur-rios.github.io/dotnet-util/random/</guid><description>&lt;h2 id="features"&gt;Features&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;CustomRandom&lt;/code&gt;: static class for generating random integers via cryptographic RNG or &lt;code&gt;System.Random&lt;/code&gt;, and constrained random strings.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;RandomStringOptions&lt;/code&gt;: configuration for random string generation — controls length and which character sets to include (lowercase letters, uppercase letters, digits, special characters).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="class-diagram"&gt;Class Diagram&lt;/h2&gt;
+&lt;pre class="mermaid"&gt;classDiagram
+namespace Random {
+class CustomRandom {
+&amp;lt;&amp;lt;static&amp;gt;&amp;gt;
++int NumberFromRng(int start, int end, int? differentFrom)
++int NumberFromSystemRandom(int start, int end, int? differentFrom)
++string Text(RandomStringOptions options, string[]? differentFrom)
+}
+class RandomStringOptions {
++int Length
++bool IncludeLowercase
++bool IncludeUppercase
++bool IncludeDigits
++bool IncludeSpecialCharacters
+}
+}
+CustomRandom ..&amp;gt; RandomStringOptions : uses
+&lt;/pre&gt;
+&lt;h2 id="usage"&gt;Usage&lt;/h2&gt;
+&lt;h3 id="random-integers"&gt;Random integers&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; ArturRios.Util.Random;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Cryptographic RNG — unpredictable, preferred for security-sensitive values&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; n1 = CustomRandom.NumberFromRng(&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;100&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// System.Random — faster, sufficient for non-security uses&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; n2 = CustomRandom.NumberFromSystemRandom(&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;50&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Exclude a specific value (retries until a different value is produced)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; roll = CustomRandom.NumberFromRng(&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;6&lt;/span&gt;, differentFrom: &lt;span style="color:#ae81ff"&gt;3&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// never returns 3&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="random-strings"&gt;Random strings&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; ArturRios.Util.Random;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 16-character password with all character sets&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; pwd = CustomRandom.Text(&lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; RandomStringOptions
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Length = &lt;span style="color:#ae81ff"&gt;16&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeLowercase = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeUppercase = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeDigits = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeSpecialCharacters = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;});
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 6-digit PIN&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; pin = CustomRandom.Text(&lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; RandomStringOptions
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Length = &lt;span style="color:#ae81ff"&gt;6&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeDigits = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;});
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Avoid previously generated values (e.g., prevent session ID collisions)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; token = CustomRandom.Text(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; RandomStringOptions { Length = &lt;span style="color:#ae81ff"&gt;32&lt;/span&gt;, IncludeDigits = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;, IncludeLowercase = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; differentFrom: existingTokens);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description><content>&lt;h2 id="features"&gt;Features&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;CustomRandom&lt;/code&gt;: static class for generating random integers via cryptographic RNG or &lt;code&gt;System.Random&lt;/code&gt;, and constrained random strings.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;RandomStringOptions&lt;/code&gt;: configuration for random string generation — controls length and which character sets to include (lowercase letters, uppercase letters, digits, special characters).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="class-diagram"&gt;Class Diagram&lt;/h2&gt;
+&lt;pre class="mermaid"&gt;classDiagram
+namespace Random {
+class CustomRandom {
+&amp;lt;&amp;lt;static&amp;gt;&amp;gt;
++int NumberFromRng(int start, int end, int? differentFrom)
++int NumberFromSystemRandom(int start, int end, int? differentFrom)
++string Text(RandomStringOptions options, string[]? differentFrom)
+}
+class RandomStringOptions {
++int Length
++bool IncludeLowercase
++bool IncludeUppercase
++bool IncludeDigits
++bool IncludeSpecialCharacters
+}
+}
+CustomRandom ..&amp;gt; RandomStringOptions : uses
+&lt;/pre&gt;
+&lt;h2 id="usage"&gt;Usage&lt;/h2&gt;
+&lt;h3 id="random-integers"&gt;Random integers&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; ArturRios.Util.Random;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Cryptographic RNG — unpredictable, preferred for security-sensitive values&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; n1 = CustomRandom.NumberFromRng(&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;100&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// System.Random — faster, sufficient for non-security uses&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; n2 = CustomRandom.NumberFromSystemRandom(&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;50&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Exclude a specific value (retries until a different value is produced)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;int&lt;/span&gt; roll = CustomRandom.NumberFromRng(&lt;span style="color:#ae81ff"&gt;1&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;6&lt;/span&gt;, differentFrom: &lt;span style="color:#ae81ff"&gt;3&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// never returns 3&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="random-strings"&gt;Random strings&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; ArturRios.Util.Random;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 16-character password with all character sets&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; pwd = CustomRandom.Text(&lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; RandomStringOptions
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Length = &lt;span style="color:#ae81ff"&gt;16&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeLowercase = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeUppercase = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeDigits = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeSpecialCharacters = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;});
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 6-digit PIN&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; pin = CustomRandom.Text(&lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; RandomStringOptions
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Length = &lt;span style="color:#ae81ff"&gt;6&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeDigits = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;});
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Avoid previously generated values (e.g., prevent session ID collisions)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; token = CustomRandom.Text(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; RandomStringOptions { Length = &lt;span style="color:#ae81ff"&gt;32&lt;/span&gt;, IncludeDigits = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;, IncludeLowercase = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; differentFrom: existingTokens);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content></item><item><title>Regular Expressions</title><link>https://artur-rios.github.io/dotnet-util/regular-expressions/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://artur-rios.github.io/dotnet-util/regular-expressions/</guid><description>&lt;h2 id="features"&gt;Features&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;RegexCollection&lt;/code&gt;: source-generated compiled regex methods for common patterns — email address, contains a digit, contains a lowercase letter, contains an uppercase letter, contains all three (digit + lowercase + uppercase).&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;RegexExtensions&lt;/code&gt;: &lt;code&gt;Remove&lt;/code&gt; extension method on &lt;code&gt;Regex&lt;/code&gt; that strips all pattern matches from a string.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="class-diagram"&gt;Class Diagram&lt;/h2&gt;
+&lt;pre class="mermaid"&gt;classDiagram
+namespace RegularExpressions {
+class RegexCollection {
+&amp;lt;&amp;lt;static&amp;gt;&amp;gt;
++const string EmailPattern
++const string HasNumberPattern
++const string HasLowerCharPattern
++const string HasUpperCharPattern
++const string HasNumberLowerAndUpperCharPattern
++Regex Email()
++Regex HasNumber()
++Regex HasLowerChar()
++Regex HasUpperChar()
++Regex HasNumberLowerAndUpperChar()
+}
+class RegexExtensions {
+&amp;lt;&amp;lt;static&amp;gt;&amp;gt;
++string Remove(Regex regex, string @string)
+}
+}
+RegexExtensions ..&amp;gt; RegexCollection : extends
+&lt;/pre&gt;
+&lt;h2 id="usage"&gt;Usage&lt;/h2&gt;
+&lt;h3 id="matching"&gt;Matching&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; ArturRios.Util.RegularExpressions;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; isEmail = RegexCollection.Email().IsMatch(&lt;span style="color:#e6db74"&gt;&amp;#34;john@doe.com&amp;#34;&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; isEmail2 = RegexCollection.Email().IsMatch(&lt;span style="color:#e6db74"&gt;&amp;#34;not-an-email&amp;#34;&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// false&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; hasDigit = RegexCollection.HasNumber().IsMatch(&lt;span style="color:#e6db74"&gt;&amp;#34;abc123&amp;#34;&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; hasLower = RegexCollection.HasLowerChar().IsMatch(&lt;span style="color:#e6db74"&gt;&amp;#34;Hello&amp;#34;&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; hasUpper = RegexCollection.HasUpperChar().IsMatch(&lt;span style="color:#e6db74"&gt;&amp;#34;Hello&amp;#34;&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Check password complexity in a single call&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; isComplex = RegexCollection.HasNumberLowerAndUpperChar().IsMatch(&lt;span style="color:#e6db74"&gt;&amp;#34;Password1&amp;#34;&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="removing-matches"&gt;Removing matches&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; ArturRios.Util.RegularExpressions;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Strip all digits from a string&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;string&lt;/span&gt; lettersOnly = RegexCollection.HasNumber().Remove(&lt;span style="color:#e6db74"&gt;&amp;#34;abc123def456&amp;#34;&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// &amp;#34;abcdef&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Strip all lowercase letters&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;string&lt;/span&gt; noLower = RegexCollection.HasLowerChar().Remove(&lt;span style="color:#e6db74"&gt;&amp;#34;Hello World&amp;#34;&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// &amp;#34;H W&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description><content>&lt;h2 id="features"&gt;Features&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;RegexCollection&lt;/code&gt;: source-generated compiled regex methods for common patterns — email address, contains a digit, contains a lowercase letter, contains an uppercase letter, contains all three (digit + lowercase + uppercase).&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;RegexExtensions&lt;/code&gt;: &lt;code&gt;Remove&lt;/code&gt; extension method on &lt;code&gt;Regex&lt;/code&gt; that strips all pattern matches from a string.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="class-diagram"&gt;Class Diagram&lt;/h2&gt;
+&lt;pre class="mermaid"&gt;classDiagram
+namespace RegularExpressions {
+class RegexCollection {
+&amp;lt;&amp;lt;static&amp;gt;&amp;gt;
++const string EmailPattern
++const string HasNumberPattern
++const string HasLowerCharPattern
++const string HasUpperCharPattern
++const string HasNumberLowerAndUpperCharPattern
++Regex Email()
++Regex HasNumber()
++Regex HasLowerChar()
++Regex HasUpperChar()
++Regex HasNumberLowerAndUpperChar()
+}
+class RegexExtensions {
+&amp;lt;&amp;lt;static&amp;gt;&amp;gt;
++string Remove(Regex regex, string @string)
+}
+}
+RegexExtensions ..&amp;gt; RegexCollection : extends
+&lt;/pre&gt;
+&lt;h2 id="usage"&gt;Usage&lt;/h2&gt;
+&lt;h3 id="matching"&gt;Matching&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; ArturRios.Util.RegularExpressions;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; isEmail = RegexCollection.Email().IsMatch(&lt;span style="color:#e6db74"&gt;&amp;#34;john@doe.com&amp;#34;&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; isEmail2 = RegexCollection.Email().IsMatch(&lt;span style="color:#e6db74"&gt;&amp;#34;not-an-email&amp;#34;&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// false&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; hasDigit = RegexCollection.HasNumber().IsMatch(&lt;span style="color:#e6db74"&gt;&amp;#34;abc123&amp;#34;&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; hasLower = RegexCollection.HasLowerChar().IsMatch(&lt;span style="color:#e6db74"&gt;&amp;#34;Hello&amp;#34;&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; hasUpper = RegexCollection.HasUpperChar().IsMatch(&lt;span style="color:#e6db74"&gt;&amp;#34;Hello&amp;#34;&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Check password complexity in a single call&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;bool&lt;/span&gt; isComplex = RegexCollection.HasNumberLowerAndUpperChar().IsMatch(&lt;span style="color:#e6db74"&gt;&amp;#34;Password1&amp;#34;&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="removing-matches"&gt;Removing matches&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; ArturRios.Util.RegularExpressions;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Strip all digits from a string&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;string&lt;/span&gt; lettersOnly = RegexCollection.HasNumber().Remove(&lt;span style="color:#e6db74"&gt;&amp;#34;abc123def456&amp;#34;&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// &amp;#34;abcdef&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Strip all lowercase letters&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;string&lt;/span&gt; noLower = RegexCollection.HasLowerChar().Remove(&lt;span style="color:#e6db74"&gt;&amp;#34;Hello World&amp;#34;&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// &amp;#34;H W&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content></item></channel></rss>

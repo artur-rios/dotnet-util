@@ -1,0 +1,87 @@
+<!doctype html><html lang=en><head><title>Flow Control :: Dotnet Output</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Features Condition: fluent condition aggregator; collects failure messages and can throw ConditionFailedException or convert to a process output. ConditionFailedException: exception carrying all collected error messages as string[]. Retry: simple retry with configurable max attempts and fixed delay; supports Action and Func<T>. JitteredWaiter: exponential backoff with jitter; exposes CanRetry and throws MaxRetriesReachedException when retries are exhausted. MaxRetriesReachedException: exception thrown when JitteredWaiter exceeds its retry limit. Class Diagram classDiagram namespace FlowControl { class Condition { -HashSet~string~ _failedConditions -bool _expression +static Condition Create +string[] FailedConditions +bool IsSatisfied +Condition True(bool expression) +Condition False(bool expression) +Condition FailsWith(string error) +void ThrowIfNotSatisfied() +ProcessOutput ToProcessOutput() } class ConditionFailedException { +string[] Errors } class Retry { -int _delayMilliseconds -int _maxAttempts +static Retry New +Retry MaxAttempts(int maxAttempts) +Retry DelayMilliseconds(int delayMilliseconds) +void Execute(Action action) +T Execute~T~(Func~T~ func) } } namespace FlowControl_Waiter { class JitteredWaiter { -const int FixedWaitDelay +int MaxRetryCount -int Count +bool CanRetry +Task Wait() } class MaxRetriesReachedException } Condition ..> ConditionFailedException : throws JitteredWaiter ..> MaxRetriesReachedException : throws Usage Condition Chain boolean assertions — all failures are collected before throwing:
+"><meta name=keywords content><meta name=robots content="noodp"><link rel=canonical href=https://artur-rios.github.io/dotnet-util/flow-control/><link rel=stylesheet href=https://artur-rios.github.io/dotnet-util/styles.css><link rel="shortcut icon" href=https://artur-rios.github.io/dotnet-util/img/theme-colors/orange.png><link rel=apple-touch-icon href=https://artur-rios.github.io/dotnet-util/img/theme-colors/orange.png><meta name=twitter:card content="summary"><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="og:title" content="Flow Control"><meta property="og:description" content="Features Condition: fluent condition aggregator; collects failure messages and can throw ConditionFailedException or convert to a process output. ConditionFailedException: exception carrying all collected error messages as string[]. Retry: simple retry with configurable max attempts and fixed delay; supports Action and Func<T>. JitteredWaiter: exponential backoff with jitter; exposes CanRetry and throws MaxRetriesReachedException when retries are exhausted. MaxRetriesReachedException: exception thrown when JitteredWaiter exceeds its retry limit. Class Diagram classDiagram namespace FlowControl { class Condition { -HashSet~string~ _failedConditions -bool _expression +static Condition Create +string[] FailedConditions +bool IsSatisfied +Condition True(bool expression) +Condition False(bool expression) +Condition FailsWith(string error) +void ThrowIfNotSatisfied() +ProcessOutput ToProcessOutput() } class ConditionFailedException { +string[] Errors } class Retry { -int _delayMilliseconds -int _maxAttempts +static Retry New +Retry MaxAttempts(int maxAttempts) +Retry DelayMilliseconds(int delayMilliseconds) +void Execute(Action action) +T Execute~T~(Func~T~ func) } } namespace FlowControl_Waiter { class JitteredWaiter { -const int FixedWaitDelay +int MaxRetryCount -int Count +bool CanRetry +Task Wait() } class MaxRetriesReachedException } Condition ..> ConditionFailedException : throws JitteredWaiter ..> MaxRetriesReachedException : throws Usage Condition Chain boolean assertions — all failures are collected before throwing:
+"><meta property="og:url" content="https://artur-rios.github.io/dotnet-util/flow-control/"><meta property="og:site_name" content="Dotnet Output"><meta property="og:image" content="img/favicon/%!s(<nil>).png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="627"></head><body><div class="container center headings--one-size"><header class=header><div class=header__inner><div class=header__logo><a href=https://artur-rios.github.io/dotnet-util/><div class=logo>Dotnet Output</div></a></div><ul class="menu menu--mobile"><li class=menu__trigger>Menu&nbsp;▾</li><li><ul class=menu__dropdown><li><a href=https://www.artur-rios.tech/>Author</a></li><li><a href=https://github.com/artur-rios/dotnet-util>GitHub</a></li><li><a href=https://artur-rios.github.io/dotnet-util/coverage-report>Test Coverage</a></li></ul></li></ul></div><nav class=navigation-menu><ul class="navigation-menu__inner menu--desktop"><li><a href=https://www.artur-rios.tech/>Author</a></li><li><a href=https://github.com/artur-rios/dotnet-util>GitHub</a></li><li><a href=https://artur-rios.github.io/dotnet-util/coverage-report>Test Coverage</a></li></ul></nav></header><div class=content><article class=post><h1 class=post-title><a href=https://artur-rios.github.io/dotnet-util/flow-control/>Flow Control</a></h1><div class=post-meta></div><div class=post-content><div><h2 id=features>Features<a href=#features class=hanchor arialabel=Anchor>&#8983;</a></h2><ul><li><code>Condition</code>: fluent condition aggregator; collects failure messages and can throw <code>ConditionFailedException</code> or convert to a process output.</li><li><code>ConditionFailedException</code>: exception carrying all collected error messages as <code>string[]</code>.</li><li><code>Retry</code>: simple retry with configurable max attempts and fixed delay; supports <code>Action</code> and <code>Func&lt;T></code>.</li><li><code>JitteredWaiter</code>: exponential backoff with jitter; exposes <code>CanRetry</code> and throws <code>MaxRetriesReachedException</code> when retries are exhausted.</li><li><code>MaxRetriesReachedException</code>: exception thrown when <code>JitteredWaiter</code> exceeds its retry limit.</li></ul><h2 id=class-diagram>Class Diagram<a href=#class-diagram class=hanchor arialabel=Anchor>&#8983;</a></h2><pre class=mermaid>classDiagram
+    namespace FlowControl {
+        class Condition {
+            -HashSet~string~ _failedConditions
+            -bool _expression
+            +static Condition Create
+            +string[] FailedConditions
+            +bool IsSatisfied
+            +Condition True(bool expression)
+            +Condition False(bool expression)
+            +Condition FailsWith(string error)
+            +void ThrowIfNotSatisfied()
+            +ProcessOutput ToProcessOutput()
+        }
+        class ConditionFailedException {
+            +string[] Errors
+        }
+        class Retry {
+            -int _delayMilliseconds
+            -int _maxAttempts
+            +static Retry New
+            +Retry MaxAttempts(int maxAttempts)
+            +Retry DelayMilliseconds(int delayMilliseconds)
+            +void Execute(Action action)
+            +T Execute~T~(Func~T~ func)
+        }
+    }
+    namespace FlowControl_Waiter {
+        class JitteredWaiter {
+            -const int FixedWaitDelay
+            +int MaxRetryCount
+            -int Count
+            +bool CanRetry
+            +Task Wait()
+        }
+        class MaxRetriesReachedException
+    }
+    Condition ..&gt; ConditionFailedException : throws
+    JitteredWaiter ..&gt; MaxRetriesReachedException : throws
+</pre><h2 id=usage>Usage<a href=#usage class=hanchor arialabel=Anchor>&#8983;</a></h2><h3 id=condition>Condition<a href=#condition class=hanchor arialabel=Anchor>&#8983;</a></h3><p>Chain boolean assertions — all failures are collected before throwing:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-csharp data-lang=csharp><span style=display:flex><span><span style=color:#66d9ef>using</span> ArturRios.Util.FlowControl;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Condition.Create
+</span></span><span style=display:flex><span>    .True(user <span style=color:#66d9ef>is</span> not <span style=color:#66d9ef>null</span>).FailsWith(<span style=color:#e6db74>&#34;User is required&#34;</span>)
+</span></span><span style=display:flex><span>    .True(emailValid).FailsWith(<span style=color:#e6db74>&#34;Invalid email format&#34;</span>)
+</span></span><span style=display:flex><span>    .False(<span style=color:#66d9ef>string</span>.IsNullOrEmpty(username)).FailsWith(<span style=color:#e6db74>&#34;Username cannot be empty&#34;</span>)
+</span></span><span style=display:flex><span>    .ThrowIfNotSatisfied();
+</span></span></code></pre></div><p>Convert to a process output instead of throwing:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-csharp data-lang=csharp><span style=display:flex><span><span style=color:#66d9ef>var</span> result = Condition.Create
+</span></span><span style=display:flex><span>    .True(age &gt;= <span style=color:#ae81ff>18</span>).FailsWith(<span style=color:#e6db74>&#34;Must be 18 or older&#34;</span>)
+</span></span><span style=display:flex><span>    .ToProcessOutput();
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>if</span> (!result.Success)
+</span></span><span style=display:flex><span>    Console.WriteLine(<span style=color:#66d9ef>string</span>.Join(<span style=color:#e6db74>&#34;, &#34;</span>, result.Errors));
+</span></span></code></pre></div><h3 id=retry>Retry<a href=#retry class=hanchor arialabel=Anchor>&#8983;</a></h3><p>Retry a void action:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-csharp data-lang=csharp><span style=display:flex><span><span style=color:#66d9ef>using</span> ArturRios.Util.FlowControl;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Retry.New
+</span></span><span style=display:flex><span>    .MaxAttempts(<span style=color:#ae81ff>3</span>)
+</span></span><span style=display:flex><span>    .DelayMilliseconds(<span style=color:#ae81ff>200</span>)
+</span></span><span style=display:flex><span>    .Execute(() =&gt; SendEmail(recipient));
+</span></span></code></pre></div><p>Retry a function that returns a value:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-csharp data-lang=csharp><span style=display:flex><span><span style=color:#66d9ef>var</span> data = Retry.New
+</span></span><span style=display:flex><span>    .MaxAttempts(<span style=color:#ae81ff>5</span>)
+</span></span><span style=display:flex><span>    .DelayMilliseconds(<span style=color:#ae81ff>500</span>)
+</span></span><span style=display:flex><span>    .Execute(() =&gt; FetchDataFromApi());
+</span></span></code></pre></div><h3 id=jitteredwaiter>JitteredWaiter<a href=#jitteredwaiter class=hanchor arialabel=Anchor>&#8983;</a></h3><p>Use in a polling or retry loop with exponential backoff:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-csharp data-lang=csharp><span style=display:flex><span><span style=color:#66d9ef>using</span> ArturRios.Util.FlowControl.Waiter;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>var</span> waiter = <span style=color:#66d9ef>new</span> JitteredWaiter(maxRetryCount: <span style=color:#ae81ff>5</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>while</span> (waiter.CanRetry)
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>try</span>
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>await</span> TryOperationAsync();
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>break</span>;
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>catch</span> (TransientException)
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>await</span> waiter.Wait();
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div></div></div><div class=page-nav><span>Back to <a href=https://artur-rios.github.io/dotnet-util/collections>Collections</a></span>
+<span class=page-nav-next>| See also <a href=https://artur-rios.github.io/dotnet-util/hashing>Hashing</a></span></div></article></div><footer class=footer><div class=footer__inner><div class=copyright><span>© 2026 Powered by <a href=https://gohugo.io>Hugo</a></span>
+<span><a href=https://github.com/mirus-ua/hugo-theme-re-terminal target=_blank>Original theme</a> made by <a href=https://github.com/mirus-ua target=_blank>Mirus</a></span>
+<span><a href=https://github.com/artur-rios/hugo-theme-re-terminal target=_blank>This version</a> is made by <a href=https://github.com/artur-rios target=_blank>Artur Rios</a></span></div></div></footer><script type=text/javascript src=https://artur-rios.github.io/dotnet-util/bundle.min.js></script></div><script type=module>
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+  </script></body></html>
