@@ -43,7 +43,7 @@ public class JitteredWaiter(int maxRetryCount)
         }
         else
         {
-            var backoffPeriodMs = Convert.ToInt32(Math.Pow(2, currentRetryAttempt) * 1000) - FixedWaitDelay;
+            var backoffPeriodMs = Convert.ToInt32(System.Math.Pow(2, currentRetryAttempt) * 1000) - FixedWaitDelay;
             await Task.Delay(FixedWaitDelay + backoffPeriodMs / 2 + new System.Random().Next(0, backoffPeriodMs / 2));
         }
     }

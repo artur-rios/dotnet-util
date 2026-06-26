@@ -12,7 +12,7 @@ public class JitteredWaiterTests
     public async Task GivenAttemptIndex_WhenWait_ThenElapsedWithinExpectedRange(int attemptIndex, int expectedMinMs, int expectedMaxMs)
     {
         var waiter = new JitteredWaiter(maxRetryCount: 10);
-        
+
         for (var i = 0; i < attemptIndex; i++)
         {
             await waiter.Wait();
@@ -20,12 +20,12 @@ public class JitteredWaiterTests
 
         var sw = Stopwatch.StartNew();
         await waiter.Wait();
-        
+
         sw.Stop();
 
         var elapsed = sw.ElapsedMilliseconds;
-        
-        var lowerBound = Math.Max(0, expectedMinMs - 150); 
+
+        var lowerBound = System.Math.Max(0, expectedMinMs - 150);
         var upperBound = expectedMaxMs + 350;
 
         Assert.InRange(elapsed, lowerBound, upperBound);
@@ -37,13 +37,13 @@ public class JitteredWaiterTests
         var waiter = new JitteredWaiter(2);
 
         Assert.True(waiter.CanRetry);
-        
+
         await waiter.Wait();
-        
+
         Assert.True(waiter.CanRetry);
-        
+
         await waiter.Wait();
-        
+
         Assert.False(waiter.CanRetry);
     }
 
@@ -51,10 +51,10 @@ public class JitteredWaiterTests
     public async Task GivenMaxRetryCount_WhenExceedingRetries_ThenThrowException()
     {
         var waiter = new JitteredWaiter(2);
-        
+
         await waiter.Wait();
         await waiter.Wait();
-        
+
         await Assert.ThrowsAsync<MaxRetriesReachedException>(() => waiter.Wait());
     }
 
@@ -62,9 +62,9 @@ public class JitteredWaiterTests
     public async Task GivenZeroMaxRetryCount_WhenWait_ThenThrowImmediately()
     {
         var waiter = new JitteredWaiter(0);
-        
+
         Assert.False(waiter.CanRetry);
-        
+
         await Assert.ThrowsAsync<MaxRetriesReachedException>(() => waiter.Wait());
     }
 }
