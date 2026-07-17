@@ -100,7 +100,7 @@ The package targets **net10.0** and depends on [`ArturRios.Output`](https://www.
   var stripped = RegexCollection.HasNumber().Remove("abc123def"); // "abcdef"
   ```
 
-## Documentation
+## Detailed documentation
 
 Full API reference, class diagrams, and usage examples:
 

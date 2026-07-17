@@ -1,5 +1,9 @@
 # Dotnet Util
 
+[![Docs](https://img.shields.io/badge/docs-website-blue)](https://artur-rios.github.io/dotnet-util)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
+[![NuGet](https://img.shields.io/nuget/v/ArturRios.Util.svg)](https://www.nuget.org/packages/ArturRios.Util)
+
 Utilities for common development tasks in .NET: flow control (conditions, retries, and waiters), hashing (Argon2id), file I/O helpers, HTTP client helpers, math utilities, random values and strings, regex helpers, and small collections.
 
 ## Installation
@@ -11,6 +15,7 @@ The package targets **net10.0** and depends on [`ArturRios.Output`](https://www.
 ## Quickstart
 
 - **Collections**
+
   ```csharp
   using ArturRios.Util.Collections;
   Console.WriteLine($"{AnsiColors.Green}Success!\x1b[0m");
@@ -18,6 +23,7 @@ The package targets **net10.0** and depends on [`ArturRios.Output`](https://www.
   ```
 
 - **FlowControl**
+
   ```csharp
   using ArturRios.Util.FlowControl;
   using ArturRios.Util.FlowControl.Waiter;
@@ -39,6 +45,7 @@ The package targets **net10.0** and depends on [`ArturRios.Output`](https://www.
   ```
 
 - **Hashing**
+
   ```csharp
   using ArturRios.Util.Hashing;
   var hash = Hash.EncodeWithRandomSalt("secret", out var salt);
@@ -46,6 +53,7 @@ The package targets **net10.0** and depends on [`ArturRios.Output`](https://www.
   ```
 
 - **Http**
+
   ```csharp
   using ArturRios.Util.Http;
   var gateway = new HttpGateway(httpClient);
@@ -55,6 +63,7 @@ The package targets **net10.0** and depends on [`ArturRios.Output`](https://www.
   ```
 
 - **IO**
+
   ```csharp
   using ArturRios.Util.IO;
   var text  = FileReader.Read(path);
@@ -65,6 +74,7 @@ The package targets **net10.0** and depends on [`ArturRios.Output`](https://www.
   ```
 
 - **Math**
+
   ```csharp
   using ArturRios.Util.Math;
   bool isPrime = PrimeUtils.IsPrimeNumber(7919); // true
@@ -74,6 +84,7 @@ The package targets **net10.0** and depends on [`ArturRios.Output`](https://www.
   ```
 
 - **Random**
+
   ```csharp
   using ArturRios.Util.Random;
   var n   = CustomRandom.NumberFromRng(1, 10);
@@ -82,6 +93,7 @@ The package targets **net10.0** and depends on [`ArturRios.Output`](https://www.
   ```
 
 - **RegularExpressions**
+
   ```csharp
   using ArturRios.Util.RegularExpressions;
   var isEmail = RegexCollection.Email().IsMatch("john@doe.com");
