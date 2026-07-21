@@ -4,7 +4,7 @@ title = 'Dotnet Util'
 
 # Documentation
 
-Utilities for common development tasks in .NET: flow control (conditions, retries, and waiters), hashing (Argon2id), file I/O helpers, HTTP client helpers, math utilities, random values and strings, regex helpers, and small collections.
+Utilities for common development tasks in .NET: console output helpers, flow control (conditions, retries, and waiters), hashing (Argon2id), file I/O helpers, HTTP client helpers, math utilities, random values and strings, regex helpers, and small collections.
 
 ## Installation
 
@@ -20,6 +20,14 @@ The package targets **net10.0** and depends on [`ArturRios.Output`](https://www.
   using ArturRios.Util.Collections;
   Console.WriteLine($"{AnsiColors.Green}Success!\x1b[0m");
   var pool = Characters.Digits + Characters.UpperLetters;
+  ```
+
+- **Console**
+
+  ```csharp
+  using ArturRios.Util.Console;
+  CustomConsole.WriteCharLine();          // 100 dashes
+  CustomConsole.WriteCharLine('=', 40);   // 40 equals signs
   ```
 
 - **FlowControl**
@@ -105,6 +113,7 @@ The package targets **net10.0** and depends on [`ArturRios.Output`](https://www.
 Full API reference, class diagrams, and usage examples:
 
 - [Collections](/dotnet-util/collections/)
+- [Console](/dotnet-util/console/)
 - [Flow Control](/dotnet-util/flow-control/)
 - [Hashing](/dotnet-util/hashing/)
 - [Http](/dotnet-util/http/)

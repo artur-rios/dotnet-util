@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
 [![NuGet](https://img.shields.io/nuget/v/ArturRios.Util.svg)](https://www.nuget.org/packages/ArturRios.Util)
 
-Utilities for common development tasks in .NET: flow control (conditions, retries, and waiters), hashing (Argon2id), file I/O helpers, HTTP client helpers, math utilities, random values and strings, regex helpers, and small collections.
+Utilities for common development tasks in .NET: console output helpers, flow control (conditions, retries, and waiters), hashing (Argon2id), file I/O helpers, HTTP client helpers, math utilities, random values and strings, regex helpers, and small collections.
 
 ## Installation
 
@@ -20,6 +20,14 @@ The package targets **net10.0** and depends on [`ArturRios.Output`](https://www.
   using ArturRios.Util.Collections;
   Console.WriteLine($"{AnsiColors.Green}Success!\x1b[0m");
   var pool = Characters.Digits + Characters.UpperLetters;
+  ```
+
+- **Console**
+
+  ```csharp
+  using ArturRios.Util.Console;
+  CustomConsole.WriteCharLine();          // 100 dashes
+  CustomConsole.WriteCharLine('=', 40);   // 40 equals signs
   ```
 
 - **FlowControl**
@@ -105,6 +113,7 @@ The package targets **net10.0** and depends on [`ArturRios.Output`](https://www.
 Full API reference, class diagrams, and usage examples:
 
 - [Collections](https://artur-rios.github.io/dotnet-util/collections/)
+- [Console](https://artur-rios.github.io/dotnet-util/console/)
 - [Flow Control](https://artur-rios.github.io/dotnet-util/flow-control/)
 - [Hashing](https://artur-rios.github.io/dotnet-util/hashing/)
 - [Http](https://artur-rios.github.io/dotnet-util/http/)

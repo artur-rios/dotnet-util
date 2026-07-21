@@ -1,8 +1,8 @@
 +++
 title          = "Flow Control"
 show_nav       = true
-nav_back_label = "Collections"
-nav_back_url   = "/dotnet-util/collections"
+nav_back_label = "Console"
+nav_back_url   = "/dotnet-util/console"
 nav_next_label = "Hashing"
 nav_next_url   = "/dotnet-util/hashing"
 +++

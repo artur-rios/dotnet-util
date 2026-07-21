@@ -3,8 +3,8 @@ title          = "Collections"
 show_nav       = true
 nav_back_label = "Home"
 nav_back_url   = "/dotnet-util"
-nav_next_label = "Flow Control"
-nav_next_url   = "/dotnet-util/flow-control"
+nav_next_label = "Console"
+nav_next_url   = "/dotnet-util/console"
 +++
 
 ## Features
