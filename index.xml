@@ -76,7 +76,59 @@ class Characters {
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Use Characters.All for the widest possible pool&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;string&lt;/span&gt; fullPool = Characters.All;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content></item><item><title>Flow Control</title><link>https://artur-rios.github.io/dotnet-util/flow-control/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://artur-rios.github.io/dotnet-util/flow-control/</guid><description>&lt;h2 id="features"&gt;Features&lt;/h2&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content></item><item><title>Console</title><link>https://artur-rios.github.io/dotnet-util/console/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://artur-rios.github.io/dotnet-util/console/</guid><description>&lt;h2 id="features"&gt;Features&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;CustomConsole&lt;/code&gt;: static helpers for writing formatted output to the system console — currently a separator line built from a single repeated character.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="class-diagram"&gt;Class Diagram&lt;/h2&gt;
+&lt;pre class="mermaid"&gt;classDiagram
+namespace Console {
+class CustomConsole {
+&amp;lt;&amp;lt;static&amp;gt;&amp;gt;
++void WriteCharLine(char c, int quantity)
+}
+}
+&lt;/pre&gt;
+&lt;h2 id="usage"&gt;Usage&lt;/h2&gt;
+&lt;h3 id="write-a-separator-line"&gt;Write a separator line&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; ArturRios.Util.Console;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Defaults: 100 dashes&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;CustomConsole.WriteCharLine();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// ----------------------------------------------------------------------------------------------------&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="choose-the-character-and-the-length"&gt;Choose the character and the length&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;CustomConsole.WriteCharLine(&lt;span style="color:#e6db74"&gt;&amp;#39;=&amp;#39;&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;40&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// ========================================&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;CustomConsole.WriteCharLine(&lt;span style="color:#e6db74"&gt;&amp;#39;*&amp;#39;&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// 100 asterisks&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;CustomConsole.WriteCharLine(&lt;span style="color:#e6db74"&gt;&amp;#39;-&amp;#39;&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// empty line&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;A negative &lt;code&gt;quantity&lt;/code&gt; throws &lt;code&gt;ArgumentOutOfRangeException&lt;/code&gt;.&lt;/p&gt;</description><content>&lt;h2 id="features"&gt;Features&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;CustomConsole&lt;/code&gt;: static helpers for writing formatted output to the system console — currently a separator line built from a single repeated character.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="class-diagram"&gt;Class Diagram&lt;/h2&gt;
+&lt;pre class="mermaid"&gt;classDiagram
+namespace Console {
+class CustomConsole {
+&amp;lt;&amp;lt;static&amp;gt;&amp;gt;
++void WriteCharLine(char c, int quantity)
+}
+}
+&lt;/pre&gt;
+&lt;h2 id="usage"&gt;Usage&lt;/h2&gt;
+&lt;h3 id="write-a-separator-line"&gt;Write a separator line&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;using&lt;/span&gt; ArturRios.Util.Console;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Defaults: 100 dashes&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;CustomConsole.WriteCharLine();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// ----------------------------------------------------------------------------------------------------&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="choose-the-character-and-the-length"&gt;Choose the character and the length&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;CustomConsole.WriteCharLine(&lt;span style="color:#e6db74"&gt;&amp;#39;=&amp;#39;&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;40&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// ========================================&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;CustomConsole.WriteCharLine(&lt;span style="color:#e6db74"&gt;&amp;#39;*&amp;#39;&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// 100 asterisks&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;CustomConsole.WriteCharLine(&lt;span style="color:#e6db74"&gt;&amp;#39;-&amp;#39;&lt;/span&gt;, &lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;); &lt;span style="color:#75715e"&gt;// empty line&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;A negative &lt;code&gt;quantity&lt;/code&gt; throws &lt;code&gt;ArgumentOutOfRangeException&lt;/code&gt;.&lt;/p&gt;</content></item><item><title>Flow Control</title><link>https://artur-rios.github.io/dotnet-util/flow-control/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://artur-rios.github.io/dotnet-util/flow-control/</guid><description>&lt;h2 id="features"&gt;Features&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;Condition&lt;/code&gt;: fluent condition aggregator; collects failure messages and can throw &lt;code&gt;ConditionFailedException&lt;/code&gt; or convert to a process output.&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;ConditionFailedException&lt;/code&gt;: exception carrying all collected error messages as &lt;code&gt;string[]&lt;/code&gt;.&lt;/li&gt;
