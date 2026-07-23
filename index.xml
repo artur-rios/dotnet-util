@@ -381,7 +381,7 @@ Hash ..&amp;gt; HashConfiguration : uses
 &lt;li&gt;&lt;code&gt;HttpGateway&lt;/code&gt;: wraps &lt;code&gt;HttpClient&lt;/code&gt; with typed async methods for GET, POST, PUT, PATCH, and DELETE. Each method deserializes the response body into the specified type and returns an &lt;code&gt;HttpOutput&amp;lt;TBody&amp;gt;&lt;/code&gt;.&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;HttpOutput&amp;lt;TBody&amp;gt;&lt;/code&gt;: typed HTTP response container carrying the status code, response headers, and deserialized body.&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;HttpExtensions&lt;/code&gt;: extension on &lt;code&gt;object&lt;/code&gt; providing &lt;code&gt;ToJsonStringContent()&lt;/code&gt; to serialize any object into a &lt;code&gt;StringContent&lt;/code&gt; suitable for request payloads.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;HttpStatusCodes&lt;/code&gt;: static constants for common HTTP status codes (200, 201, 204, 400, 401, 403, 404, 500, 501, 502) plus grouped collections (&lt;code&gt;Success&lt;/code&gt;, &lt;code&gt;ClientError&lt;/code&gt;, &lt;code&gt;ServerError&lt;/code&gt;, &lt;code&gt;All&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;HttpStatusCodes&lt;/code&gt;: static constants for common HTTP status codes (200, 201, 202, 204, 301, 302, 304, 307, 308, 400, 401, 403, 404, 405, 409, 422, 429, 500, 501, 502, 503, 504) plus grouped collections (&lt;code&gt;Success&lt;/code&gt;, &lt;code&gt;Redirection&lt;/code&gt;, &lt;code&gt;ClientError&lt;/code&gt;, &lt;code&gt;ServerError&lt;/code&gt;, &lt;code&gt;All&lt;/code&gt;).&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id="class-diagram"&gt;Class Diagram&lt;/h2&gt;
 &lt;pre class="mermaid"&gt;classDiagram
@@ -408,15 +408,28 @@ class HttpStatusCodes {
 &amp;lt;&amp;lt;static&amp;gt;&amp;gt;
 +const int Ok
 +const int Created
++const int Accepted
 +const int NoContent
++const int MovedPermanently
++const int Found
++const int NotModified
++const int TemporaryRedirect
++const int PermanentRedirect
 +const int BadRequest
 +const int Unauthorized
 +const int Forbidden
 +const int NotFound
++const int MethodNotAllowed
++const int Conflict
++const int UnprocessableEntity
++const int TooManyRequests
 +const int InternalServerError
 +const int NotImplemented
 +const int BadGateway
++const int ServiceUnavailable
++const int GatewayTimeout
 +int[] Success
++int[] Redirection
 +int[] ClientError
 +int[] ServerError
 +int[] All
@@ -474,7 +487,7 @@ HttpGateway ..&amp;gt; HttpExtensions : uses
 &lt;li&gt;&lt;code&gt;HttpGateway&lt;/code&gt;: wraps &lt;code&gt;HttpClient&lt;/code&gt; with typed async methods for GET, POST, PUT, PATCH, and DELETE. Each method deserializes the response body into the specified type and returns an &lt;code&gt;HttpOutput&amp;lt;TBody&amp;gt;&lt;/code&gt;.&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;HttpOutput&amp;lt;TBody&amp;gt;&lt;/code&gt;: typed HTTP response container carrying the status code, response headers, and deserialized body.&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;HttpExtensions&lt;/code&gt;: extension on &lt;code&gt;object&lt;/code&gt; providing &lt;code&gt;ToJsonStringContent()&lt;/code&gt; to serialize any object into a &lt;code&gt;StringContent&lt;/code&gt; suitable for request payloads.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;HttpStatusCodes&lt;/code&gt;: static constants for common HTTP status codes (200, 201, 204, 400, 401, 403, 404, 500, 501, 502) plus grouped collections (&lt;code&gt;Success&lt;/code&gt;, &lt;code&gt;ClientError&lt;/code&gt;, &lt;code&gt;ServerError&lt;/code&gt;, &lt;code&gt;All&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;HttpStatusCodes&lt;/code&gt;: static constants for common HTTP status codes (200, 201, 202, 204, 301, 302, 304, 307, 308, 400, 401, 403, 404, 405, 409, 422, 429, 500, 501, 502, 503, 504) plus grouped collections (&lt;code&gt;Success&lt;/code&gt;, &lt;code&gt;Redirection&lt;/code&gt;, &lt;code&gt;ClientError&lt;/code&gt;, &lt;code&gt;ServerError&lt;/code&gt;, &lt;code&gt;All&lt;/code&gt;).&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id="class-diagram"&gt;Class Diagram&lt;/h2&gt;
 &lt;pre class="mermaid"&gt;classDiagram
@@ -501,15 +514,28 @@ class HttpStatusCodes {
 &amp;lt;&amp;lt;static&amp;gt;&amp;gt;
 +const int Ok
 +const int Created
++const int Accepted
 +const int NoContent
++const int MovedPermanently
++const int Found
++const int NotModified
++const int TemporaryRedirect
++const int PermanentRedirect
 +const int BadRequest
 +const int Unauthorized
 +const int Forbidden
 +const int NotFound
++const int MethodNotAllowed
++const int Conflict
++const int UnprocessableEntity
++const int TooManyRequests
 +const int InternalServerError
 +const int NotImplemented
 +const int BadGateway
++const int ServiceUnavailable
++const int GatewayTimeout
 +int[] Success
++int[] Redirection
 +int[] ClientError
 +int[] ServerError
 +int[] All
