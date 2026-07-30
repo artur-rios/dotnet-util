@@ -829,7 +829,13 @@ PrimeGenerator~T~ ..&amp;gt; PrimeUtils : uses
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content></item><item><title>Random</title><link>https://artur-rios.github.io/dotnet-util/random/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://artur-rios.github.io/dotnet-util/random/</guid><description>&lt;h2 id="features"&gt;Features&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;CustomRandom&lt;/code&gt;: static class for generating random integers via cryptographic RNG or &lt;code&gt;System.Random&lt;/code&gt;, and constrained random strings.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;RandomStringOptions&lt;/code&gt;: configuration for random string generation — controls length and which character sets to include (lowercase letters, uppercase letters, digits, special characters).&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;RandomStringOptions&lt;/code&gt;: configuration for random string generation — controls length and which character sets to include (lowercase letters, uppercase letters, digits, special characters). &lt;strong&gt;Every flag defaults to &lt;code&gt;true&lt;/code&gt;&lt;/strong&gt;, so disabling a set means setting it to &lt;code&gt;false&lt;/code&gt; explicitly.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;CustomRandom.Text&lt;/code&gt; draws from &lt;code&gt;RandomNumberGenerator&lt;/code&gt;, so its output is suitable for security tokens. It guarantees that:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;every character comes from one of the enabled character sets — and only those;&lt;/li&gt;
+&lt;li&gt;at least one character from each enabled set is present;&lt;/li&gt;
+&lt;li&gt;the result is exactly &lt;code&gt;Length&lt;/code&gt; characters long.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id="class-diagram"&gt;Class Diagram&lt;/h2&gt;
 &lt;pre class="mermaid"&gt;classDiagram
@@ -875,21 +881,49 @@ CustomRandom ..&amp;gt; RandomStringOptions : uses
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeSpecialCharacters = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;});
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 6-digit PIN&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 6-digit PIN — the sets you do not want must be disabled explicitly,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// since every flag defaults to true&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; pin = CustomRandom.Text(&lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; RandomStringOptions
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;{
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Length = &lt;span style="color:#ae81ff"&gt;6&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeDigits = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeDigits = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeLowercase = &lt;span style="color:#66d9ef"&gt;false&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeUppercase = &lt;span style="color:#66d9ef"&gt;false&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeSpecialCharacters = &lt;span style="color:#66d9ef"&gt;false&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;});
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// URL-safe token: letters and digits only, no special characters&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; token = CustomRandom.Text(&lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; RandomStringOptions
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Length = &lt;span style="color:#ae81ff"&gt;48&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeLowercase = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeUppercase = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeDigits = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeSpecialCharacters = &lt;span style="color:#66d9ef"&gt;false&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;});
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Avoid previously generated values (e.g., prevent session ID collisions)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; token = CustomRandom.Text(
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; RandomStringOptions { Length = &lt;span style="color:#ae81ff"&gt;32&lt;/span&gt;, IncludeDigits = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;, IncludeLowercase = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; sessionId = CustomRandom.Text(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; RandomStringOptions
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Length = &lt;span style="color:#ae81ff"&gt;32&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeLowercase = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeUppercase = &lt;span style="color:#66d9ef"&gt;false&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeDigits = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeSpecialCharacters = &lt;span style="color:#66d9ef"&gt;false&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; },
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; differentFrom: existingTokens);
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description><content>&lt;h2 id="features"&gt;Features&lt;/h2&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="errors"&gt;Errors&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;CustomRandom.Text&lt;/code&gt; throws &lt;code&gt;ArgumentException&lt;/code&gt; when the request cannot be satisfied:&lt;/p&gt;</description><content>&lt;h2 id="features"&gt;Features&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;CustomRandom&lt;/code&gt;: static class for generating random integers via cryptographic RNG or &lt;code&gt;System.Random&lt;/code&gt;, and constrained random strings.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;RandomStringOptions&lt;/code&gt;: configuration for random string generation — controls length and which character sets to include (lowercase letters, uppercase letters, digits, special characters).&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;RandomStringOptions&lt;/code&gt;: configuration for random string generation — controls length and which character sets to include (lowercase letters, uppercase letters, digits, special characters). &lt;strong&gt;Every flag defaults to &lt;code&gt;true&lt;/code&gt;&lt;/strong&gt;, so disabling a set means setting it to &lt;code&gt;false&lt;/code&gt; explicitly.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;CustomRandom.Text&lt;/code&gt; draws from &lt;code&gt;RandomNumberGenerator&lt;/code&gt;, so its output is suitable for security tokens. It guarantees that:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;every character comes from one of the enabled character sets — and only those;&lt;/li&gt;
+&lt;li&gt;at least one character from each enabled set is present;&lt;/li&gt;
+&lt;li&gt;the result is exactly &lt;code&gt;Length&lt;/code&gt; characters long.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id="class-diagram"&gt;Class Diagram&lt;/h2&gt;
 &lt;pre class="mermaid"&gt;classDiagram
@@ -935,17 +969,53 @@ CustomRandom ..&amp;gt; RandomStringOptions : uses
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeSpecialCharacters = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;});
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 6-digit PIN&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// 6-digit PIN — the sets you do not want must be disabled explicitly,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// since every flag defaults to true&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; pin = CustomRandom.Text(&lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; RandomStringOptions
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;{
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Length = &lt;span style="color:#ae81ff"&gt;6&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeDigits = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeDigits = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeLowercase = &lt;span style="color:#66d9ef"&gt;false&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeUppercase = &lt;span style="color:#66d9ef"&gt;false&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeSpecialCharacters = &lt;span style="color:#66d9ef"&gt;false&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;});
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// URL-safe token: letters and digits only, no special characters&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; token = CustomRandom.Text(&lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; RandomStringOptions
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Length = &lt;span style="color:#ae81ff"&gt;48&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeLowercase = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeUppercase = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeDigits = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeSpecialCharacters = &lt;span style="color:#66d9ef"&gt;false&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;});
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Avoid previously generated values (e.g., prevent session ID collisions)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; token = CustomRandom.Text(
-&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; RandomStringOptions { Length = &lt;span style="color:#ae81ff"&gt;32&lt;/span&gt;, IncludeDigits = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;, IncludeLowercase = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;var&lt;/span&gt; sessionId = CustomRandom.Text(
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; RandomStringOptions
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Length = &lt;span style="color:#ae81ff"&gt;32&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeLowercase = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeUppercase = &lt;span style="color:#66d9ef"&gt;false&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeDigits = &lt;span style="color:#66d9ef"&gt;true&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeSpecialCharacters = &lt;span style="color:#66d9ef"&gt;false&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; },
 &lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; differentFrom: existingTokens);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="errors"&gt;Errors&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;CustomRandom.Text&lt;/code&gt; throws &lt;code&gt;ArgumentException&lt;/code&gt; when the request cannot be satisfied:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-csharp" data-lang="csharp"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// No character set enabled — there is nothing to draw from&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;CustomRandom.Text(&lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; RandomStringOptions
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Length = &lt;span style="color:#ae81ff"&gt;10&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeLowercase = &lt;span style="color:#66d9ef"&gt;false&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeUppercase = &lt;span style="color:#66d9ef"&gt;false&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeDigits = &lt;span style="color:#66d9ef"&gt;false&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; IncludeSpecialCharacters = &lt;span style="color:#66d9ef"&gt;false&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;});
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// Length smaller than the number of enabled sets — the exact length and the&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;// at-least-one-of-each guarantee cannot both be honoured&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;CustomRandom.Text(&lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; RandomStringOptions { Length = &lt;span style="color:#ae81ff"&gt;3&lt;/span&gt; }); &lt;span style="color:#75715e"&gt;// 4 sets enabled by default&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content></item><item><title>Regular Expressions</title><link>https://artur-rios.github.io/dotnet-util/regular-expressions/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://artur-rios.github.io/dotnet-util/regular-expressions/</guid><description>&lt;h2 id="features"&gt;Features&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;RegexCollection&lt;/code&gt;: source-generated compiled regex methods for common patterns — email address, contains a digit, contains a lowercase letter, contains an uppercase letter, contains all three (digit + lowercase + uppercase).&lt;/li&gt;
