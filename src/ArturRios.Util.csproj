@@ -17,7 +17,7 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>utilities</PackageTags>
     <RepositoryUrl>https://github.com/artur-rios/dotnet-util</RepositoryUrl>
-    <Version>1.4.2</Version>
+    <Version>1.5.0</Version>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ArturRios.Output" Version="3.1.0" />

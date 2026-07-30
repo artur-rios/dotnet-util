@@ -97,7 +97,11 @@ The package targets **net10.0** and depends on [`ArturRios.Output`](https://www.
   using ArturRios.Util.Random;
   var n   = CustomRandom.NumberFromRng(1, 10);
   var n2  = CustomRandom.NumberFromSystemRandom(0, 100, differentFrom: 42);
-  var pwd = CustomRandom.Text(new RandomStringOptions { Length = 16, IncludeSpecialCharacters = true });
+  var pwd = CustomRandom.Text(new RandomStringOptions { Length = 16 }); // all sets on by default
+  var pin = CustomRandom.Text(new RandomStringOptions
+  {
+      Length = 6, IncludeLowercase = false, IncludeUppercase = false, IncludeSpecialCharacters = false
+  });
   ```
 
 - **RegularExpressions**

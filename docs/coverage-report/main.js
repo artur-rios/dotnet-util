@@ -229,7 +229,7 @@ var assemblies = [
       { "name": "ArturRios.Util.IO.FileReaderAsync", "rp": "ArturRios.Util_FileReaderAsync.html", "cl": 59, "ucl": 0, "cal": 59, "tl": 130, "cb": 28, "tb": 28, "cm": 4, "fcm": 0, "tm": 4, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 16,  "cc": 16,  "cov": 100,  "bcov": 100 } },
       { "name": "ArturRios.Util.Math.PrimeGenerator<T>", "rp": "ArturRios.Util_PrimeGenerator_1.html", "cl": 134, "ucl": 92, "cal": 226, "tl": 353, "cb": 82, "tb": 126, "cm": 7, "fcm": 0, "tm": 7, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 290,  "cc": 36,  "cov": 41.89,  "bcov": 50.0 } },
       { "name": "ArturRios.Util.Math.PrimeUtils", "rp": "ArturRios.Util_PrimeUtils.html", "cl": 168, "ucl": 5, "cal": 173, "tl": 330, "cb": 79, "tb": 82, "cm": 11, "fcm": 5, "tm": 11, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 19,  "cc": 18,  "cov": 87.50,  "bcov": 83.33 } },
-      { "name": "ArturRios.Util.Random.CustomRandom", "rp": "ArturRios.Util_CustomRandom.html", "cl": 57, "ucl": 8, "cal": 65, "tl": 124, "cb": 15, "tb": 22, "cm": 3, "fcm": 0, "tm": 3, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 14,  "cc": 14,  "cov": 75.00,  "bcov": 64.28 } },
+      { "name": "ArturRios.Util.Random.CustomRandom", "rp": "ArturRios.Util_CustomRandom.html", "cl": 64, "ucl": 8, "cal": 72, "tl": 147, "cb": 23, "tb": 26, "cm": 3, "fcm": 0, "tm": 3, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 18,  "cc": 18,  "cov": 75.00,  "bcov": 75.00 } },
       { "name": "ArturRios.Util.Random.RandomStringOptions", "rp": "ArturRios.Util_RandomStringOptions.html", "cl": 5, "ucl": 0, "cal": 5, "tl": 28, "cb": 0, "tb": 0, "cm": 5, "fcm": 5, "tm": 5, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 1,  "cc": 1,  "cov": 100,  "bcov": 100 } },
       { "name": "ArturRios.Util.RegularExpressions.RegexCollection", "rp": "ArturRios.Util_RegexCollection.html", "cl": 5, "ucl": 0, "cal": 5, "tl": 1226, "cb": 0, "tb": 0, "cm": 5, "fcm": 5, "tm": 5, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 1,  "cc": 1,  "cov": 100,  "bcov": 100 } },
       { "name": "ArturRios.Util.RegularExpressions.RegexExtensions", "rp": "ArturRios.Util_RegexExtensions.html", "cl": 1, "ucl": 0, "cal": 1, "tl": 17, "cb": 0, "tb": 0, "cm": 1, "fcm": 1, "tm": 1, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 1,  "cc": 1,  "cov": 100,  "bcov": 100 } },
@@ -316,6 +316,12 @@ var riskHotspots = [
     "assembly": "ArturRios.Util", "class": "ArturRios.Util.Math.PrimeUtils", "reportPath": "ArturRios.Util_PrimeUtils.html", "methodName": "IsPrimeNumber(System.UInt64)", "methodShortName": "IsPrimeNumber(...)", "fileIndex": 0, "line": 167,
     "metrics": [
       { "value": 19, "exceeded": false },
+      { "value": 18, "exceeded": true },
+    ]},
+  {
+    "assembly": "ArturRios.Util", "class": "ArturRios.Util.Random.CustomRandom", "reportPath": "ArturRios.Util_CustomRandom.html", "methodName": "Text(ArturRios.Util.Random.RandomStringOptions,System.String[])", "methodShortName": "Text(...)", "fileIndex": 0, "line": 80,
+    "metrics": [
+      { "value": 18, "exceeded": false },
       { "value": 18, "exceeded": true },
     ]},
   {
