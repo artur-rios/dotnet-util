@@ -1,11 +1,9 @@
-+++
-title          = "Math"
-show_nav       = true
-nav_back_label = "IO"
-nav_back_url   = "/dotnet-util/io"
-nav_next_label = "Random"
-nav_next_url   = "/dotnet-util/random"
-+++
+---
+title: Math
+weight: 70
+description: >-
+  bool a = PrimeUtils.IsPrimeNumber(7919); // true bool b = PrimeUtils.IsPrimeNumber(7920); // false bool c = PrimeUtils.IsPrimeNumber(1_000_000_007); // true...
+---
 
 ## Features
 

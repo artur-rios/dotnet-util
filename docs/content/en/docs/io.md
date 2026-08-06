@@ -1,11 +1,9 @@
-+++
-title          = "IO"
-show_nav       = true
-nav_back_label = "Http"
-nav_back_url   = "/dotnet-util/http"
-nav_next_label = "Math"
-nav_next_url   = "/dotnet-util/math"
-+++
+---
+title: IO
+weight: 60
+description: >-
+  // Entire file as a single string string content = FileReader.Read("/data/notes.txt");
+---
 
 ## Features
 

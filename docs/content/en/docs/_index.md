@@ -1,8 +1,10 @@
-+++
-title = 'Dotnet Util'
-+++
-
-# Documentation
+---
+title: Documentation
+linkTitle: Documentation
+weight: 20
+description: >-
+  Utilities for common development tasks in .NET: console output helpers, flow control (conditions, retries, and waiters), hashing (Argon2id), file I/O helpers...
+---
 
 Utilities for common development tasks in .NET: console output helpers, flow control (conditions, retries, and waiters), hashing (Argon2id), file I/O helpers, HTTP client helpers, math utilities, random values and strings, regex helpers, and small collections.
 
@@ -116,15 +118,15 @@ The package targets **net10.0** and depends on [`ArturRios.Output`](https://www.
 
 Full API reference, class diagrams, and usage examples:
 
-- [Collections](/dotnet-util/collections/)
-- [Console](/dotnet-util/console/)
-- [Flow Control](/dotnet-util/flow-control/)
-- [Hashing](/dotnet-util/hashing/)
-- [Http](/dotnet-util/http/)
-- [IO](/dotnet-util/io/)
-- [Math](/dotnet-util/math/)
-- [Random](/dotnet-util/random/)
-- [Regular Expressions](/dotnet-util/regular-expressions/)
+- [Collections](collections/)
+- [Console](console/)
+- [Flow Control](flow-control/)
+- [Hashing](hashing/)
+- [Http](http/)
+- [IO](io/)
+- [Math](math/)
+- [Random](random/)
+- [Regular Expressions](regular-expressions/)
 
 ## Versioning
 

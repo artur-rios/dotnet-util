@@ -1,11 +1,9 @@
-+++
-title          = "Collections"
-show_nav       = true
-nav_back_label = "Home"
-nav_back_url   = "/dotnet-util"
-nav_next_label = "Console"
-nav_next_url   = "/dotnet-util/console"
-+++
+---
+title: Collections
+weight: 10
+description: >-
+  Wrap text in a color constant and reset with `\x1b[0m`:
+---
 
 ## Features
 

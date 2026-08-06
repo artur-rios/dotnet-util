@@ -1,11 +1,9 @@
-+++
-title          = "Console"
-show_nav       = true
-nav_back_label = "Collections"
-nav_back_url   = "/dotnet-util/collections"
-nav_next_label = "Flow Control"
-nav_next_url   = "/dotnet-util/flow-control"
-+++
+---
+title: Console
+weight: 20
+description: >-
+  // Defaults: 100 dashes CustomConsole.WriteCharLine(); // ----------------------------------------------------------------------------------------------------...
+---
 
 ## Features
 

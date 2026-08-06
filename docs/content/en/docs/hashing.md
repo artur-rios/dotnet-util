@@ -1,11 +1,9 @@
-+++
-title          = "Hashing"
-show_nav       = true
-nav_back_label = "Flow Control"
-nav_back_url   = "/dotnet-util/flow-control"
-nav_next_label = "Http"
-nav_next_url   = "/dotnet-util/http"
-+++
+---
+title: Hashing
+weight: 40
+description: >-
+  // Encode — store both hash and salt byte[] hash = Hash.EncodeWithRandomSalt("my-secret-password", out byte[] salt);
+---
 
 ## Features
 

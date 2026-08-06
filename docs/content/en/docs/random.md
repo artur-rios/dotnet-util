@@ -1,11 +1,9 @@
-+++
-title          = "Random"
-show_nav       = true
-nav_back_label = "Math"
-nav_back_url   = "/dotnet-util/math"
-nav_next_label = "Regular Expressions"
-nav_next_url   = "/dotnet-util/regular-expressions"
-+++
+---
+title: Random
+weight: 80
+description: >-
+  `CustomRandom.Text` draws from `RandomNumberGenerator`, so its output is suitable for security tokens. It guarantees that:
+---
 
 ## Features
 

@@ -1,11 +1,9 @@
-+++
-title          = "Http"
-show_nav       = true
-nav_back_label = "Hashing"
-nav_back_url   = "/dotnet-util/hashing"
-nav_next_label = "IO"
-nav_next_url   = "/dotnet-util/io"
-+++
+---
+title: Http
+weight: 50
+description: >-
+  var client = new HttpClient { BaseAddress = new Uri("https://api.example.com") }; var gateway = new HttpGateway(client);
+---
 
 ## Features
 

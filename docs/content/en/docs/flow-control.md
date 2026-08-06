@@ -1,11 +1,9 @@
-+++
-title          = "Flow Control"
-show_nav       = true
-nav_back_label = "Console"
-nav_back_url   = "/dotnet-util/console"
-nav_next_label = "Hashing"
-nav_next_url   = "/dotnet-util/hashing"
-+++
+---
+title: Flow Control
+weight: 30
+description: >-
+  Chain boolean assertions — all failures are collected before throwing:
+---
 
 ## Features
 

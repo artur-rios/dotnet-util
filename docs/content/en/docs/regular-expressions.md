@@ -1,9 +1,9 @@
-+++
-title          = "Regular Expressions"
-show_nav       = true
-nav_back_label = "Random"
-nav_back_url   = "/dotnet-util/random"
-+++
+---
+title: Regular Expressions
+weight: 90
+description: >-
+  bool isEmail = RegexCollection.Email().IsMatch("john@doe.com"); // true bool isEmail2 = RegexCollection.Email().IsMatch("not-an-email"); // false
+---
 
 ## Features
 
