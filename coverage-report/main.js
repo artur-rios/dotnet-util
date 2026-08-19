@@ -308,14 +308,16 @@ var assemblies = [
       { "name": "ArturRios.Util.Math.PrimeUtils", "rp": "ArturRios.Util_PrimeUtils.html", "cl": 101, "ucl": 2, "cal": 103, "tl": 330, "cb": 79, "tb": 82, "cm": 11, "fcm": 10, "tm": 11, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 18,  "cc": 18,  "cov": 92.30,  "bcov": 83.33 } },
       { "name": "ArturRios.Util.Random.CustomRandom", "rp": "ArturRios.Util_CustomRandom.html", "cl": 40, "ucl": 2, "cal": 42, "tl": 147, "cb": 23, "tb": 26, "cm": 3, "fcm": 1, "tm": 3, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 18,  "cc": 18,  "cov": 85.71,  "bcov": 75.00 } },
       { "name": "ArturRios.Util.Random.RandomStringOptions", "rp": "ArturRios.Util_RandomStringOptions.html", "cl": 5, "ucl": 0, "cal": 5, "tl": 28, "cb": 0, "tb": 0, "cm": 5, "fcm": 5, "tm": 5, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 1,  "cc": 1,  "cov": 100,  "bcov": 100 } },
-      { "name": "ArturRios.Util.RegularExpressions.RegexCollection", "rp": "ArturRios.Util_RegexCollection.html", "cl": 5, "ucl": 0, "cal": 5, "tl": 1868, "cb": 0, "tb": 0, "cm": 5, "fcm": 5, "tm": 5, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 1,  "cc": 1,  "cov": 100,  "bcov": 100 } },
+      { "name": "ArturRios.Util.RegularExpressions.RegexCollection", "rp": "ArturRios.Util_RegexCollection.html", "cl": 5, "ucl": 0, "cal": 5, "tl": 1774, "cb": 0, "tb": 0, "cm": 5, "fcm": 5, "tm": 5, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 1,  "cc": 1,  "cov": 100,  "bcov": 100 } },
       { "name": "ArturRios.Util.RegularExpressions.RegexExtensions", "rp": "ArturRios.Util_RegexExtensions.html", "cl": 1, "ucl": 0, "cal": 1, "tl": 17, "cb": 0, "tb": 0, "cm": 1, "fcm": 1, "tm": 1, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 1,  "cc": 1,  "cov": 100,  "bcov": 100 } },
-      { "name": "System.Text.RegularExpressions.Generated", "rp": "ArturRios.Util_Generated.html", "cl": 541, "ucl": 71, "cal": 612, "tl": 1868, "cb": 252, "tb": 336, "cm": 37, "fcm": 25, "tm": 39, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 256,  "cc": 206,  "cov": 0,  "bcov": 50.0 } },
-      { "name": "System.Text.RegularExpressions.Generated.\u003CRegexGenerator_g\u003EF36A651036645E8412F949870328796960F521B01C75A54DBCB080152C5565E24__Email_0", "rp": "ArturRios.Util__RegexGenerator_g_F36A651036645E841F521B01C75A54DBCB080152C5565E24__Email_0.html", "cl": 302, "ucl": 33, "cal": 335, "tl": 1868, "cb": 177, "tb": 216, "cm": 7, "fcm": 6, "tm": 7, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 256,  "cc": 206,  "cov": 89.45,  "bcov": 81.06 } },
-      { "name": "System.Text.RegularExpressions.Generated.\u003CRegexGenerator_g\u003EF36A651036645E8412F949870328796960F521B01C75A54DBCB080152C5565E24__HasLowerChar_2", "rp": "ArturRios.Util__RegexGenerator_g_F36A651036645E841C75A54DBCB080152C5565E24__HasLowerChar_2.html", "cl": 34, "ucl": 4, "cal": 38, "tl": 1868, "cb": 10, "tb": 16, "cm": 6, "fcm": 4, "tm": 6, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 13,  "cc": 8,  "cov": 57.14,  "bcov": 50.0 } },
-      { "name": "System.Text.RegularExpressions.Generated.\u003CRegexGenerator_g\u003EF36A651036645E8412F949870328796960F521B01C75A54DBCB080152C5565E24__HasNumber_1", "rp": "ArturRios.Util__RegexGenerator_g_F36A651036645E841B01C75A54DBCB080152C5565E24__HasNumber_1.html", "cl": 34, "ucl": 4, "cal": 38, "tl": 1868, "cb": 10, "tb": 16, "cm": 6, "fcm": 4, "tm": 6, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 13,  "cc": 8,  "cov": 57.14,  "bcov": 50.0 } },
-      { "name": "System.Text.RegularExpressions.Generated.\u003CRegexGenerator_g\u003EF36A651036645E8412F949870328796960F521B01C75A54DBCB080152C5565E24__HasNumberLowerAndUpperChar_4", "rp": "ArturRios.Util__RegexGenerator_g_F36A651036645E84152C5565E24__HasNumberLowerAndUpperChar_4.html", "cl": 104, "ucl": 16, "cal": 120, "tl": 1868, "cb": 40, "tb": 64, "cm": 6, "fcm": 4, "tm": 6, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 64,  "cc": 56,  "cov": 66.66,  "bcov": 50.0 } },
-      { "name": "System.Text.RegularExpressions.Generated.\u003CRegexGenerator_g\u003EF36A651036645E8412F949870328796960F521B01C75A54DBCB080152C5565E24__HasUpperChar_3", "rp": "ArturRios.Util__RegexGenerator_g_F36A651036645E841C75A54DBCB080152C5565E24__HasUpperChar_3.html", "cl": 34, "ucl": 4, "cal": 38, "tl": 1868, "cb": 10, "tb": 16, "cm": 6, "fcm": 4, "tm": 6, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 13,  "cc": 8,  "cov": 57.14,  "bcov": 50.0 } },
+      { "name": "ArturRios.Util.Text.CharacterChecks", "rp": "ArturRios.Util_CharacterChecks.html", "cl": 28, "ucl": 0, "cal": 28, "tl": 137, "cb": 18, "tb": 18, "cm": 13, "fcm": 13, "tm": 13, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 18,  "cc": 18,  "cov": 100,  "bcov": 100 } },
+      { "name": "ArturRios.Util.Text.EmailAddress", "rp": "ArturRios.Util_EmailAddress.html", "cl": 21, "ucl": 0, "cal": 21, "tl": 101, "cb": 10, "tb": 10, "cm": 4, "fcm": 4, "tm": 4, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 8,  "cc": 8,  "cov": 100,  "bcov": 100 } },
+      { "name": "System.Text.RegularExpressions.Generated", "rp": "ArturRios.Util_Generated.html", "cl": 531, "ucl": 44, "cal": 575, "tl": 1774, "cb": 236, "tb": 282, "cm": 37, "fcm": 26, "tm": 39, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 191,  "cc": 180,  "cov": 0,  "bcov": 50.0 } },
+      { "name": "System.Text.RegularExpressions.Generated.\u003CRegexGenerator_g\u003EF36A651036645E8412F949870328796960F521B01C75A54DBCB080152C5565E24__Email_0", "rp": "ArturRios.Util__RegexGenerator_g_F36A651036645E841F521B01C75A54DBCB080152C5565E24__Email_0.html", "cl": 302, "ucl": 21, "cal": 323, "tl": 1774, "cb": 163, "tb": 190, "cm": 7, "fcm": 6, "tm": 7, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 191,  "cc": 180,  "cov": 93.04,  "bcov": 85.00 } },
+      { "name": "System.Text.RegularExpressions.Generated.\u003CRegexGenerator_g\u003EF36A651036645E8412F949870328796960F521B01C75A54DBCB080152C5565E24__HasLowerChar_2", "rp": "ArturRios.Util__RegexGenerator_g_F36A651036645E841C75A54DBCB080152C5565E24__HasLowerChar_2.html", "cl": 33, "ucl": 3, "cal": 36, "tl": 1774, "cb": 11, "tb": 14, "cm": 6, "fcm": 4, "tm": 6, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 7,  "cc": 6,  "cov": 66.66,  "bcov": 66.66 } },
+      { "name": "System.Text.RegularExpressions.Generated.\u003CRegexGenerator_g\u003EF36A651036645E8412F949870328796960F521B01C75A54DBCB080152C5565E24__HasNumber_1", "rp": "ArturRios.Util__RegexGenerator_g_F36A651036645E841B01C75A54DBCB080152C5565E24__HasNumber_1.html", "cl": 33, "ucl": 3, "cal": 36, "tl": 1774, "cb": 10, "tb": 14, "cm": 6, "fcm": 4, "tm": 6, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 7,  "cc": 6,  "cov": 66.66,  "bcov": 50.0 } },
+      { "name": "System.Text.RegularExpressions.Generated.\u003CRegexGenerator_g\u003EF36A651036645E8412F949870328796960F521B01C75A54DBCB080152C5565E24__HasNumberLowerAndUpperChar_4", "rp": "ArturRios.Util__RegexGenerator_g_F36A651036645E84152C5565E24__HasNumberLowerAndUpperChar_4.html", "cl": 99, "ucl": 4, "cal": 103, "tl": 1774, "cb": 37, "tb": 44, "cm": 6, "fcm": 4, "tm": 6, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 36,  "cc": 36,  "cov": 66.66,  "bcov": 50.0 } },
+      { "name": "System.Text.RegularExpressions.Generated.\u003CRegexGenerator_g\u003EF36A651036645E8412F949870328796960F521B01C75A54DBCB080152C5565E24__HasUpperChar_3", "rp": "ArturRios.Util__RegexGenerator_g_F36A651036645E841C75A54DBCB080152C5565E24__HasUpperChar_3.html", "cl": 33, "ucl": 3, "cal": 36, "tl": 1774, "cb": 11, "tb": 14, "cm": 6, "fcm": 4, "tm": 6, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 7,  "cc": 6,  "cov": 66.66,  "bcov": 66.66 } },
     ]},
 ];
 
@@ -330,16 +332,16 @@ var riskHotspotMetrics = [
 
 var riskHotspots = [
   {
-    "assembly": "ArturRios.Util", "class": "System.Text.RegularExpressions.Generated", "reportPath": "ArturRios.Util_Generated.html", "methodName": "TryMatchAtCurrentPosition(System.ReadOnlySpan\u00601\u003CSystem.Char\u003E)", "methodShortName": "TryMatchAtCurrentPosition(...)", "fileIndex": 0, "line": 238,
+    "assembly": "ArturRios.Util", "class": "System.Text.RegularExpressions.Generated", "reportPath": "ArturRios.Util_Generated.html", "methodName": "TryMatchAtCurrentPosition(System.ReadOnlySpan\u00601\u003CSystem.Char\u003E)", "methodShortName": "TryMatchAtCurrentPosition(...)", "fileIndex": 0, "line": 237,
     "metrics": [
-      { "value": 256, "exceeded": true },
-      { "value": 206, "exceeded": true },
+      { "value": 191, "exceeded": true },
+      { "value": 180, "exceeded": true },
     ]},
   {
-    "assembly": "ArturRios.Util", "class": "System.Text.RegularExpressions.Generated.\u003CRegexGenerator_g\u003EF36A651036645E8412F949870328796960F521B01C75A54DBCB080152C5565E24__Email_0", "reportPath": "ArturRios.Util__RegexGenerator_g_F36A651036645E841F521B01C75A54DBCB080152C5565E24__Email_0.html", "methodName": "TryMatchAtCurrentPosition(System.ReadOnlySpan\u00601\u003CSystem.Char\u003E)", "methodShortName": "TryMatchAtCurrentPosition(...)", "fileIndex": 0, "line": 238,
+    "assembly": "ArturRios.Util", "class": "System.Text.RegularExpressions.Generated.\u003CRegexGenerator_g\u003EF36A651036645E8412F949870328796960F521B01C75A54DBCB080152C5565E24__Email_0", "reportPath": "ArturRios.Util__RegexGenerator_g_F36A651036645E841F521B01C75A54DBCB080152C5565E24__Email_0.html", "methodName": "TryMatchAtCurrentPosition(System.ReadOnlySpan\u00601\u003CSystem.Char\u003E)", "methodShortName": "TryMatchAtCurrentPosition(...)", "fileIndex": 0, "line": 237,
     "metrics": [
-      { "value": 256, "exceeded": true },
-      { "value": 206, "exceeded": true },
+      { "value": 191, "exceeded": true },
+      { "value": 180, "exceeded": true },
     ]},
   {
     "assembly": "ArturRios.Util", "class": "ArturRios.Util.Math.PrimeGenerator\u003CT\u003E", "reportPath": "ArturRios.Util_PrimeGenerator_1.html", "methodName": "EnsureAtLeastTwo(T\u0026)", "methodShortName": "EnsureAtLeastTwo(...)", "fileIndex": 0, "line": 227,
@@ -354,16 +356,16 @@ var riskHotspots = [
       { "value": 34, "exceeded": true },
     ]},
   {
-    "assembly": "ArturRios.Util", "class": "System.Text.RegularExpressions.Generated", "reportPath": "ArturRios.Util_Generated.html", "methodName": "TryMatchAtCurrentPosition(System.ReadOnlySpan\u00601\u003CSystem.Char\u003E)", "methodShortName": "TryMatchAtCurrentPosition(...)", "fileIndex": 0, "line": 1521,
+    "assembly": "ArturRios.Util", "class": "System.Text.RegularExpressions.Generated", "reportPath": "ArturRios.Util_Generated.html", "methodName": "TryMatchAtCurrentPosition(System.ReadOnlySpan\u00601\u003CSystem.Char\u003E)", "methodShortName": "TryMatchAtCurrentPosition(...)", "fileIndex": 0, "line": 1474,
     "metrics": [
-      { "value": 64, "exceeded": true },
-      { "value": 56, "exceeded": true },
+      { "value": 36, "exceeded": true },
+      { "value": 36, "exceeded": true },
     ]},
   {
-    "assembly": "ArturRios.Util", "class": "System.Text.RegularExpressions.Generated.\u003CRegexGenerator_g\u003EF36A651036645E8412F949870328796960F521B01C75A54DBCB080152C5565E24__HasNumberLowerAndUpperChar_4", "reportPath": "ArturRios.Util__RegexGenerator_g_F36A651036645E84152C5565E24__HasNumberLowerAndUpperChar_4.html", "methodName": "TryMatchAtCurrentPosition(System.ReadOnlySpan\u00601\u003CSystem.Char\u003E)", "methodShortName": "TryMatchAtCurrentPosition(...)", "fileIndex": 0, "line": 1521,
+    "assembly": "ArturRios.Util", "class": "System.Text.RegularExpressions.Generated.\u003CRegexGenerator_g\u003EF36A651036645E8412F949870328796960F521B01C75A54DBCB080152C5565E24__HasNumberLowerAndUpperChar_4", "reportPath": "ArturRios.Util__RegexGenerator_g_F36A651036645E84152C5565E24__HasNumberLowerAndUpperChar_4.html", "methodName": "TryMatchAtCurrentPosition(System.ReadOnlySpan\u00601\u003CSystem.Char\u003E)", "methodShortName": "TryMatchAtCurrentPosition(...)", "fileIndex": 0, "line": 1474,
     "metrics": [
-      { "value": 64, "exceeded": true },
-      { "value": 56, "exceeded": true },
+      { "value": 36, "exceeded": true },
+      { "value": 36, "exceeded": true },
     ]},
   {
     "assembly": "ArturRios.Util", "class": "ArturRios.Util.Math.PrimeGenerator\u003CT\u003E", "reportPath": "ArturRios.Util_PrimeGenerator_1.html", "methodName": "ValidateSupportedType()", "methodShortName": "ValidateSupportedType()", "fileIndex": 0, "line": 54,
@@ -397,6 +399,12 @@ var riskHotspots = [
     ]},
   {
     "assembly": "ArturRios.Util", "class": "ArturRios.Util.Random.CustomRandom", "reportPath": "ArturRios.Util_CustomRandom.html", "methodName": "Text(ArturRios.Util.Random.RandomStringOptions,System.String[])", "methodShortName": "Text(...)", "fileIndex": 0, "line": 81,
+    "metrics": [
+      { "value": 18, "exceeded": false },
+      { "value": 18, "exceeded": true },
+    ]},
+  {
+    "assembly": "ArturRios.Util", "class": "ArturRios.Util.Text.CharacterChecks", "reportPath": "ArturRios.Util_CharacterChecks.html", "methodName": "Classify(System.ReadOnlySpan\u00601\u003CSystem.Char\u003E)", "methodShortName": "Classify(...)", "fileIndex": 0, "line": 77,
     "metrics": [
       { "value": 18, "exceeded": false },
       { "value": 18, "exceeded": true },
