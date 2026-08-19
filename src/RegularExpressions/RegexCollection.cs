@@ -40,7 +40,9 @@ public static partial class RegexCollection
     /// <summary>Pattern that validates a string contains at least one lowercase, one uppercase and one digit.</summary>
     /// <remarks>
     /// Anchored with <c>\z</c> so a trailing newline is not accepted, and <c>.</c> does not match a newline,
-    /// so any input spanning more than one line is rejected.
+    /// so any input spanning more than one line is rejected. Use
+    /// <see cref="Text.CharacterChecks.Missing(string, Text.CharacterClasses)"/> when newlines should be
+    /// tolerated, or when the caller needs to know which requirement failed rather than just that one did.
     /// </remarks>
     public const string HasNumberLowerAndUpperCharPattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+\z";
 
