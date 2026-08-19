@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using ArturRios.Util.IO;
 using ArturRios.Util.Tests.Setup;
 
@@ -269,5 +269,111 @@ public class FileReaderTests
                 File.Delete(path);
             }
         }
+    }
+
+    [Fact]
+    public void GivenDuplicateHeaders_WhenReadAsDictionary_ThenThrowInsteadOfDroppingAColumn()
+    {
+        // A silent overwrite used to return a dictionary with fewer entries than the file has columns.
+        using var file = TempFile.WithLines("name,value,name", "a,1,b");
+
+        var exception = Assert.Throws<InvalidOperationException>(() => FileReader.ReadAsDictionary(file, ','));
+
+        Assert.Contains("duplicate", exception.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("'name'", exception.Message);
+    }
+
+    [Fact]
+    public void GivenHeadersDifferingOnlyByCase_WhenReadAsDictionary_ThenTreatThemAsDistinct()
+    {
+        using var file = TempFile.WithLines("Name,name", "a,b");
+
+        var result = FileReader.ReadAsDictionary(file, ',');
+
+        Assert.Equal(["a"], result["Name"]);
+        Assert.Equal(["b"], result["name"]);
+    }
+
+    [Fact]
+    public void GivenEmptyHeaderName_WhenReadAsDictionary_ThenKeepItAsAnEmptyKey()
+    {
+        using var file = TempFile.WithLines("name,,age", "a,b,30");
+
+        var result = FileReader.ReadAsDictionary(file, ',');
+
+        Assert.Equal(["b"], result[string.Empty]);
+    }
+
+    [Fact]
+    public void GivenQuotedFieldContainingTheSeparator_WhenReadAsDictionary_ThenSplitItAnyway()
+    {
+        // Documented limitation: this is a plain split, not an RFC 4180 parser.
+        using var file = TempFile.WithLines("a,b", "\"x,y\",z");
+
+        var result = FileReader.ReadAsDictionary(file, ',');
+
+        Assert.Equal(["\"x"], result["a"]);
+        Assert.Equal(["y\""], result["b"]);
+    }
+
+    [Fact]
+    public void GivenEmptyFile_WhenReadAsDictionary_ThenThrowInvalidOperationException()
+    {
+        using var file = new TempFile(string.Empty);
+
+        Assert.Throws<InvalidOperationException>(() => FileReader.ReadAsDictionary(file, ','));
+    }
+
+    [Fact]
+    public void GivenSeparatorAbsentFromTheFile_WhenReadAsDictionary_ThenReturnASingleColumn()
+    {
+        using var file = TempFile.WithLines("header", "first", "second");
+
+        var result = FileReader.ReadAsDictionary(file, ',');
+
+        Assert.Equal(["first", "second"], result["header"]);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    public void GivenEmptyOrWhitespaceJsonFile_WhenReadAndDeserialize_ThenThrowJsonException(string content)
+    {
+        // The documentation used to promise null here; the serializer has always thrown.
+        using var file = new TempFile(content);
+
+        Assert.Throws<JsonException>(() => FileReader.ReadAndDeserialize<Person>(file));
+    }
+
+    [Fact]
+    public void GivenJsonNullLiteral_WhenReadAndDeserialize_ThenReturnNull()
+    {
+        using var file = new TempFile("null");
+
+        Assert.Null(FileReader.ReadAndDeserialize<Person>(file));
+    }
+
+    [Fact]
+    public void GivenJsonOfTheWrongShape_WhenReadAndDeserialize_ThenThrowJsonException()
+    {
+        using var file = new TempFile("[1, 2, 3]");
+
+        Assert.Throws<JsonException>(() => FileReader.ReadAndDeserialize<Person>(file));
+    }
+
+    [Fact]
+    public void GivenEmptyFile_WhenRead_ThenReturnEmptyString()
+    {
+        using var file = new TempFile(string.Empty);
+
+        Assert.Equal(string.Empty, FileReader.Read(file));
+    }
+
+    [Fact]
+    public void GivenEmptyFile_WhenReadLines_ThenReturnEmptyArray()
+    {
+        using var file = new TempFile(string.Empty);
+
+        Assert.Empty(FileReader.ReadLines(file));
     }
 }

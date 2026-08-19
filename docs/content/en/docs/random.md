@@ -7,7 +7,7 @@ description: >-
 
 ## Features
 
-- `CustomRandom`: static class for generating random integers via cryptographic RNG or `System.Random`, and constrained random strings.
+- `CustomRandom`: static class for generating random integers via cryptographic RNG or `System.Random`, and constrained random strings. Both integer helpers treat `start` and `end` as **inclusive**, and both support the full 32-bit range.
 - `RandomStringOptions`: configuration for random string generation — controls length and which character sets to include (lowercase letters, uppercase letters, digits, special characters). **Every flag defaults to `true`**, so disabling a set means setting it to `false` explicitly.
 
 `CustomRandom.Text` draws from `RandomNumberGenerator`, so its output is suitable for security tokens. It guarantees that:
@@ -106,7 +106,7 @@ var sessionId = CustomRandom.Text(
 
 ### Errors
 
-`CustomRandom.Text` throws `ArgumentException` when the request cannot be satisfied:
+`CustomRandom.Text` throws `ArgumentException` when the request cannot be satisfied, and `InvalidOperationException` when `differentFrom` excludes effectively every string the options can produce:
 
 ```csharp
 // No character set enabled — there is nothing to draw from
@@ -120,6 +120,6 @@ CustomRandom.Text(new RandomStringOptions
 });
 
 // Length smaller than the number of enabled sets — the exact length and the
-// at-least-one-of-each guarantee cannot both be honoured
+// at-least-one-of-each guarantee cannot both be honored
 CustomRandom.Text(new RandomStringOptions { Length = 3 }); // 4 sets enabled by default
 ```

@@ -99,6 +99,13 @@ public class PrimeUtilsTests
     [InlineData(1L, false)]
     [InlineData(1000000005L, false)]
     [InlineData(9223372036854775807L, false)] // long.MaxValue, composite
+    [InlineData(0L, false)]
+    [InlineData(-1L, false)]
+    [InlineData(-2L, false)]
+    [InlineData(-7L, false)]
+    [InlineData(-59L, false)] // reinterpreting the bits as a ulong yields 2^64-59, which IS prime
+    [InlineData(-9223372036854775783L, false)]
+    [InlineData(-9223372036854775808L, false)] // long.MinValue
     public void GivenLong_WhenIsPrimeNumber_ThenReturnExpected(long value, bool expected)
     {
         Assert.Equal(expected, PrimeUtils.IsPrimeNumber(value));
@@ -164,5 +171,78 @@ public class PrimeUtilsTests
     public void GivenNegativeValue_WhenBigIntegerSqrt_ThenThrowArithmeticException()
     {
         Assert.Throws<ArithmeticException>(() => PrimeUtils.BigIntegerSqrt(BigInteger.MinusOne));
+    }
+
+    [Theory]
+    [InlineData("18446744073709551557", true)] // largest prime below 2^64, the last exact answer
+    [InlineData("18446744073709551615", false)] // ulong.MaxValue, composite
+    [InlineData("18446744073709551629", true)] // smallest prime above 2^64, first probabilistic answer
+    [InlineData("18446744073709551616", false)] // 2^64
+    [InlineData("170141183460469231731687303715884105727", true)] // 2^127-1, the Mersenne prime M127
+    [InlineData("170141183460469231731687303715884105729", false)]
+    public void GivenBigIntegerBeyondSixtyFourBits_WhenIsPrimeNumber_ThenReturnExpected(string value, bool expected)
+    {
+        Assert.Equal(expected, PrimeUtils.IsPrimeNumber(BigInteger.Parse(value)));
+    }
+
+    [Fact]
+    public async Task GivenLargeBigIntegerPrime_WhenIsPrimeNumber_ThenCompleteQuicklyInsteadOfTrialDividing()
+    {
+        // 2^521-1 is the Mersenne prime M521. Trial division would need ~2^260 iterations; Miller-Rabin
+        // settles it in milliseconds. Completing at all is the assertion.
+        var mersenne521 = BigInteger.Pow(2, 521) - 1;
+
+        var work = Task.Run(() => PrimeUtils.IsPrimeNumber(mersenne521));
+
+        var finished = await Task.WhenAny(work, Task.Delay(TimeSpan.FromSeconds(10)));
+
+        Assert.Same(work, finished);
+        Assert.True(await work);
+    }
+
+    [Fact]
+    public void GivenLargeBigIntegerComposite_WhenIsPrimeNumber_ThenReturnFalse()
+    {
+        // The product of two 100-bit primes: no small factor, so only the strong test can reject it.
+        var first = BigInteger.Parse("1267650600228229401496703205653");
+        var second = BigInteger.Parse("1267650600228229401496703205653");
+
+        Assert.False(PrimeUtils.IsPrimeNumber(first * second));
+    }
+
+    [Fact]
+    public void GivenNegativeBigInteger_WhenIsPrimeNumber_ThenReturnFalse()
+    {
+        Assert.False(PrimeUtils.IsPrimeNumber(BigInteger.Parse("-18446744073709551557")));
+    }
+
+    [Fact]
+    public void GivenPrimeGeneratedByEveryOverload_WhenIsPrimeNumber_ThenAllOverloadsAgree()
+    {
+        for (var value = 0; value < 2000; value++)
+        {
+            var expected = PrimeUtils.IsPrimeNumber(value);
+
+            Assert.Equal(expected, PrimeUtils.IsPrimeNumber((long)value));
+            Assert.Equal(expected, PrimeUtils.IsPrimeNumber((ulong)value));
+            Assert.Equal(expected, PrimeUtils.IsPrimeNumber((uint)value));
+            Assert.Equal(expected, PrimeUtils.IsPrimeNumber(new BigInteger(value)));
+
+            if (value <= short.MaxValue)
+            {
+                Assert.Equal(expected, PrimeUtils.IsPrimeNumber((short)value));
+                Assert.Equal(expected, PrimeUtils.IsPrimeNumber((ushort)value));
+            }
+
+            if (value <= sbyte.MaxValue)
+            {
+                Assert.Equal(expected, PrimeUtils.IsPrimeNumber((sbyte)value));
+            }
+
+            if (value <= byte.MaxValue)
+            {
+                Assert.Equal(expected, PrimeUtils.IsPrimeNumber((byte)value));
+            }
+        }
     }
 }

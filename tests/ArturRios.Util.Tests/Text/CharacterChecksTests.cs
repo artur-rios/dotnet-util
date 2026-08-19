@@ -119,7 +119,7 @@ public class CharacterChecksTests
     {
         const string arabicIndicThree = "٣";
 
-        Assert.True(arabicIndicThree.Any(char.IsDigit));
+        Assert.Contains(arabicIndicThree, char.IsDigit);
         Assert.False(arabicIndicThree.HasNumber());
     }
 
@@ -128,7 +128,7 @@ public class CharacterChecksTests
     {
         const string sharpS = "ß";
 
-        Assert.True(sharpS.Any(char.IsLower));
+        Assert.Contains(sharpS, char.IsLower);
         Assert.False(sharpS.HasLowerChar());
     }
 

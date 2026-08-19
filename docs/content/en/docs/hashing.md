@@ -7,8 +7,8 @@ description: >-
 
 ## Features
 
-- `Hash`: static helpers for Argon2id password hashing — encode with a provided or randomly generated salt, and verify plaintext against a stored hash.
-- `HashConfiguration`: configures Argon2id cost parameters — degree of parallelism, number of iterations, and memory usage in KB. Ships with sensible defaults.
+- `Hash`: static helpers for Argon2id password hashing — encode with a provided or randomly generated salt, and verify plaintext against a stored hash. Verification is constant time and accepts the same optional `HashConfiguration` used to produce the hash, so non-default cost parameters can be verified. Salts must be at least 8 bytes.
+- `HashConfiguration`: configures Argon2id cost parameters — degree of parallelism, number of iterations, and memory usage in KB; each must be at least 1. The defaults are deliberately expensive (600 MB across 16 lanes per hash), which suits a login path but not a service hashing many secrets at once. Changing them invalidates existing hashes.
 
 ## Class Diagram
 
@@ -22,7 +22,7 @@ classDiagram
             -byte[] CreateSalt()
             +byte[] EncodeWithSalt(string text, byte[] salt, HashConfiguration? configuration)
             +byte[] EncodeWithRandomSalt(string text, out byte[] salt, HashConfiguration? configuration)
-            +bool TextMatches(string text, byte[] hash, byte[] salt)
+            +bool TextMatches(string text, byte[] hash, byte[] salt, HashConfiguration?)
         }
         class HashConfiguration {
             +const int DefaultDegreeOfParallelism

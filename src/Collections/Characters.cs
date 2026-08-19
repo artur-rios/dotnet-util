@@ -17,8 +17,17 @@ public static class Characters
     /// <summary>All uppercase ASCII letters A-Z.</summary>
     public const string UpperLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    /// <summary>Common ASCII special characters, excluding whitespace.</summary>
-    public const string Special = "!@#$%^&*()_+-=[]{}|;':\",.<>?/";
+    /// <summary>
+    /// Every printable ASCII character that is neither a letter, a digit, nor whitespace.
+    /// </summary>
+    /// <remarks>
+    /// This is the complete set of ASCII punctuation, so a character is "special" here exactly when it is
+    /// not alphanumeric. An earlier revision omitted the backtick, tilde and backslash, which made
+    /// <see cref="Text.CharacterChecks.HasSpecialChar(string)"/> disagree with
+    /// <see cref="RegularExpressions.RegexCollection.EmailPattern"/> about characters the latter accepts in
+    /// a local part.
+    /// </remarks>
+    public const string Special = "!@#$%^&*()_+-=[]{}|;':\",.<>?/`~\\";
 
     /// <summary>Union of <see cref="Digits"/>, <see cref="LowerLetters"/>, <see cref="UpperLetters"/> and <see cref="Special"/>.</summary>
     public const string All = Digits + LowerLetters + UpperLetters + Special;

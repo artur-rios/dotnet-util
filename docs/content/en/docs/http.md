@@ -7,10 +7,10 @@ description: >-
 
 ## Features
 
-- `HttpGateway`: wraps `HttpClient` with typed async methods for GET, POST, PUT, PATCH, and DELETE. Each method deserializes the response body into the specified type and returns an `HttpOutput<TBody>`.
-- `HttpOutput<TBody>`: typed HTTP response container carrying the status code, response headers, and deserialized body.
-- `HttpExtensions`: extension on `object` providing `ToJsonStringContent()` to serialize any object into a `StringContent` suitable for request payloads.
-- `HttpStatusCodes`: static constants for common HTTP status codes (200, 201, 202, 204, 301, 302, 304, 307, 308, 400, 401, 403, 404, 405, 409, 422, 429, 500, 501, 502, 503, 504) plus grouped collections (`Success`, `Redirection`, `ClientError`, `ServerError`, `All`).
+- `HttpGateway`: wraps `HttpClient` with typed async methods for GET, POST, PUT, PATCH, and DELETE. Each takes a `CancellationToken`, buffers the response body into an `HttpOutput<TBody>`, and disposes the underlying `HttpResponseMessage` before returning.
+- `HttpOutput<TBody>`: typed HTTP response container carrying the status code, response and content headers, the raw body text, an `IsSuccess` flag, and the deserialized body. A payload that cannot be bound to `TBody` — malformed JSON, an array where an object was expected, an HTML error page — leaves `Body` at its default rather than throwing.
+- `HttpExtensions`: generic extension providing `ToJsonStringContent()` to serialize a payload into a `StringContent` suitable for request payloads. Serialization uses `System.Text.Json`; property matching on the way back in is case insensitive.
+- `HttpStatusCodes`: static constants for common HTTP status codes (200, 201, 202, 204, 301, 302, 304, 307, 308, 400, 401, 403, 404, 405, 409, 422, 429, 500, 501, 502, 503, 504) plus grouped `ImmutableArray<int>` collections (`Success`, `Redirection`, `ClientError`, `ServerError`, `All`). The groups are singletons, so reading one allocates nothing.
 
 ## Class Diagram
 
@@ -29,7 +29,7 @@ classDiagram
             +HttpStatusCode StatusCode
             +HttpResponseHeaders Headers
             +TBody? Body
-            +Task ReadContent()
+            +Task ReadContentAsync(CancellationToken)
         }
         class HttpExtensions {
             <<static>>

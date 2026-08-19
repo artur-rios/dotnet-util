@@ -74,11 +74,97 @@ public class PrimeGeneratorTests
         Assert.Equal(5, first.Next());
     }
 
+    // Unsupported element types such as decimal or double no longer compile, because the generator is
+    // constrained to IBinaryInteger<T>. The former run-time ArgumentException has become a compile error.
+
     [Fact]
-    public void GivenUnsupportedType_WhenConstructed_ThenThrowArgumentException()
+    public void GivenUshortGenerator_WhenNextCalledRepeatedly_ThenReturnPrimesInOrder()
     {
-        Assert.Throws<ArgumentException>(() => new PrimeGenerator<decimal>());
+        var generator = new PrimeGenerator<ushort>();
+
+        Assert.Equal((ushort)2, generator.Next());
+        Assert.Equal((ushort)3, generator.Next());
+        Assert.Equal((ushort)5, generator.Next());
+        Assert.Equal((ushort)7, generator.Next());
     }
+
+    [Fact]
+    public void GivenUintGenerator_WhenNextCalledRepeatedly_ThenReturnPrimesInOrder()
+    {
+        var generator = new PrimeGenerator<uint>();
+
+        Assert.Equal(2U, generator.Next());
+        Assert.Equal(3U, generator.Next());
+        Assert.Equal(5U, generator.Next());
+        Assert.Equal(7U, generator.Next());
+    }
+
+    [Fact]
+    public void GivenUlongGenerator_WhenNextCalledRepeatedly_ThenReturnPrimesInOrder()
+    {
+        var generator = new PrimeGenerator<ulong>();
+
+        Assert.Equal(2UL, generator.Next());
+        Assert.Equal(3UL, generator.Next());
+        Assert.Equal(5UL, generator.Next());
+        Assert.Equal(7UL, generator.Next());
+    }
+
+    [Fact]
+    public void GivenShortGenerator_WhenNextCalledRepeatedly_ThenReturnPrimesInOrder()
+    {
+        var generator = new PrimeGenerator<short>();
+
+        Assert.Equal((short)2, generator.Next());
+        Assert.Equal((short)3, generator.Next());
+        Assert.Equal((short)5, generator.Next());
+        Assert.Equal((short)7, generator.Next());
+    }
+
+    [Fact]
+    public void GivenByteGenerator_WhenExceedingLargestPrimeInRange_ThenThrowOverflowException()
+    {
+        var generator = new PrimeGenerator<byte>();
+
+        byte last = 0;
+
+        Assert.Throws<OverflowException>((Action)ExhaustPrimes);
+
+        // 251 is the largest prime that fits in a byte.
+        Assert.Equal((byte)251, last);
+
+        return;
+
+        void ExhaustPrimes()
+        {
+            while (true)
+            {
+                last = generator.Next();
+            }
+        }
+    }
+
+    [Fact]
+    public void GivenExhaustedGenerator_WhenNextCalledAgain_ThenThrowOverflowExceptionWithoutWrapping()
+    {
+        var generator = new PrimeGenerator<sbyte>();
+
+        while (true)
+        {
+            try
+            {
+                generator.Next();
+            }
+            catch (OverflowException)
+            {
+                break;
+            }
+        }
+
+        // The generator stays parked on its last prime instead of restarting the sequence.
+        Assert.Throws<OverflowException>(() => generator.Next());
+    }
+
 
     [Fact]
     public void GivenSbyteGenerator_WhenExceedingLargestPrimeInRange_ThenThrowOverflowException()

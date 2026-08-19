@@ -54,7 +54,7 @@ public class CharacterClassesTests
         var expected = CharacterClasses.Digit | CharacterClasses.Lower | CharacterClasses.Upper;
         const string value = "aB\n1";
 
-        Assert.False(RegexCollection.HasNumberLowerAndUpperChar().IsMatch(value));
+        Assert.DoesNotMatch(RegexCollection.HasNumberLowerAndUpperChar(), value);
         Assert.Equal(expected, value.Classify());
     }
 

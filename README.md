@@ -48,7 +48,7 @@ The package targets **net10.0** and depends on [`ArturRios.Output`](https://www.
   while (waiter.CanRetry)
   {
       try { await TryOperationAsync(); break; }
-      catch { await waiter.Wait(); }
+      catch { await waiter.WaitAsync(); }
   }
   ```
 
@@ -134,6 +134,52 @@ Full API reference, class diagrams, and usage examples:
 - [Random](https://artur-rios.github.io/dotnet-util/random/)
 - [Regular Expressions](https://artur-rios.github.io/dotnet-util/regular-expressions/)
 - [Text](https://artur-rios.github.io/dotnet-util/text/)
+
+## Upgrading to 2.0
+
+2.0 fixes several correctness bugs. Most call sites need no change, but the following behave differently.
+
+**Correctness fixes that change results**
+
+- `PrimeUtils.IsPrimeNumber(long)` rejects negative values. It previously reinterpreted the bits as
+  `ulong`, so `IsPrimeNumber(-59L)` returned `true`.
+- `PrimeUtils.IsPrimeNumber(BigInteger)` uses Miller-Rabin above 2^64 instead of trial division, which
+  never returned for a large operand. Below 2^64 the answer is still exact; above it, a "prime" verdict is
+  probabilistic with an error probability below 4^-40.
+- `Retry.MaxAttempts(n)` now means *n total executions*. It previously ran `n + 1` times, and consumed its
+  own configuration, so a reused instance had no attempts left. Add one to your argument to keep the old
+  execution count.
+- `CustomRandom.NumberFromSystemRandom` treats `end` as **inclusive**, matching `NumberFromRng`. Pass
+  `end - 1` to keep the old exclusive behavior.
+- `Characters.Special` gained the backtick, tilde and backslash, completing the ASCII punctuation set. This
+  changes the alphabet `CustomRandom.Text` draws from and what `HasSpecialChar` reports.
+- `HttpOutput` and `HttpGateway` serialize with `System.Text.Json` instead of `Newtonsoft.Json`; property
+  matching on deserialization stays case insensitive. The `Newtonsoft.Json` dependency is gone.
+- `Condition` reports duplicate failure messages once per failing condition instead of collapsing them, and
+  `FailsWith` throws `InvalidOperationException` when no `True`/`False` precedes it.
+
+**Signature and type changes**
+
+- `JitteredWaiter.Wait()` is **removed**; use `WaitAsync(CancellationToken)`. Waits are now capped at
+  `maxWaitMilliseconds` (30 s by default) rather than overflowing past ~20 retries.
+- `HttpOutput.ReadContent()` is **removed**; use `ReadContentAsync(CancellationToken)`. `StatusCode`,
+  `Headers` and `Body` are read-only, and `ContentHeaders`, `RawBody` and `IsSuccess` are new.
+- `HttpStatusCodes` groups are `ImmutableArray<int>` rather than `int[]`.
+- `PrimeGenerator<T>` is constrained to `IBinaryInteger<T>`. An unsupported `T` is now a compile error
+  instead of a constructor `ArgumentException`.
+- `ConditionFailedException.Errors` is a property rather than a public field.
+- `FileReaderAsync` methods take an optional `CancellationToken`.
+
+**Newly enforced validation**
+
+- `Retry.MaxAttempts` and `DelayMilliseconds`, `JitteredWaiter`'s constructor, and `HashConfiguration`'s
+  cost parameters all reject out-of-range values.
+- `Hash` rejects empty text and salts shorter than 8 bytes, and `Hash.TextMatches` compares in constant
+  time and accepts the `HashConfiguration` the hash was produced with.
+- `CustomRandom` rejects an inverted range, and a single-value range equal to `differentFrom`, instead of
+  looping forever. `CustomRandom.Text` gives up with `InvalidOperationException` when `differentFrom`
+  excludes everything it can produce.
+- `ReadAsDictionary` throws on duplicate header names instead of silently dropping a column.
 
 ## Versioning
 

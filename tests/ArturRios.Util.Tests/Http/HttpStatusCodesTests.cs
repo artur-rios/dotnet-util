@@ -1,4 +1,4 @@
-﻿using ArturRios.Util.Http;
+using ArturRios.Util.Http;
 
 namespace ArturRios.Util.Tests.Http;
 
@@ -74,5 +74,32 @@ public class HttpStatusCodesTests
             Assert.Contains(code, HttpStatusCodes.All);
         }
     }
-}
 
+    [Fact]
+    public void GivenGroups_WhenReadTwice_ThenReturnTheSameInstanceInsteadOfANewArray()
+    {
+        // These were expression-bodied properties that allocated a fresh array on every read.
+        Assert.True(HttpStatusCodes.Success == HttpStatusCodes.Success);
+        Assert.True(HttpStatusCodes.All == HttpStatusCodes.All);
+    }
+
+    [Fact]
+    public void GivenAllGroups_WhenCombined_ThenEveryCodeIsUniqueAndInItsOwnBand()
+    {
+        Assert.Equal(HttpStatusCodes.All.Length, HttpStatusCodes.All.Distinct().Count());
+
+        Assert.All(HttpStatusCodes.Success, code => Assert.InRange(code, 200, 299));
+        Assert.All(HttpStatusCodes.Redirection, code => Assert.InRange(code, 300, 399));
+        Assert.All(HttpStatusCodes.ClientError, code => Assert.InRange(code, 400, 499));
+        Assert.All(HttpStatusCodes.ServerError, code => Assert.InRange(code, 500, 599));
+    }
+
+    [Fact]
+    public void GivenAllGroup_WhenCounted_ThenItIsTheSumOfTheFourBands()
+    {
+        var expected = HttpStatusCodes.Success.Length + HttpStatusCodes.Redirection.Length +
+                       HttpStatusCodes.ClientError.Length + HttpStatusCodes.ServerError.Length;
+
+        Assert.Equal(expected, HttpStatusCodes.All.Length);
+    }
+}

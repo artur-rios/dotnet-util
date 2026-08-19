@@ -89,7 +89,7 @@ public class EmailAddressTests
     [InlineData("ma@[10.0.0.255]")]
     public void GivenAddressTheRegexAccepts_WhenIsValid_ThenTrue(string value)
     {
-        Assert.True(RegexCollection.Email().IsMatch(value));
+        Assert.Matches(RegexCollection.Email(), value);
         Assert.True(EmailAddress.IsValid(value));
     }
 
@@ -98,7 +98,7 @@ public class EmailAddressTests
     {
         const string value = "ma@münchen.de";
 
-        Assert.False(RegexCollection.Email().IsMatch(value));
+        Assert.DoesNotMatch(RegexCollection.Email(), value);
         Assert.True(EmailAddress.IsValid(value));
     }
 }

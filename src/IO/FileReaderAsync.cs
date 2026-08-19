@@ -7,6 +7,7 @@ namespace ArturRios.Util.IO;
 /// </summary>
 /// <remarks>
 /// All methods validate the provided path and throw <see cref="ArgumentException"/> for null/whitespace and <see cref="FileNotFoundException"/> when the file does not exist.
+/// Behavior matches <see cref="FileReader"/> exactly; only the I/O is asynchronous.
 /// </remarks>
 public static class FileReaderAsync
 {
@@ -14,19 +15,16 @@ public static class FileReaderAsync
     /// Asynchronously reads the entire contents of a text file.
     /// </summary>
     /// <param name="path">Absolute or relative path to the file.</param>
+    /// <param name="cancellationToken">Cancels the read.</param>
     /// <returns>File content as a string.</returns>
     /// <exception cref="ArgumentException">Path is null or whitespace.</exception>
     /// <exception cref="FileNotFoundException">File does not exist.</exception>
-    public static async Task<string> ReadAsync(string path)
+    /// <exception cref="OperationCanceledException"><paramref name="cancellationToken"/> was canceled.</exception>
+    public static async Task<string> ReadAsync(string path, CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrWhiteSpace(path))
-        {
-            throw new ArgumentException("Path cannot be null or whitespace", nameof(path));
-        }
+        FileReader.ValidatePath(path);
 
-        return File.Exists(path)
-            ? await File.ReadAllTextAsync(path)
-            : throw new FileNotFoundException($"The file at path '{path}' does not exist", path);
+        return await File.ReadAllTextAsync(path, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -34,73 +32,47 @@ public static class FileReaderAsync
     /// </summary>
     /// <param name="path">Path to the file.</param>
     /// <param name="separator">Delimiter separating fields (e.g. <c>','</c>).</param>
+    /// <param name="cancellationToken">Cancels the read.</param>
     /// <returns>A dictionary keyed by column header mapping to arrays of its values.</returns>
     /// <exception cref="ArgumentException">Path is null or whitespace.</exception>
     /// <exception cref="FileNotFoundException">File does not exist.</exception>
-    /// <exception cref="InvalidOperationException">File must contain a header and at least one data line.</exception>
-    public static async Task<Dictionary<string, string[]>> ReadAsDictionaryAsync(string path, char separator)
+    /// <exception cref="InvalidOperationException">
+    /// The file has fewer than two lines, or the header row repeats a name, which would silently drop a
+    /// column from the result.
+    /// </exception>
+    /// <exception cref="OperationCanceledException"><paramref name="cancellationToken"/> was canceled.</exception>
+    /// <remarks>
+    /// This is a plain split on <paramref name="separator"/>, not an RFC 4180 parser: quoting is not
+    /// interpreted, so a quoted field containing the separator or a line break is split like any other.
+    /// Use a dedicated CSV library when the data can contain either. Rows shorter than the header are
+    /// padded with empty strings, and values beyond the last header are discarded.
+    /// </remarks>
+    public static async Task<Dictionary<string, string[]>> ReadAsDictionaryAsync(
+        string path,
+        char separator,
+        CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrWhiteSpace(path))
-        {
-            throw new ArgumentException("Path cannot be null or whitespace", nameof(path));
-        }
+        FileReader.ValidatePath(path);
 
-        if (!File.Exists(path))
-        {
-            throw new FileNotFoundException($"The file at path '{path}' does not exist", path);
-        }
+        var lines = await File.ReadAllLinesAsync(path, cancellationToken).ConfigureAwait(false);
 
-        var lines = await File.ReadAllLinesAsync(path);
-
-        if (lines.Length < 2)
-        {
-            throw new InvalidOperationException("File must have at least a header and one data line");
-        }
-
-        var headers = lines[0].Split(separator);
-        var columnLists = new List<string>[headers.Length];
-        for (int i = 0; i < headers.Length; i++)
-        {
-            columnLists[i] = new List<string>();
-        }
-
-        for (var row = 1; row < lines.Length; row++)
-        {
-            var values = lines[row].Split(separator);
-
-            for (var col = 0; col < headers.Length; col++)
-            {
-                var value = col < values.Length ? values[col] : string.Empty;
-                columnLists[col].Add(value);
-            }
-        }
-
-        var dict = new Dictionary<string, string[]>(headers.Length);
-        for (int i = 0; i < headers.Length; i++)
-        {
-            dict[headers[i]] = columnLists[i].ToArray();
-        }
-
-        return dict;
+        return DelimitedText.ToDictionary(lines, separator);
     }
 
     /// <summary>
     /// Asynchronously reads all lines of a text file into an array.
     /// </summary>
     /// <param name="path">Path to the file.</param>
+    /// <param name="cancellationToken">Cancels the read.</param>
     /// <returns>Array of lines.</returns>
     /// <exception cref="ArgumentException">Path is null or whitespace.</exception>
     /// <exception cref="FileNotFoundException">File does not exist.</exception>
-    public static async Task<string[]> ReadLinesAsync(string path)
+    /// <exception cref="OperationCanceledException"><paramref name="cancellationToken"/> was canceled.</exception>
+    public static async Task<string[]> ReadLinesAsync(string path, CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrWhiteSpace(path))
-        {
-            throw new ArgumentException("Path cannot be null or whitespace", nameof(path));
-        }
+        FileReader.ValidatePath(path);
 
-        return File.Exists(path)
-            ? await File.ReadAllLinesAsync(path)
-            : throw new FileNotFoundException($"The file at path '{path}' does not exist", path);
+        return await File.ReadAllLinesAsync(path, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -108,23 +80,24 @@ public static class FileReaderAsync
     /// </summary>
     /// <typeparam name="T">Target type.</typeparam>
     /// <param name="path">Path to the JSON file.</param>
-    /// <returns>Deserialized object or <c>null</c> if content is empty or invalid JSON.</returns>
+    /// <param name="cancellationToken">Cancels the read and the deserialization.</param>
+    /// <returns>
+    /// The deserialized object, or <c>null</c> when the file contains the JSON literal <c>null</c>.
+    /// </returns>
     /// <exception cref="ArgumentException">Path is null or whitespace.</exception>
     /// <exception cref="FileNotFoundException">File does not exist.</exception>
-    public static async Task<T?> ReadAndDeserializeAsync<T>(string path)
+    /// <exception cref="JsonException">
+    /// The file is empty, holds only whitespace, or does not contain JSON matching
+    /// <typeparamref name="T"/>. An unreadable file is reported rather than silently turned into
+    /// <c>null</c>, which would be indistinguishable from a genuine null payload.
+    /// </exception>
+    /// <exception cref="OperationCanceledException"><paramref name="cancellationToken"/> was canceled.</exception>
+    public static async Task<T?> ReadAndDeserializeAsync<T>(string path, CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrWhiteSpace(path))
-        {
-            throw new ArgumentException("Path cannot be null or whitespace", nameof(path));
-        }
+        FileReader.ValidatePath(path);
 
-        if (!File.Exists(path))
-        {
-            throw new FileNotFoundException($"The file at path '{path}' does not exist", path);
-        }
+        await using var stream = File.OpenRead(path);
 
-        var content = await File.ReadAllTextAsync(path);
-
-        return JsonSerializer.Deserialize<T>(content);
+        return await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken).ConfigureAwait(false);
     }
 }

@@ -50,7 +50,7 @@ The package targets **net10.0** and depends on [`ArturRios.Output`](https://www.
   while (waiter.CanRetry)
   {
       try { await TryOperationAsync(); break; }
-      catch { await waiter.Wait(); }
+      catch { await waiter.WaitAsync(); }
   }
   ```
 

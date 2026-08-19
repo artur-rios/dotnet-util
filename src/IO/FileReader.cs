@@ -7,6 +7,7 @@ namespace ArturRios.Util.IO;
 /// </summary>
 /// <remarks>
 /// All methods validate the provided path and throw <see cref="ArgumentException"/> for null/whitespace and <see cref="FileNotFoundException"/> when the file does not exist.
+/// See <see cref="FileReaderAsync"/> for the asynchronous equivalents, which behave identically.
 /// </remarks>
 public static class FileReader
 {
@@ -19,14 +20,9 @@ public static class FileReader
     /// <exception cref="FileNotFoundException">File does not exist.</exception>
     public static string Read(string path)
     {
-        if (string.IsNullOrWhiteSpace(path))
-        {
-            throw new ArgumentException("Path cannot be null or whitespace", nameof(path));
-        }
+        ValidatePath(path);
 
-        return File.Exists(path)
-            ? File.ReadAllText(path)
-            : throw new FileNotFoundException($"The file at path '{path}' does not exist", path);
+        return File.ReadAllText(path);
     }
 
     /// <summary>
@@ -37,51 +33,21 @@ public static class FileReader
     /// <returns>A dictionary keyed by column header mapping to arrays of its values.</returns>
     /// <exception cref="ArgumentException">Path is null or whitespace.</exception>
     /// <exception cref="FileNotFoundException">File does not exist.</exception>
-    /// <exception cref="InvalidOperationException">File must contain a header and at least one data line.</exception>
+    /// <exception cref="InvalidOperationException">
+    /// The file has fewer than two lines, or the header row repeats a name, which would silently drop a
+    /// column from the result.
+    /// </exception>
+    /// <remarks>
+    /// This is a plain split on <paramref name="separator"/>, not an RFC 4180 parser: quoting is not
+    /// interpreted, so a quoted field containing the separator or a line break is split like any other.
+    /// Use a dedicated CSV library when the data can contain either. Rows shorter than the header are
+    /// padded with empty strings, and values beyond the last header are discarded.
+    /// </remarks>
     public static Dictionary<string, string[]> ReadAsDictionary(string path, char separator)
     {
-        if (string.IsNullOrWhiteSpace(path))
-        {
-            throw new ArgumentException("Path cannot be null or whitespace", nameof(path));
-        }
+        ValidatePath(path);
 
-        if (!File.Exists(path))
-        {
-            throw new FileNotFoundException($"The file at path '{path}' does not exist", path);
-        }
-
-        var lines = File.ReadAllLines(path);
-
-        if (lines.Length < 2)
-        {
-            throw new InvalidOperationException("File must have at least a header and one data line");
-        }
-
-        var headers = lines[0].Split(separator);
-        var columnLists = new List<string>[headers.Length];
-        for (int i = 0; i < headers.Length; i++)
-        {
-            columnLists[i] = new List<string>();
-        }
-
-        for (var row = 1; row < lines.Length; row++)
-        {
-            var values = lines[row].Split(separator);
-
-            for (var col = 0; col < headers.Length; col++)
-            {
-                var value = col < values.Length ? values[col] : string.Empty;
-                columnLists[col].Add(value);
-            }
-        }
-
-        var dict = new Dictionary<string, string[]>(headers.Length);
-        for (int i = 0; i < headers.Length; i++)
-        {
-            dict[headers[i]] = columnLists[i].ToArray();
-        }
-
-        return dict;
+        return DelimitedText.ToDictionary(File.ReadAllLines(path), separator);
     }
 
     /// <summary>
@@ -93,14 +59,9 @@ public static class FileReader
     /// <exception cref="FileNotFoundException">File does not exist.</exception>
     public static string[] ReadLines(string path)
     {
-        if (string.IsNullOrWhiteSpace(path))
-        {
-            throw new ArgumentException("Path cannot be null or whitespace", nameof(path));
-        }
+        ValidatePath(path);
 
-        return File.Exists(path)
-            ? File.ReadAllLines(path)
-            : throw new FileNotFoundException($"The file at path '{path}' does not exist", path);
+        return File.ReadAllLines(path);
     }
 
     /// <summary>
@@ -108,10 +69,29 @@ public static class FileReader
     /// </summary>
     /// <typeparam name="T">Target type.</typeparam>
     /// <param name="path">Path to the JSON file.</param>
-    /// <returns>Deserialized object or <c>null</c> if content is empty or invalid JSON.</returns>
+    /// <returns>
+    /// The deserialized object, or <c>null</c> when the file contains the JSON literal <c>null</c>.
+    /// </returns>
     /// <exception cref="ArgumentException">Path is null or whitespace.</exception>
     /// <exception cref="FileNotFoundException">File does not exist.</exception>
+    /// <exception cref="JsonException">
+    /// The file is empty, holds only whitespace, or does not contain JSON matching
+    /// <typeparamref name="T"/>. An unreadable file is reported rather than silently turned into
+    /// <c>null</c>, which would be indistinguishable from a genuine null payload.
+    /// </exception>
     public static T? ReadAndDeserialize<T>(string path)
+    {
+        ValidatePath(path);
+
+        return JsonSerializer.Deserialize<T>(File.ReadAllText(path));
+    }
+
+    /// <summary>
+    /// Rejects an unusable path before any I/O is attempted.
+    /// </summary>
+    /// <exception cref="ArgumentException">Path is null or whitespace.</exception>
+    /// <exception cref="FileNotFoundException">File does not exist.</exception>
+    internal static void ValidatePath(string path)
     {
         if (string.IsNullOrWhiteSpace(path))
         {
@@ -122,9 +102,5 @@ public static class FileReader
         {
             throw new FileNotFoundException($"The file at path '{path}' does not exist", path);
         }
-
-        var content = File.ReadAllText(path);
-
-        return JsonSerializer.Deserialize<T>(content);
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using ArturRios.Util.IO;
 using ArturRios.Util.Tests.Setup;
 
@@ -277,5 +277,136 @@ public class FileReaderAsyncTests
                 File.Delete(path);
             }
         }
+    }
+
+    [Fact]
+    public async Task GivenDuplicateHeaders_WhenReadAsDictionaryAsync_ThenThrowInsteadOfDroppingAColumn()
+    {
+        // A silent overwrite used to return a dictionary with fewer entries than the file has columns.
+        using var file = TempFile.WithLines("name,value,name", "a,1,b");
+
+        var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => FileReaderAsync.ReadAsDictionaryAsync(file, ','));
+
+        Assert.Contains("duplicate", exception.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("'name'", exception.Message);
+    }
+
+    [Fact]
+    public async Task GivenHeadersDifferingOnlyByCase_WhenReadAsDictionaryAsync_ThenTreatThemAsDistinct()
+    {
+        using var file = TempFile.WithLines("Name,name", "a,b");
+
+        var result = await FileReaderAsync.ReadAsDictionaryAsync(file, ',');
+
+        Assert.Equal(["a"], result["Name"]);
+        Assert.Equal(["b"], result["name"]);
+    }
+
+    [Fact]
+    public async Task GivenEmptyHeaderName_WhenReadAsDictionaryAsync_ThenKeepItAsAnEmptyKey()
+    {
+        using var file = TempFile.WithLines("name,,age", "a,b,30");
+
+        var result = await FileReaderAsync.ReadAsDictionaryAsync(file, ',');
+
+        Assert.Equal(["b"], result[string.Empty]);
+    }
+
+    [Fact]
+    public async Task GivenQuotedFieldContainingTheSeparator_WhenReadAsDictionaryAsync_ThenSplitItAnyway()
+    {
+        // Documented limitation: this is a plain split, not an RFC 4180 parser.
+        using var file = TempFile.WithLines("a,b", "\"x,y\",z");
+
+        var result = await FileReaderAsync.ReadAsDictionaryAsync(file, ',');
+
+        Assert.Equal(["\"x"], result["a"]);
+        Assert.Equal(["y\""], result["b"]);
+    }
+
+    [Fact]
+    public async Task GivenEmptyFile_WhenReadAsDictionaryAsync_ThenThrowInvalidOperationException()
+    {
+        using var file = new TempFile(string.Empty);
+
+        await Assert.ThrowsAsync<InvalidOperationException>(() => FileReaderAsync.ReadAsDictionaryAsync(file, ','));
+    }
+
+    [Fact]
+    public async Task GivenSeparatorAbsentFromTheFile_WhenReadAsDictionaryAsync_ThenReturnASingleColumn()
+    {
+        using var file = TempFile.WithLines("header", "first", "second");
+
+        var result = await FileReaderAsync.ReadAsDictionaryAsync(file, ',');
+
+        Assert.Equal(["first", "second"], result["header"]);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    public async Task GivenEmptyOrWhitespaceJsonFile_WhenReadAndDeserializeAsync_ThenThrowJsonException(string content)
+    {
+        // The documentation used to promise null here; the serializer has always thrown.
+        using var file = new TempFile(content);
+
+        await Assert.ThrowsAsync<JsonException>(() => FileReaderAsync.ReadAndDeserializeAsync<Person>(file));
+    }
+
+    [Fact]
+    public async Task GivenJsonNullLiteral_WhenReadAndDeserializeAsync_ThenReturnNull()
+    {
+        using var file = new TempFile("null");
+
+        Assert.Null(await FileReaderAsync.ReadAndDeserializeAsync<Person>(file));
+    }
+
+    [Fact]
+    public async Task GivenJsonOfTheWrongShape_WhenReadAndDeserializeAsync_ThenThrowJsonException()
+    {
+        using var file = new TempFile("[1, 2, 3]");
+
+        await Assert.ThrowsAsync<JsonException>(() => FileReaderAsync.ReadAndDeserializeAsync<Person>(file));
+    }
+
+    [Fact]
+    public async Task GivenEmptyFile_WhenReadAsync_ThenReturnEmptyString()
+    {
+        using var file = new TempFile(string.Empty);
+
+        Assert.Equal(string.Empty, await FileReaderAsync.ReadAsync(file));
+    }
+
+    [Fact]
+    public async Task GivenEmptyFile_WhenReadLinesAsync_ThenReturnEmptyArray()
+    {
+        using var file = new TempFile(string.Empty);
+
+        Assert.Empty(await FileReaderAsync.ReadLinesAsync(file));
+    }
+
+    [Fact]
+    public async Task GivenCancelledToken_WhenReadingAsync_ThenThrowOperationCanceledException()
+    {
+        using var file = TempFile.WithLines("a,b", "1,2");
+        using var cancellation = new CancellationTokenSource();
+
+        await cancellation.CancelAsync();
+
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => FileReaderAsync.ReadAsync(file, cancellation.Token));
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => FileReaderAsync.ReadLinesAsync(file, cancellation.Token));
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => FileReaderAsync.ReadAsDictionaryAsync(file, ',', cancellation.Token));
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => FileReaderAsync.ReadAndDeserializeAsync<Person>(file, cancellation.Token));
+    }
+
+    [Fact]
+    public async Task GivenTheSameInput_WhenReadAsDictionaryAsync_ThenMatchTheSynchronousReader()
+    {
+        using var file = TempFile.WithLines("a,b,c", "1,2,3", "4,5");
+
+        var asynchronous = await FileReaderAsync.ReadAsDictionaryAsync(file, ',');
+        var synchronous = FileReader.ReadAsDictionary(file, ',');
+
+        Assert.Equal(synchronous, asynchronous);
     }
 }

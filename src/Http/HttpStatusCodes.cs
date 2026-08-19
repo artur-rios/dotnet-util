@@ -1,8 +1,15 @@
-﻿namespace ArturRios.Util.Http;
+﻿using System.Collections.Immutable;
+
+namespace ArturRios.Util.Http;
 
 /// <summary>
 /// Provides common HTTP status code constants and grouped collections for convenience.
 /// </summary>
+/// <remarks>
+/// The groups are immutable singletons rather than freshly built arrays, so reading one in a hot path
+/// costs nothing and no caller can alter what another caller sees. They list the codes this type declares,
+/// not every code the relevant RFCs define.
+/// </remarks>
 public static class HttpStatusCodes
 {
     /// <summary>HTTP 200 - OK.</summary>
@@ -54,28 +61,30 @@ public static class HttpStatusCodes
     public const int GatewayTimeout = 504;
 
     /// <summary>
-    /// Group containing success status codes (2xx).
+    /// Group containing the success status codes (2xx) declared by this type.
     /// </summary>
-    public static int[] Success => [Ok, Created, Accepted, NoContent];
+    public static ImmutableArray<int> Success { get; } = [Ok, Created, Accepted, NoContent];
 
     /// <summary>
-    /// Group containing redirection status codes (3xx).
+    /// Group containing the redirection status codes (3xx) declared by this type.
     /// </summary>
-    public static int[] Redirection => [MovedPermanently, Found, NotModified, TemporaryRedirect, PermanentRedirect];
+    public static ImmutableArray<int> Redirection { get; } =
+        [MovedPermanently, Found, NotModified, TemporaryRedirect, PermanentRedirect];
 
     /// <summary>
-    /// Group containing client error status codes (4xx).
+    /// Group containing the client error status codes (4xx) declared by this type.
     /// </summary>
-    public static int[] ClientError =>
+    public static ImmutableArray<int> ClientError { get; } =
         [BadRequest, Unauthorized, Forbidden, NotFound, MethodNotAllowed, Conflict, UnprocessableEntity, TooManyRequests];
 
     /// <summary>
-    /// Group containing server error status codes (5xx).
+    /// Group containing the server error status codes (5xx) declared by this type.
     /// </summary>
-    public static int[] ServerError => [InternalServerError, NotImplemented, BadGateway, ServiceUnavailable, GatewayTimeout];
+    public static ImmutableArray<int> ServerError { get; } =
+        [InternalServerError, NotImplemented, BadGateway, ServiceUnavailable, GatewayTimeout];
 
     /// <summary>
-    /// Convenience property containing all supported status codes.
+    /// Convenience property containing every status code declared by this type.
     /// </summary>
-    public static int[] All => [..Success, ..Redirection, ..ClientError, ..ServerError];
+    public static ImmutableArray<int> All { get; } = [..Success, ..Redirection, ..ClientError, ..ServerError];
 }

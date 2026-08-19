@@ -7,8 +7,9 @@ description: >-
 
 ## Features
 
-- `FileReader` (synchronous): read a file as a string, as an array of lines, as a separator-delimited dictionary, or deserialize its JSON content into a typed object.
-- `FileReaderAsync` (asynchronous): the same four operations as `FileReader`, returning `Task`-wrapped results.
+- `FileReader` (synchronous): read a file as a string, as an array of lines, as a separator-delimited dictionary, or deserialize its JSON content into a typed object. Deserialization throws `JsonException` for an empty, malformed or mismatched payload, and returns `null` only for the JSON literal `null`.
+- `FileReaderAsync` (asynchronous): the same four operations as `FileReader`, returning `Task`-wrapped results and accepting a `CancellationToken`. Behavior is identical to the synchronous reader.
+- The delimited reader is a plain split on the separator, not an RFC 4180 parser: quoting is not interpreted, so a quoted field containing the separator or a line break is split like any other. It throws `InvalidOperationException` on a duplicate header name rather than silently dropping the column.
 
 ## Class Diagram
 
@@ -27,7 +28,7 @@ classDiagram
             +Task~string~ ReadAsync(string path)
             +Task~string[]~ ReadLinesAsync(string path)
             +Task~Dictionary~string, string[]~~ ReadAsDictionaryAsync(string path, char separator)
-            +Task~T~ ReadAndDeserializeAsync~T~(string path)
+            +Task~T~ ReadAndDeserializeAsync~T~(string path, CancellationToken)
         }
     }
 ```
@@ -49,7 +50,7 @@ string[] lines = FileReader.ReadLines("/data/notes.txt");
 // Key = first column value, Value = remaining columns as string[]
 Dictionary<string, string[]> table = FileReader.ReadAsDictionary("/data/config.csv", ',');
 
-// JSON file → typed object (uses Newtonsoft.Json)
+// JSON file → typed object (uses System.Text.Json)
 AppConfig config = FileReader.ReadAndDeserialize<AppConfig>("/data/config.json");
 ```
 

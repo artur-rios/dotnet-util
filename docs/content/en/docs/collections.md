@@ -8,7 +8,7 @@ description: >-
 ## Features
 
 - `AnsiColors`: static class with ANSI escape code string constants for console foreground colors (DarkGray, Cyan, White, Yellow, Red, Magenta, BrightRed, Green).
-- `Characters`: static class with string constants for character pools — digits, lowercase letters, uppercase letters, special characters, and the union `All`.
+- `Characters`: static class with string constants for character pools — digits, lowercase letters, uppercase letters, special characters, and the union `All`. `Special` is the complete set of ASCII punctuation, so a character counts as special exactly when it is printable ASCII and not alphanumeric.
 
 ## Class Diagram
 

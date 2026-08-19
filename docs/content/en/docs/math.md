@@ -7,8 +7,8 @@ description: >-
 
 ## Features
 
-- `PrimeUtils`: static primality tests for all standard integer types (`sbyte`, `byte`, `short`, `ushort`, `int`, `uint`, `long`, `ulong`) and `BigInteger`. Uses trial division for 32-bit values and deterministic Miller-Rabin witnesses for 64-bit values. Also exposes `BigIntegerSqrt` for computing the integer (floor) square root of a `BigInteger`.
-- `PrimeGenerator<T>`: generates an ascending, infinite sequence of prime numbers of the chosen integer type. Thread-safe; each instance maintains its own independent counter. Supported types: `sbyte`, `byte`, `short`, `ushort`, `int`, `uint`, `long`, `ulong`, `BigInteger`.
+- `PrimeUtils`: static primality tests for all standard integer types (`sbyte`, `byte`, `short`, `ushort`, `int`, `uint`, `long`, `ulong`) and `BigInteger`. Uses trial division for 32-bit values and deterministic Miller-Rabin witnesses up to 2^64, where the answer is exact. Beyond 2^64 a `BigInteger` is settled by 40 random Miller-Rabin rounds, so a "prime" verdict is probabilistic (error below 4^-40) while a "not prime" verdict is exact. Negative values are never prime. Also exposes `BigIntegerSqrt` for computing the integer (floor) square root of a `BigInteger`.
+- `PrimeGenerator<T>`: generates an ascending, infinite sequence of prime numbers of the chosen integer type. Thread-safe; each instance maintains its own independent counter. `T` is constrained to `IBinaryInteger<T>`, so `sbyte`, `byte`, `short`, `ushort`, `int`, `uint`, `long`, `ulong`, `nint`, `nuint`, `Int128`, `UInt128` and `BigInteger` all work, and anything else is a compile error rather than a run-time exception. Running past the largest prime a fixed-width `T` can hold throws `OverflowException`.
 
 ## Class Diagram
 

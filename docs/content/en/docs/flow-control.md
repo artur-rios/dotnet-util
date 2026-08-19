@@ -7,10 +7,10 @@ description: >-
 
 ## Features
 
-- `Condition`: fluent condition aggregator; collects failure messages and can throw `ConditionFailedException` or convert to a process output.
+- `Condition`: fluent condition aggregator; collects failure messages in order — repeats included — and can throw `ConditionFailedException` or convert to a process output. `FailsWith` throws `InvalidOperationException` when no `True`/`False` precedes it.
 - `ConditionFailedException`: exception carrying all collected error messages as `string[]`.
-- `Retry`: simple retry with configurable max attempts and fixed delay; supports `Action` and `Func<T>`.
-- `JitteredWaiter`: exponential backoff with jitter; exposes `CanRetry` and throws `MaxRetriesReachedException` when retries are exhausted.
+- `Retry`: simple retry with configurable max attempts and fixed delay; supports `Action`, `Func<T>` and the asynchronous `ExecuteAsync` overloads, a `When` predicate to restrict which exceptions are retried, and `JitteredBackoff` to space attempts with the same exponential-plus-jitter schedule as `JitteredWaiter`. `MaxAttempts(n)` runs the operation at most `n` times in total, and a configured instance is reusable.
+- `JitteredWaiter`: exponential backoff with jitter, capped at `maxWaitMilliseconds` (30 s by default); `WaitAsync` accepts a `CancellationToken`, exposes `CanRetry` and throws `MaxRetriesReachedException` when retries are exhausted.
 - `MaxRetriesReachedException`: exception thrown when `JitteredWaiter` exceeds its retry limit.
 
 ## Class Diagram
@@ -19,8 +19,8 @@ description: >-
 classDiagram
     namespace FlowControl {
         class Condition {
-            -HashSet~string~ _failedConditions
-            -bool _expression
+            -List~string~ _failedConditions
+            -bool? _expression
             +static Condition Create
             +string[] FailedConditions
             +bool IsSatisfied
@@ -39,8 +39,13 @@ classDiagram
             +static Retry New
             +Retry MaxAttempts(int maxAttempts)
             +Retry DelayMilliseconds(int delayMilliseconds)
+            +Retry JitteredBackoff(int maxWaitMilliseconds)
+            +Retry When(Func~Exception, bool~ predicate)
+            +Retry When~TException~()
             +void Execute(Action action)
             +T Execute~T~(Func~T~ func)
+            +Task ExecuteAsync(Func~CancellationToken, Task~ operation, CancellationToken)
+            +Task~T~ ExecuteAsync~T~(Func~CancellationToken, Task~T~~ operation, CancellationToken)
         }
     }
     namespace FlowControl_Waiter {
@@ -49,7 +54,7 @@ classDiagram
             +int MaxRetryCount
             -int Count
             +bool CanRetry
-            +Task Wait()
+            +Task WaitAsync(CancellationToken)
         }
         class MaxRetriesReachedException
     }
@@ -124,7 +129,7 @@ while (waiter.CanRetry)
     }
     catch (TransientException)
     {
-        await waiter.Wait();
+        await waiter.WaitAsync();
     }
 }
 ```

@@ -1,4 +1,4 @@
-﻿namespace ArturRios.Util.Tests.Random;
+namespace ArturRios.Util.Tests.Random;
 
 using ArturRios.Util.Random;
 using ArturRios.Util.Collections;
@@ -36,8 +36,8 @@ public class CustomRandomTests
         const int end = 100;
         
         var value = CustomRandom.NumberFromSystemRandom(start, end);
-        
-        Assert.InRange(value, start, end - 1);
+
+        Assert.InRange(value, start, end);
     }
 
     [Fact]
@@ -48,8 +48,8 @@ public class CustomRandomTests
         const int excluded = 15;
         
         var value = CustomRandom.NumberFromSystemRandom(start, end, excluded);
-        
-        Assert.InRange(value, start, end - 1);
+
+        Assert.InRange(value, start, end);
         Assert.NotEqual(excluded, value);
     }
 
@@ -380,5 +380,138 @@ public class CustomRandomTests
         }
 
         Assert.Equal(100, results.Count);
+    }
+
+    [Theory]
+    [InlineData(0, int.MaxValue)]
+    [InlineData(int.MaxValue - 1, int.MaxValue)]
+    [InlineData(int.MinValue, int.MaxValue)]
+    [InlineData(int.MinValue, int.MinValue + 1)]
+    public void GivenExtremeBounds_WhenNumberFromRng_ThenReturnValueWithinRange(int start, int end)
+    {
+        // "end++" used to wrap to int.MinValue here, so GetInt32 rejected the range outright.
+        for (var draw = 0; draw < 50; draw++)
+        {
+            Assert.InRange(CustomRandom.NumberFromRng(start, end), start, end);
+        }
+    }
+
+    [Theory]
+    [InlineData(0, int.MaxValue)]
+    [InlineData(int.MinValue, int.MaxValue)]
+    public void GivenExtremeBounds_WhenNumberFromSystemRandom_ThenReturnValueWithinRange(int start, int end)
+    {
+        for (var draw = 0; draw < 50; draw++)
+        {
+            Assert.InRange(CustomRandom.NumberFromSystemRandom(start, end), start, end);
+        }
+    }
+
+    [Fact]
+    public void GivenInclusiveBounds_WhenNumberFromRng_ThenBothEndsAreReachable()
+    {
+        var seen = new HashSet<int>();
+
+        for (var draw = 0; draw < 500; draw++)
+        {
+            seen.Add(CustomRandom.NumberFromRng(0, 1));
+        }
+
+        Assert.Equal([0, 1], seen.Order());
+    }
+
+    [Fact]
+    public void GivenInclusiveBounds_WhenNumberFromSystemRandom_ThenBothEndsAreReachable()
+    {
+        var seen = new HashSet<int>();
+
+        for (var draw = 0; draw < 500; draw++)
+        {
+            seen.Add(CustomRandom.NumberFromSystemRandom(0, 1));
+        }
+
+        Assert.Equal([0, 1], seen.Order());
+    }
+
+    [Fact]
+    public void GivenSingleValueRange_WhenNumberFromRng_ThenReturnThatValue()
+    {
+        Assert.Equal(7, CustomRandom.NumberFromRng(7, 7));
+        Assert.Equal(7, CustomRandom.NumberFromSystemRandom(7, 7));
+    }
+
+    [Fact]
+    public void GivenSingleValueRangeEqualToTheExcludedValue_WhenNumberFromRng_ThenThrowInsteadOfLoopingForever()
+    {
+        Assert.Throws<ArgumentException>(() => CustomRandom.NumberFromRng(5, 5, 5));
+        Assert.Throws<ArgumentException>(() => CustomRandom.NumberFromSystemRandom(5, 5, 5));
+    }
+
+    [Fact]
+    public void GivenExcludedValueOutsideTheRange_WhenNumberFromRng_ThenIgnoreIt()
+    {
+        Assert.Equal(5, CustomRandom.NumberFromRng(5, 5, 6));
+        Assert.Equal(5, CustomRandom.NumberFromSystemRandom(5, 5, 6));
+    }
+
+    [Fact]
+    public void GivenInvertedRange_WhenNumberFromRng_ThenThrowArgumentOutOfRangeException()
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(() => CustomRandom.NumberFromRng(10, 5));
+        Assert.Throws<ArgumentOutOfRangeException>(() => CustomRandom.NumberFromSystemRandom(10, 5));
+    }
+
+    [Fact]
+    public void GivenNullEntryInExclusionList_WhenText_ThenIgnoreItInsteadOfThrowing()
+    {
+        var options = new RandomStringOptions { Length = 12 };
+
+        var value = CustomRandom.Text(options, [null!, "not-a-match"]);
+
+        Assert.Equal(12, value.Length);
+    }
+
+    [Fact]
+    public void GivenExclusionListCoveringEveryPossibleValue_WhenText_ThenThrowInsteadOfLoopingForever()
+    {
+        // One lowercase character: the alphabet has 26 members, so listing all of them leaves nothing.
+        var options = new RandomStringOptions
+        {
+            Length = 1,
+            IncludeLowercase = true,
+            IncludeUppercase = false,
+            IncludeDigits = false,
+            IncludeSpecialCharacters = false
+        };
+
+        var everyPossibleValue = Characters.LowerLetters.Select(character => character.ToString()).ToArray();
+
+        Assert.Throws<InvalidOperationException>(() => CustomRandom.Text(options, everyPossibleValue));
+    }
+
+    [Fact]
+    public void GivenEmptyExclusionList_WhenText_ThenGenerateNormally()
+    {
+        var options = new RandomStringOptions { Length = 8 };
+
+        Assert.Equal(8, CustomRandom.Text(options, []).Length);
+    }
+
+    [Fact]
+    public void GivenExcludedValueDifferingOnlyByCase_WhenText_ThenTreatItAsADifferentString()
+    {
+        var options = new RandomStringOptions
+        {
+            Length = 1,
+            IncludeLowercase = true,
+            IncludeUppercase = false,
+            IncludeDigits = false,
+            IncludeSpecialCharacters = false
+        };
+
+        // Excluding the uppercase spellings must not exclude the lowercase ones: comparison is ordinal.
+        var uppercaseSpellings = Characters.UpperLetters.Select(character => character.ToString()).ToArray();
+
+        Assert.Single(CustomRandom.Text(options, uppercaseSpellings));
     }
 }

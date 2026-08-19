@@ -8,11 +8,13 @@ namespace ArturRios.Util.FlowControl;
 /// <remarks>
 /// Use <see cref="True"/> or <see cref="False"/> to set the result of an expression and chain <see cref="FailsWith"/> to capture error messages.
 /// After building all conditions call <see cref="ThrowIfNotSatisfied"/> or inspect <see cref="IsSatisfied"/> / <see cref="FailedConditions"/>.
+/// Failures are reported in the order they were recorded, and two conditions that fail with the same
+/// message are reported twice: the count reflects conditions, not distinct wordings.
 /// </remarks>
 public class Condition
 {
-    private readonly HashSet<string> _failedConditions = [];
-    private bool _expression;
+    private readonly List<string> _failedConditions = [];
+    private bool? _expression;
 
     /// <summary>
     /// Creates a new <see cref="Condition"/> instance. Syntactic sugar for <c>new Condition()</c>.
@@ -20,9 +22,9 @@ public class Condition
     public static Condition Create => new();
 
     /// <summary>
-    /// Gets an array of all failure messages collected by <see cref="FailsWith"/>.
+    /// Gets an array of all failure messages collected by <see cref="FailsWith"/>, in the order they failed.
     /// </summary>
-    public string[] FailedConditions => _failedConditions.ToArray();
+    public string[] FailedConditions => [.. _failedConditions];
 
     /// <summary>
     /// Indicates whether all evaluated conditions have succeeded (i.e. there are no failures).
@@ -58,9 +60,22 @@ public class Condition
     /// </summary>
     /// <param name="error">The error message describing the failure.</param>
     /// <returns>The current <see cref="Condition"/> for fluent chaining.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="error"/> is <c>null</c>.</exception>
+    /// <exception cref="InvalidOperationException">
+    /// No <see cref="True"/> or <see cref="False"/> call precedes this one. Recording a failure for an
+    /// expression that was never evaluated would silently invent one.
+    /// </exception>
     public Condition FailsWith(string error)
     {
-        if (!_expression)
+        ArgumentNullException.ThrowIfNull(error);
+
+        if (_expression is null)
+        {
+            throw new InvalidOperationException(
+                $"{nameof(FailsWith)} must follow a call to {nameof(True)} or {nameof(False)}.");
+        }
+
+        if (!_expression.Value)
         {
             _failedConditions.Add(error);
         }
@@ -103,10 +118,11 @@ public class Condition
 /// Exception raised when one or more conditions fail in a <see cref="Condition"/> chain.
 /// </summary>
 /// <param name="errors">The set of failure messages collected.</param>
-public class ConditionFailedException(string[] errors) : Exception($"A total of {errors.Length} conditions failed")
+public class ConditionFailedException(string[] errors)
+    : Exception($"A total of {errors.Length} conditions failed: {string.Join("; ", errors)}")
 {
     /// <summary>
-    /// The failure messages that caused this exception.
+    /// The failure messages that caused this exception, in the order they failed.
     /// </summary>
-    public readonly string[] Errors = errors;
+    public string[] Errors { get; } = errors;
 }
