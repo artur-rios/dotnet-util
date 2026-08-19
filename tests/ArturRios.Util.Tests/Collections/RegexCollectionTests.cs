@@ -19,8 +19,15 @@ public class RegexCollectionTests
         "ma_@jjf.",
         "j@proseware.com9",
         "js@proseware.com9",
-        "ma@hostname.comcom",
-        "MA@hostname.coMCom"
+        "ma@-hostname.com",
+        "ma@hostname-.com",
+        "ma@host_name.com",
+        "ma@1.2.3.999",
+        "ma@192.168.1.1",
+        "ma@[1.2.3.999]",
+        "joão@hostname.com",
+        "mä@hostname.com",
+        "中文@hostname.com"
     ];
 
     public static TheoryData<string> ValidEmails =>
@@ -41,7 +48,13 @@ public class RegexCollectionTests
         "ma-a@hostname.com.edu",
         "ma-a@1hostname.com",
         "ma.a@1hostname.com",
-        "ma@1hostname.com"
+        "ma@1hostname.com",
+        "ma@hostname.museum",
+        "ma@sub.hostname.travel",
+        "ma@hostname.comcom",
+        "MA@hostname.coMCom",
+        "ma@[192.168.1.1]",
+        "ma@[10.0.0.255]"
     ];
 
     [Theory]
