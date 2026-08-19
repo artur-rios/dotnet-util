@@ -291,22 +291,25 @@ var assemblies = [
     "name": "ArturRios.Util",
     "classes": [
       { "name": "ArturRios.Util.Console.CustomConsole", "rp": "ArturRios.Util_CustomConsole.html", "cl": 1, "ucl": 0, "cal": 1, "tl": 15, "cb": 0, "tb": 0, "cm": 1, "fcm": 1, "tm": 1, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 1,  "cc": 1,  "cov": 100,  "bcov": 100 } },
-      { "name": "ArturRios.Util.FlowControl.Condition", "rp": "ArturRios.Util_Condition.html", "cl": 14, "ucl": 4, "cal": 18, "tl": 112, "cb": 4, "tb": 6, "cm": 7, "fcm": 7, "tm": 9, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 6,  "cc": 2,  "cov": 0,  "bcov": 0 } },
-      { "name": "ArturRios.Util.FlowControl.ConditionFailedException", "rp": "ArturRios.Util_ConditionFailedException.html", "cl": 0, "ucl": 2, "cal": 2, "tl": 112, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 1, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 2,  "cc": 1,  "cov": 0,  "bcov": 100 } },
-      { "name": "ArturRios.Util.FlowControl.Retry", "rp": "ArturRios.Util_Retry.html", "cl": 20, "ucl": 2, "cal": 22, "tl": 102, "cb": 6, "tb": 8, "cm": 5, "fcm": 3, "tm": 5, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 4,  "cc": 4,  "cov": 87.50,  "bcov": 75.00 } },
-      { "name": "ArturRios.Util.FlowControl.Waiter.JitteredWaiter", "rp": "ArturRios.Util_JitteredWaiter.html", "cl": 12, "ucl": 0, "cal": 12, "tl": 50, "cb": 4, "tb": 4, "cm": 5, "fcm": 5, "tm": 5, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 4,  "cc": 4,  "cov": 100,  "bcov": 100 } },
+      { "name": "ArturRios.Util.FlowControl.Condition", "rp": "ArturRios.Util_Condition.html", "cl": 22, "ucl": 0, "cal": 22, "tl": 128, "cb": 8, "tb": 8, "cm": 9, "fcm": 9, "tm": 9, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 4,  "cc": 4,  "cov": 100,  "bcov": 100 } },
+      { "name": "ArturRios.Util.FlowControl.ConditionFailedException", "rp": "ArturRios.Util_ConditionFailedException.html", "cl": 2, "ucl": 0, "cal": 2, "tl": 128, "cb": 0, "tb": 0, "cm": 2, "fcm": 2, "tm": 2, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 1,  "cc": 1,  "cov": 100,  "bcov": 100 } },
+      { "name": "ArturRios.Util.FlowControl.Retry", "rp": "ArturRios.Util_Retry.html", "cl": 60, "ucl": 2, "cal": 62, "tl": 254, "cb": 18, "tb": 18, "cm": 14, "fcm": 12, "tm": 14, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 6,  "cc": 6,  "cov": 66.66,  "bcov": 100 } },
+      { "name": "ArturRios.Util.FlowControl.Waiter.Backoff", "rp": "ArturRios.Util_Backoff.html", "cl": 8, "ucl": 0, "cal": 8, "tl": 41, "cb": 5, "tb": 6, "cm": 1, "fcm": 1, "tm": 1, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 6,  "cc": 6,  "cov": 100,  "bcov": 83.33 } },
+      { "name": "ArturRios.Util.FlowControl.Waiter.JitteredWaiter", "rp": "ArturRios.Util_JitteredWaiter.html", "cl": 19, "ucl": 0, "cal": 19, "tl": 82, "cb": 2, "tb": 2, "cm": 6, "fcm": 6, "tm": 6, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 4,  "cc": 4,  "cov": 100,  "bcov": 100 } },
       { "name": "ArturRios.Util.FlowControl.Waiter.MaxRetriesReachedException", "rp": "ArturRios.Util_MaxRetriesReachedException.html", "cl": 1, "ucl": 0, "cal": 1, "tl": 10, "cb": 1, "tb": 2, "cm": 1, "fcm": 1, "tm": 1, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 2,  "cc": 2,  "cov": 100,  "bcov": 50.0 } },
-      { "name": "ArturRios.Util.Hashing.Hash", "rp": "ArturRios.Util_Hash.html", "cl": 26, "ucl": 0, "cal": 26, "tl": 90, "cb": 2, "tb": 4, "cm": 4, "fcm": 4, "tm": 4, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 2,  "cc": 2,  "cov": 100,  "bcov": 50.0 } },
-      { "name": "ArturRios.Util.Hashing.HashConfiguration", "rp": "ArturRios.Util_HashConfiguration.html", "cl": 7, "ucl": 0, "cal": 7, "tl": 43, "cb": 0, "tb": 0, "cm": 4, "fcm": 4, "tm": 4, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 1,  "cc": 1,  "cov": 100,  "bcov": 100 } },
-      { "name": "ArturRios.Util.Http.HttpExtensions", "rp": "ArturRios.Util_HttpExtensions.html", "cl": 2, "ucl": 0, "cal": 2, "tl": 32, "cb": 0, "tb": 0, "cm": 1, "fcm": 1, "tm": 1, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 1,  "cc": 1,  "cov": 100,  "bcov": 100 } },
-      { "name": "ArturRios.Util.Http.HttpGateway", "rp": "ArturRios.Util_HttpGateway.html", "cl": 24, "ucl": 0, "cal": 24, "tl": 102, "cb": 3, "tb": 6, "cm": 8, "fcm": 8, "tm": 8, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 2,  "cc": 2,  "cov": 100,  "bcov": 50.0 } },
-      { "name": "ArturRios.Util.Http.HttpOutput\u003CT\u003E", "rp": "ArturRios.Util_HttpOutput_1.html", "cl": 11, "ucl": 0, "cal": 11, "tl": 44, "cb": 0, "tb": 0, "cm": 5, "fcm": 5, "tm": 5, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 1,  "cc": 1,  "cov": 100,  "bcov": 100 } },
-      { "name": "ArturRios.Util.Http.HttpStatusCodes", "rp": "ArturRios.Util_HttpStatusCodes.html", "cl": 5, "ucl": 0, "cal": 5, "tl": 81, "cb": 0, "tb": 0, "cm": 5, "fcm": 5, "tm": 5, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 1,  "cc": 1,  "cov": 100,  "bcov": 100 } },
-      { "name": "ArturRios.Util.IO.FileReader", "rp": "ArturRios.Util_FileReader.html", "cl": 36, "ucl": 0, "cal": 36, "tl": 130, "cb": 28, "tb": 28, "cm": 4, "fcm": 4, "tm": 4, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 16,  "cc": 16,  "cov": 100,  "bcov": 100 } },
-      { "name": "ArturRios.Util.IO.FileReaderAsync", "rp": "ArturRios.Util_FileReaderAsync.html", "cl": 40, "ucl": 0, "cal": 40, "tl": 130, "cb": 28, "tb": 28, "cm": 4, "fcm": 4, "tm": 4, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 16,  "cc": 16,  "cov": 100,  "bcov": 100 } },
-      { "name": "ArturRios.Util.Math.PrimeGenerator\u003CT\u003E", "rp": "ArturRios.Util_PrimeGenerator_1.html", "cl": 95, "ucl": 47, "cal": 142, "tl": 353, "cb": 82, "tb": 126, "cm": 7, "fcm": 3, "tm": 7, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 162,  "cc": 36,  "cov": 54.05,  "bcov": 50.0 } },
-      { "name": "ArturRios.Util.Math.PrimeUtils", "rp": "ArturRios.Util_PrimeUtils.html", "cl": 101, "ucl": 2, "cal": 103, "tl": 330, "cb": 79, "tb": 82, "cm": 11, "fcm": 10, "tm": 11, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 18,  "cc": 18,  "cov": 92.30,  "bcov": 83.33 } },
-      { "name": "ArturRios.Util.Random.CustomRandom", "rp": "ArturRios.Util_CustomRandom.html", "cl": 41, "ucl": 1, "cal": 42, "tl": 147, "cb": 24, "tb": 26, "cm": 3, "fcm": 2, "tm": 3, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 18,  "cc": 18,  "cov": 85.71,  "bcov": 75.00 } },
+      { "name": "ArturRios.Util.Hashing.Hash", "rp": "ArturRios.Util_Hash.html", "cl": 21, "ucl": 0, "cal": 21, "tl": 120, "cb": 6, "tb": 6, "cm": 5, "fcm": 5, "tm": 5, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 4,  "cc": 4,  "cov": 100,  "bcov": 100 } },
+      { "name": "ArturRios.Util.Hashing.HashConfiguration", "rp": "ArturRios.Util_HashConfiguration.html", "cl": 12, "ucl": 0, "cal": 12, "tl": 65, "cb": 0, "tb": 0, "cm": 5, "fcm": 5, "tm": 5, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 1,  "cc": 1,  "cov": 100,  "bcov": 100 } },
+      { "name": "ArturRios.Util.Http.HttpExtensions", "rp": "ArturRios.Util_HttpExtensions.html", "cl": 2, "ucl": 0, "cal": 2, "tl": 38, "cb": 0, "tb": 0, "cm": 1, "fcm": 1, "tm": 1, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 1,  "cc": 1,  "cov": 100,  "bcov": 100 } },
+      { "name": "ArturRios.Util.Http.HttpGateway", "rp": "ArturRios.Util_HttpGateway.html", "cl": 13, "ucl": 0, "cal": 13, "tl": 105, "cb": 2, "tb": 2, "cm": 9, "fcm": 9, "tm": 9, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 2,  "cc": 2,  "cov": 100,  "bcov": 100 } },
+      { "name": "ArturRios.Util.Http.HttpOutput\u003CT\u003E", "rp": "ArturRios.Util_HttpOutput_1.html", "cl": 14, "ucl": 0, "cal": 14, "tl": 73, "cb": 1, "tb": 2, "cm": 8, "fcm": 8, "tm": 8, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 2,  "cc": 2,  "cov": 100,  "bcov": 50.0 } },
+      { "name": "ArturRios.Util.Http.HttpStatusCodes", "rp": "ArturRios.Util_HttpStatusCodes.html", "cl": 8, "ucl": 0, "cal": 8, "tl": 90, "cb": 0, "tb": 0, "cm": 6, "fcm": 6, "tm": 6, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 8,  "cc": 8,  "cov": 100,  "bcov": 100 } },
+      { "name": "ArturRios.Util.Http.JsonDefaults", "rp": "ArturRios.Util_JsonDefaults.html", "cl": 4, "ucl": 0, "cal": 4, "tl": 22, "cb": 0, "tb": 0, "cm": 1, "fcm": 1, "tm": 1, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 1,  "cc": 1,  "cov": 100,  "bcov": 100 } },
+      { "name": "ArturRios.Util.IO.DelimitedText", "rp": "ArturRios.Util_DelimitedText.html", "cl": 22, "ucl": 0, "cal": 22, "tl": 68, "cb": 14, "tb": 14, "cm": 1, "fcm": 1, "tm": 1, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 14,  "cc": 14,  "cov": 100,  "bcov": 100 } },
+      { "name": "ArturRios.Util.IO.FileReader", "rp": "ArturRios.Util_FileReader.html", "cl": 13, "ucl": 0, "cal": 13, "tl": 106, "cb": 4, "tb": 4, "cm": 5, "fcm": 5, "tm": 5, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 4,  "cc": 4,  "cov": 100,  "bcov": 100 } },
+      { "name": "ArturRios.Util.IO.FileReaderAsync", "rp": "ArturRios.Util_FileReaderAsync.html", "cl": 14, "ucl": 0, "cal": 14, "tl": 103, "cb": 0, "tb": 0, "cm": 4, "fcm": 4, "tm": 4, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 1,  "cc": 1,  "cov": 100,  "bcov": 100 } },
+      { "name": "ArturRios.Util.Math.PrimeGenerator\u003CT\u003E", "rp": "ArturRios.Util_PrimeGenerator_1.html", "cl": 16, "ucl": 2, "cal": 18, "tl": 76, "cb": 5, "tb": 8, "cm": 4, "fcm": 2, "tm": 4, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 4,  "cc": 4,  "cov": 80.0,  "bcov": 50.0 } },
+      { "name": "ArturRios.Util.Math.PrimeUtils", "rp": "ArturRios.Util_PrimeUtils.html", "cl": 85, "ucl": 0, "cal": 85, "tl": 342, "cb": 66, "tb": 66, "cm": 14, "fcm": 14, "tm": 14, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 16,  "cc": 16,  "cov": 100,  "bcov": 100 } },
+      { "name": "ArturRios.Util.Random.CustomRandom", "rp": "ArturRios.Util_CustomRandom.html", "cl": 57, "ucl": 1, "cal": 58, "tl": 230, "cb": 35, "tb": 38, "cm": 6, "fcm": 5, "tm": 6, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 18,  "cc": 18,  "cov": 80.0,  "bcov": 75.00 } },
       { "name": "ArturRios.Util.Random.RandomStringOptions", "rp": "ArturRios.Util_RandomStringOptions.html", "cl": 5, "ucl": 0, "cal": 5, "tl": 28, "cb": 0, "tb": 0, "cm": 5, "fcm": 5, "tm": 5, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 1,  "cc": 1,  "cov": 100,  "bcov": 100 } },
       { "name": "ArturRios.Util.RegularExpressions.RegexCollection", "rp": "ArturRios.Util_RegexCollection.html", "cl": 5, "ucl": 0, "cal": 5, "tl": 1774, "cb": 0, "tb": 0, "cm": 5, "fcm": 5, "tm": 5, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 1,  "cc": 1,  "cov": 100,  "bcov": 100 } },
       { "name": "ArturRios.Util.RegularExpressions.RegexExtensions", "rp": "ArturRios.Util_RegexExtensions.html", "cl": 1, "ucl": 0, "cal": 1, "tl": 17, "cb": 0, "tb": 0, "cm": 1, "fcm": 1, "tm": 1, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { "crp": 1,  "cc": 1,  "cov": 100,  "bcov": 100 } },
@@ -344,18 +347,6 @@ var riskHotspots = [
       { "value": 180, "exceeded": true },
     ]},
   {
-    "assembly": "ArturRios.Util", "class": "ArturRios.Util.Math.PrimeGenerator\u003CT\u003E", "reportPath": "ArturRios.Util_PrimeGenerator_1.html", "methodName": "EnsureAtLeastTwo(T\u0026)", "methodShortName": "EnsureAtLeastTwo(...)", "fileIndex": 0, "line": 227,
-    "metrics": [
-      { "value": 162, "exceeded": true },
-      { "value": 36, "exceeded": true },
-    ]},
-  {
-    "assembly": "ArturRios.Util", "class": "ArturRios.Util.Math.PrimeGenerator\u003CT\u003E", "reportPath": "ArturRios.Util_PrimeGenerator_1.html", "methodName": "Increment(T)", "methodShortName": "Increment(...)", "fileIndex": 0, "line": 125,
-    "metrics": [
-      { "value": 143, "exceeded": true },
-      { "value": 34, "exceeded": true },
-    ]},
-  {
     "assembly": "ArturRios.Util", "class": "System.Text.RegularExpressions.Generated", "reportPath": "ArturRios.Util_Generated.html", "methodName": "TryMatchAtCurrentPosition(System.ReadOnlySpan\u00601\u003CSystem.Char\u003E)", "methodShortName": "TryMatchAtCurrentPosition(...)", "fileIndex": 0, "line": 1474,
     "metrics": [
       { "value": 36, "exceeded": true },
@@ -368,37 +359,7 @@ var riskHotspots = [
       { "value": 36, "exceeded": true },
     ]},
   {
-    "assembly": "ArturRios.Util", "class": "ArturRios.Util.Math.PrimeGenerator\u003CT\u003E", "reportPath": "ArturRios.Util_PrimeGenerator_1.html", "methodName": "ValidateSupportedType()", "methodShortName": "ValidateSupportedType()", "fileIndex": 0, "line": 54,
-    "metrics": [
-      { "value": 18, "exceeded": false },
-      { "value": 18, "exceeded": true },
-    ]},
-  {
-    "assembly": "ArturRios.Util", "class": "ArturRios.Util.Math.PrimeGenerator\u003CT\u003E", "reportPath": "ArturRios.Util_PrimeGenerator_1.html", "methodName": "GetStartValue()", "methodShortName": "GetStartValue()", "fileIndex": 0, "line": 72,
-    "metrics": [
-      { "value": 24, "exceeded": false },
-      { "value": 18, "exceeded": true },
-    ]},
-  {
-    "assembly": "ArturRios.Util", "class": "ArturRios.Util.Math.PrimeGenerator\u003CT\u003E", "reportPath": "ArturRios.Util_PrimeGenerator_1.html", "methodName": "IsPrime(T)", "methodShortName": "IsPrime(...)", "fileIndex": 0, "line": 306,
-    "metrics": [
-      { "value": 24, "exceeded": false },
-      { "value": 18, "exceeded": true },
-    ]},
-  {
-    "assembly": "ArturRios.Util", "class": "ArturRios.Util.Math.PrimeUtils", "reportPath": "ArturRios.Util_PrimeUtils.html", "methodName": "IsPrimeNumber(System.Int64)", "methodShortName": "IsPrimeNumber(...)", "fileIndex": 0, "line": 102,
-    "metrics": [
-      { "value": 18, "exceeded": false },
-      { "value": 18, "exceeded": true },
-    ]},
-  {
-    "assembly": "ArturRios.Util", "class": "ArturRios.Util.Math.PrimeUtils", "reportPath": "ArturRios.Util_PrimeUtils.html", "methodName": "IsPrimeNumber(System.UInt64)", "methodShortName": "IsPrimeNumber(...)", "fileIndex": 0, "line": 168,
-    "metrics": [
-      { "value": 18, "exceeded": false },
-      { "value": 18, "exceeded": true },
-    ]},
-  {
-    "assembly": "ArturRios.Util", "class": "ArturRios.Util.Random.CustomRandom", "reportPath": "ArturRios.Util_CustomRandom.html", "methodName": "Text(ArturRios.Util.Random.RandomStringOptions,System.String[])", "methodShortName": "Text(...)", "fileIndex": 0, "line": 81,
+    "assembly": "ArturRios.Util", "class": "ArturRios.Util.Random.CustomRandom", "reportPath": "ArturRios.Util_CustomRandom.html", "methodName": "Text(ArturRios.Util.Random.RandomStringOptions,System.String[])", "methodShortName": "Text(...)", "fileIndex": 0, "line": 106,
     "metrics": [
       { "value": 18, "exceeded": false },
       { "value": 18, "exceeded": true },
@@ -410,13 +371,7 @@ var riskHotspots = [
       { "value": 18, "exceeded": true },
     ]},
   {
-    "assembly": "ArturRios.Util", "class": "ArturRios.Util.IO.FileReader", "reportPath": "ArturRios.Util_FileReader.html", "methodName": "ReadAsDictionary(System.String,System.Char)", "methodShortName": "ReadAsDictionary(...)", "fileIndex": 0, "line": 43,
-    "metrics": [
-      { "value": 16, "exceeded": false },
-      { "value": 16, "exceeded": true },
-    ]},
-  {
-    "assembly": "ArturRios.Util", "class": "ArturRios.Util.IO.FileReaderAsync", "reportPath": "ArturRios.Util_FileReaderAsync.html", "methodName": "ReadAsDictionaryAsync()", "methodShortName": "ReadAsDictionaryAsync()", "fileIndex": 0, "line": 43,
+    "assembly": "ArturRios.Util", "class": "ArturRios.Util.Math.PrimeUtils", "reportPath": "ArturRios.Util_PrimeUtils.html", "methodName": "IsStrongProbablePrime(System.Numerics.BigInteger,System.Collections.Generic.IEnumerable\u00601\u003CSystem.Numerics.BigInteger\u003E)", "methodShortName": "IsStrongProbablePrime(...)", "fileIndex": 0, "line": 246,
     "metrics": [
       { "value": 16, "exceeded": false },
       { "value": 16, "exceeded": true },
