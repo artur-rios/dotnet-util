@@ -27,7 +27,8 @@ public class RegexCollectionTests
         "ma@[1.2.3.999]",
         "joão@hostname.com",
         "mä@hostname.com",
-        "中文@hostname.com"
+        "中文@hostname.com",
+        "ma@hostname.com\n"
     ];
 
     public static TheoryData<string> ValidEmails =>
@@ -148,6 +149,7 @@ public class RegexCollectionTests
     [InlineData("ABCabc")]
     [InlineData("abc123")]
     [InlineData("ABC123")]
+    [InlineData("abcABC123\n")]
     public void GivenStringWithoutNumberLowerAndUpperChar_WhenCompositeRegex_ThenNotMatch(string @string)
     {
         var result = RegexCollection.HasNumberLowerAndUpperChar().IsMatch(@string);

@@ -8,6 +8,12 @@ namespace ArturRios.Util.RegularExpressions;
 public static partial class RegexCollection
 {
     /// <summary>
+    /// Upper bound, in milliseconds, applied to every regex in this collection so that a pattern
+    /// can never spin indefinitely on hostile input.
+    /// </summary>
+    public const int MatchTimeoutMilliseconds = 100;
+
+    /// <summary>
     /// Pattern that matches a single email address (RFC 5322 addr-spec, simplified).
     /// </summary>
     /// <remarks>
@@ -20,7 +26,7 @@ public static partial class RegexCollection
     public const string EmailPattern =
         @"^[a-zA-Z0-9!#$%&'*+\-/=?\^_`{|}~]+(\.[a-zA-Z0-9!#$%&'*+\-/=?\^_`{|}~]+)*@" +
         @"((([a-zA-Z0-9](([a-zA-Z0-9\-]{0,61})[a-zA-Z0-9])?\.)+[a-zA-Z]{2,63})" +
-        @"|(\[((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\]))$";
+        @"|(\[((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\]))\z";
 
     /// <summary>Pattern that checks if a string contains at least one digit.</summary>
     public const string HasNumberPattern = "[0-9]+";
@@ -32,35 +38,39 @@ public static partial class RegexCollection
     public const string HasUpperCharPattern = "[A-Z]+";
 
     /// <summary>Pattern that validates a string contains at least one lowercase, one uppercase and one digit.</summary>
-    public const string HasNumberLowerAndUpperCharPattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$";
+    /// <remarks>
+    /// Anchored with <c>\z</c> so a trailing newline is not accepted, and <c>.</c> does not match a newline,
+    /// so any input spanning more than one line is rejected.
+    /// </remarks>
+    public const string HasNumberLowerAndUpperCharPattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+\z";
 
     /// <summary>
     /// Returns a compiled regex for <see cref="EmailPattern"/>.
     /// </summary>
-    [GeneratedRegex(EmailPattern)]
+    [GeneratedRegex(EmailPattern, RegexOptions.None, MatchTimeoutMilliseconds)]
     public static partial Regex Email();
 
     /// <summary>
     /// Returns a compiled regex for <see cref="HasNumberPattern"/>.
     /// </summary>
-    [GeneratedRegex(HasNumberPattern)]
+    [GeneratedRegex(HasNumberPattern, RegexOptions.None, MatchTimeoutMilliseconds)]
     public static partial Regex HasNumber();
 
     /// <summary>
     /// Returns a compiled regex for <see cref="HasLowerCharPattern"/>.
     /// </summary>
-    [GeneratedRegex(HasLowerCharPattern)]
+    [GeneratedRegex(HasLowerCharPattern, RegexOptions.None, MatchTimeoutMilliseconds)]
     public static partial Regex HasLowerChar();
 
     /// <summary>
     /// Returns a compiled regex for <see cref="HasUpperCharPattern"/>.
     /// </summary>
-    [GeneratedRegex(HasUpperCharPattern)]
+    [GeneratedRegex(HasUpperCharPattern, RegexOptions.None, MatchTimeoutMilliseconds)]
     public static partial Regex HasUpperChar();
 
     /// <summary>
     /// Returns a compiled regex for <see cref="HasNumberLowerAndUpperCharPattern"/>.
     /// </summary>
-    [GeneratedRegex(HasNumberLowerAndUpperCharPattern)]
+    [GeneratedRegex(HasNumberLowerAndUpperCharPattern, RegexOptions.None, MatchTimeoutMilliseconds)]
     public static partial Regex HasNumberLowerAndUpperChar();
 }
