@@ -6,7 +6,7 @@ description: >-
   Utilities for common development tasks in .NET: console output helpers, flow control (conditions, retries, and waiters), hashing (Argon2id), file I/O helpers...
 ---
 
-Utilities for common development tasks in .NET: console output helpers, flow control (conditions, retries, and waiters), hashing (Argon2id), file I/O helpers, HTTP client helpers, math utilities, random values and strings, regex helpers, and small collections.
+Utilities for common development tasks in .NET: console output helpers, flow control (conditions, retries, and waiters), hashing (Argon2id), file I/O helpers, HTTP client helpers, math utilities, random values and strings, regex helpers, text and email helpers, and small collections.
 
 ## Installation
 
@@ -114,6 +114,14 @@ The package targets **net10.0** and depends on [`ArturRios.Output`](https://www.
   var stripped = RegexCollection.HasNumber().Remove("abc123def"); // "abcdef"
   ```
 
+- **Text**
+
+  ```csharp
+  using ArturRios.Util.Text;
+  var missing  = "ab1".Missing(CharacterClasses.Upper | CharacterClasses.Special); // Upper | Special
+  var ok       = EmailAddress.TryNormalize("MA@Hostname.COM", out var address);    // "MA@hostname.com"
+  ```
+
 ## Detailed documentation
 
 Full API reference, class diagrams, and usage examples:
@@ -127,6 +135,7 @@ Full API reference, class diagrams, and usage examples:
 - [Math](math/)
 - [Random](random/)
 - [Regular Expressions](regular-expressions/)
+- [Text](text/)
 
 ## Versioning
 

@@ -112,6 +112,14 @@ The package targets **net10.0** and depends on [`ArturRios.Output`](https://www.
   var stripped = RegexCollection.HasNumber().Remove("abc123def"); // "abcdef"
   ```
 
+- **Text**
+
+  ```csharp
+  using ArturRios.Util.Text;
+  var missing  = "ab1".Missing(CharacterClasses.Upper | CharacterClasses.Special); // Upper | Special
+  var ok       = EmailAddress.TryNormalize("MA@Hostname.COM", out var address);    // "MA@hostname.com"
+  ```
+
 ## Documentation
 
 Full API reference, class diagrams, and usage examples:
@@ -125,6 +133,7 @@ Full API reference, class diagrams, and usage examples:
 - [Math](https://artur-rios.github.io/dotnet-util/math/)
 - [Random](https://artur-rios.github.io/dotnet-util/random/)
 - [Regular Expressions](https://artur-rios.github.io/dotnet-util/regular-expressions/)
+- [Text](https://artur-rios.github.io/dotnet-util/text/)
 
 ## Versioning
 
