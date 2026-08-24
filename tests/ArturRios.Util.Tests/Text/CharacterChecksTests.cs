@@ -3,6 +3,7 @@ using ArturRios.Util.Text;
 
 namespace ArturRios.Util.Tests.Text;
 
+[Trait("Category", "Unit")]
 public class CharacterChecksTests
 {
     [Theory]

@@ -4,10 +4,14 @@
 /// Provides ANSI escape code color constants for console output formatting.
 /// </summary>
 /// <remarks>
-/// These strings can be prefixed to console text to apply color and should usually be followed by an ANSI reset ("\x1b[0m") after usage.
+/// These strings can be prefixed to console text to apply color and should be followed by <see cref="Reset"/>,
+/// otherwise the color leaks into everything written afterwards.
 /// </remarks>
 public static class AnsiColors
 {
+    /// <summary>ANSI escape sequence that returns the terminal to its default colors and attributes.</summary>
+    public const string Reset = "\x1b[0m";
+
     /// <summary>ANSI color code for dark gray (bright black) foreground text.</summary>
     public const string DarkGray = "\x1b[90m";
 

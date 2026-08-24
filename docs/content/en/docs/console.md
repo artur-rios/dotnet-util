@@ -2,7 +2,7 @@
 title: Console
 weight: 20
 description: >-
-  // Defaults: 100 dashes CustomConsole.WriteCharLine(); // ----------------------------------------------------------------------------------------------------...
+  Helpers for writing formatted output to the system console.
 ---
 
 ## Features

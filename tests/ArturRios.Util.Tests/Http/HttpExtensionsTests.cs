@@ -4,6 +4,7 @@ using ArturRios.Util.Tests.Setup;
 
 namespace ArturRios.Util.Tests.Http;
 
+[Trait("Category", "Unit")]
 public class HttpExtensionsTests
 {
     [Fact]

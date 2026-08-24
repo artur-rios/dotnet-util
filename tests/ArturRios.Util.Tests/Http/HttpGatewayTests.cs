@@ -4,6 +4,7 @@ using ArturRios.Util.Http;
 
 namespace ArturRios.Util.Tests.Http;
 
+[Trait("Category", "Unit")]
 public class HttpGatewayTests
 {
     private sealed class StubHandler(Func<HttpRequestMessage, HttpResponseMessage> responder) : HttpMessageHandler

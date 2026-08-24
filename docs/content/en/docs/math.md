@@ -2,7 +2,7 @@
 title: Math
 weight: 70
 description: >-
-  bool a = PrimeUtils.IsPrimeNumber(7919); // true bool b = PrimeUtils.IsPrimeNumber(7920); // false bool c = PrimeUtils.IsPrimeNumber(1_000_000_007); // true...
+  Primality tests for every built-in integer type and BigInteger, plus a generic prime generator.
 ---
 
 ## Features

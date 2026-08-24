@@ -4,6 +4,7 @@ using ArturRios.Util.Tests.Setup;
 
 namespace ArturRios.Util.Tests.IO;
 
+[Trait("Category", "Functional")]
 public class FileReaderAsyncTests
 {
     [Fact]

@@ -2,7 +2,7 @@
 title: Hashing
 weight: 40
 description: >-
-  // Encode — store both hash and salt byte[] hash = Hash.EncodeWithRandomSalt("my-secret-password", out byte[] salt);
+  Argon2id password hashing with configurable cost parameters and a constant-time comparison.
 ---
 
 ## Features

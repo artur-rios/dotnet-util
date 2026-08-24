@@ -1,8 +1,9 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 using ArturRios.Util.RegularExpressions;
 
 namespace ArturRios.Util.Tests.RegularExpressions;
 
+[Trait("Category", "Unit")]
 public partial class RegexExtensionsTests
 {
     [Fact]

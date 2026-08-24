@@ -3,6 +3,7 @@ using ArturRios.Util.Math;
 
 namespace ArturRios.Util.Tests.Math;
 
+[Trait("Category", "Unit")]
 public class PrimeUtilsTests
 {
     [Theory]
