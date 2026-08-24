@@ -2,7 +2,7 @@
 title: Flow Control
 weight: 30
 description: >-
-  Chain boolean assertions — all failures are collected before throwing:
+  Conditions that collect every failure before throwing, a reusable retry policy, and an exponential-backoff waiter with jitter.
 ---
 
 ## Features

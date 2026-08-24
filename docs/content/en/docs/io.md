@@ -2,7 +2,7 @@
 title: IO
 weight: 60
 description: >-
-  // Entire file as a single string string content = FileReader.Read("/data/notes.txt");
+  Synchronous and asynchronous file readers for text, lines, delimited data and JSON.
 ---
 
 ## Features

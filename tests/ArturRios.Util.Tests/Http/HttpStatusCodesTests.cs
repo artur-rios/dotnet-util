@@ -2,6 +2,7 @@ using ArturRios.Util.Http;
 
 namespace ArturRios.Util.Tests.Http;
 
+[Trait("Category", "Unit")]
 public class HttpStatusCodesTests
 {
     [Fact]

@@ -3,6 +3,7 @@ namespace ArturRios.Util.Tests.Random;
 using ArturRios.Util.Random;
 using ArturRios.Util.Collections;
 
+[Trait("Category", "Unit")]
 public class CustomRandomTests
 {
     [Fact]

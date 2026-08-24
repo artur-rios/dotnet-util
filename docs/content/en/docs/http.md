@@ -2,7 +2,7 @@
 title: Http
 weight: 50
 description: >-
-  var client = new HttpClient { BaseAddress = new Uri("https://api.example.com") }; var gateway = new HttpGateway(client);
+  A typed HttpClient wrapper that returns status, headers and a deserialized body in a single envelope.
 ---
 
 ## Features

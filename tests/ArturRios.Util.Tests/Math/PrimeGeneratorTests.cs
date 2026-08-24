@@ -3,6 +3,7 @@ using ArturRios.Util.Math;
 
 namespace ArturRios.Util.Tests.Math;
 
+[Trait("Category", "Unit")]
 public class PrimeGeneratorTests
 {
     private static readonly int[] s_firstTenPrimes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29];

@@ -2,7 +2,7 @@
 title: Random
 weight: 80
 description: >-
-  `CustomRandom.Text` draws from `RandomNumberGenerator`, so its output is suitable for security tokens. It guarantees that:
+  Cryptographically strong random numbers and strings, with optional exclusion constraints.
 ---
 
 ## Features

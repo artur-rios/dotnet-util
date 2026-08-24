@@ -3,6 +3,7 @@ using ArturRios.Util.FlowControl.Waiter;
 
 namespace ArturRios.Util.Tests.FlowControl;
 
+[Trait("Category", "Unit")]
 public class JitteredWaiterTests
 {
     [Theory]

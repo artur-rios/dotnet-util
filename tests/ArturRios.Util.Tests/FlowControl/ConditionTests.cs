@@ -2,6 +2,7 @@ using ArturRios.Util.FlowControl;
 
 namespace ArturRios.Util.Tests.FlowControl;
 
+[Trait("Category", "Unit")]
 public class ConditionTests
 {
     [Fact]

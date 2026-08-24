@@ -2,6 +2,7 @@ using ArturRios.Util.Console;
 
 namespace ArturRios.Util.Tests.Console;
 
+[Trait("Category", "Unit")]
 public class CustomConsoleTests
 {
     private static string CaptureOutput(Action action)

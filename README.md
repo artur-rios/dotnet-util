@@ -18,7 +18,7 @@ The package targets **net10.0** and depends on [`ArturRios.Output`](https://www.
 
   ```csharp
   using ArturRios.Util.Collections;
-  Console.WriteLine($"{AnsiColors.Green}Success!\x1b[0m");
+  Console.WriteLine($"{AnsiColors.Green}Success!{AnsiColors.Reset}");
   var pool = Characters.Digits + Characters.UpperLetters;
   ```
 
@@ -124,16 +124,16 @@ The package targets **net10.0** and depends on [`ArturRios.Output`](https://www.
 
 Full API reference, class diagrams, and usage examples:
 
-- [Collections](https://artur-rios.github.io/dotnet-util/collections/)
-- [Console](https://artur-rios.github.io/dotnet-util/console/)
-- [Flow Control](https://artur-rios.github.io/dotnet-util/flow-control/)
-- [Hashing](https://artur-rios.github.io/dotnet-util/hashing/)
-- [Http](https://artur-rios.github.io/dotnet-util/http/)
-- [IO](https://artur-rios.github.io/dotnet-util/io/)
-- [Math](https://artur-rios.github.io/dotnet-util/math/)
-- [Random](https://artur-rios.github.io/dotnet-util/random/)
-- [Regular Expressions](https://artur-rios.github.io/dotnet-util/regular-expressions/)
-- [Text](https://artur-rios.github.io/dotnet-util/text/)
+- [Collections](https://artur-rios.github.io/dotnet-util/docs/collections/)
+- [Console](https://artur-rios.github.io/dotnet-util/docs/console/)
+- [Flow Control](https://artur-rios.github.io/dotnet-util/docs/flow-control/)
+- [Hashing](https://artur-rios.github.io/dotnet-util/docs/hashing/)
+- [Http](https://artur-rios.github.io/dotnet-util/docs/http/)
+- [IO](https://artur-rios.github.io/dotnet-util/docs/io/)
+- [Math](https://artur-rios.github.io/dotnet-util/docs/math/)
+- [Random](https://artur-rios.github.io/dotnet-util/docs/random/)
+- [Regular Expressions](https://artur-rios.github.io/dotnet-util/docs/regular-expressions/)
+- [Text](https://artur-rios.github.io/dotnet-util/docs/text/)
 
 ## Upgrading to 2.0
 
@@ -180,6 +180,19 @@ Full API reference, class diagrams, and usage examples:
   looping forever. `CustomRandom.Text` gives up with `InvalidOperationException` when `differentFrom`
   excludes everything it can produce.
 - `ReadAsDictionary` throws on duplicate header names instead of silently dropping a column.
+
+## Testing
+
+The test suite is xUnit, and every test is named with the Given / When / Then pattern. Every test class
+carries a `Category` trait, so the two kinds can be run — and reported — separately:
+
+```bash
+dotnet test src/ArturRios.Util.sln --filter "Category=Unit"
+dotnet test src/ArturRios.Util.sln --filter "Category=Functional"
+```
+
+Unit tests exercise the code in isolation against test doubles. Functional tests read and write real files on disk and drive `HttpGateway` against a real HTTP server on the loopback interface. CI runs the two as separate jobs,
+and both must pass before a pull request can be merged.
 
 ## Versioning
 

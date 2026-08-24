@@ -2,6 +2,7 @@ using ArturRios.Util.Hashing;
 
 namespace ArturRios.Util.Tests.Hashing;
 
+[Trait("Category", "Unit")]
 public class HashTests
 {
     [Fact]

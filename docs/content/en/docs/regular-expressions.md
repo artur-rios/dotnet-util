@@ -2,7 +2,7 @@
 title: Regular Expressions
 weight: 90
 description: >-
-  bool isEmail = RegexCollection.Email().IsMatch("john@doe.com"); // true bool isEmail2 = RegexCollection.Email().IsMatch("not-an-email"); // false
+  Source-generated compiled regular expressions for email and character-class checks, with a match timeout.
 ---
 
 ## Features

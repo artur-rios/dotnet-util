@@ -3,6 +3,7 @@ using ArturRios.Util.FlowControl;
 
 namespace ArturRios.Util.Tests.FlowControl;
 
+[Trait("Category", "Unit")]
 public class RetryTests
 {
     private int _attemptCount;

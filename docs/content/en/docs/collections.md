@@ -2,12 +2,12 @@
 title: Collections
 weight: 10
 description: >-
-  Wrap text in a color constant and reset with `\x1b[0m`:
+  ANSI colour escape sequences and the character pools that random string generation and validation draw from.
 ---
 
 ## Features
 
-- `AnsiColors`: static class with ANSI escape code string constants for console foreground colors (DarkGray, Cyan, White, Yellow, Red, Magenta, BrightRed, Green).
+- `AnsiColors`: static class with ANSI escape code string constants for console foreground colors (DarkGray, Cyan, White, Yellow, Red, Magenta, BrightRed, Green) plus `Reset`, which returns the terminal to its default colors.
 - `Characters`: static class with string constants for character pools — digits, lowercase letters, uppercase letters, special characters, and the union `All`. `Special` is the complete set of ASCII punctuation, so a character counts as special exactly when it is printable ASCII and not alphanumeric.
 
 ## Class Diagram
@@ -17,6 +17,7 @@ classDiagram
     namespace Collections {
         class AnsiColors {
             <<static>>
+            +string Reset
             +string DarkGray
             +string Cyan
             +string White
@@ -41,15 +42,15 @@ classDiagram
 
 ### ANSI Colors
 
-Wrap text in a color constant and reset with `\x1b[0m`:
+Wrap text in a color constant and reset with `AnsiColors.Reset`:
 
 ```csharp
 using ArturRios.Util.Collections;
 
-Console.WriteLine($"{AnsiColors.Green}Success!\x1b[0m");
-Console.WriteLine($"{AnsiColors.Red}Error: something went wrong.\x1b[0m");
-Console.WriteLine($"{AnsiColors.Yellow}Warning: disk usage is high.\x1b[0m");
-Console.WriteLine($"{AnsiColors.Cyan}Info: process started.\x1b[0m");
+Console.WriteLine($"{AnsiColors.Green}Success!{AnsiColors.Reset}");
+Console.WriteLine($"{AnsiColors.Red}Error: something went wrong.{AnsiColors.Reset}");
+Console.WriteLine($"{AnsiColors.Yellow}Warning: disk usage is high.{AnsiColors.Reset}");
+Console.WriteLine($"{AnsiColors.Cyan}Info: process started.{AnsiColors.Reset}");
 ```
 
 ### Character Pools

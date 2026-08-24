@@ -1,7 +1,8 @@
-﻿using ArturRios.Util.RegularExpressions;
+using ArturRios.Util.RegularExpressions;
 
-namespace ArturRios.Util.Tests.Collections;
+namespace ArturRios.Util.Tests.RegularExpressions;
 
+[Trait("Category", "Unit")]
 public class RegexCollectionTests
 {
     public static TheoryData<string> InvalidEmails =>

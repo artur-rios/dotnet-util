@@ -20,7 +20,7 @@ The package targets **net10.0** and depends on [`ArturRios.Output`](https://www.
 
   ```csharp
   using ArturRios.Util.Collections;
-  Console.WriteLine($"{AnsiColors.Green}Success!\x1b[0m");
+  Console.WriteLine($"{AnsiColors.Green}Success!{AnsiColors.Reset}");
   var pool = Characters.Digits + Characters.UpperLetters;
   ```
 
@@ -136,6 +136,19 @@ Full API reference, class diagrams, and usage examples:
 - [Random](random/)
 - [Regular Expressions](regular-expressions/)
 - [Text](text/)
+
+## Testing
+
+The test suite is xUnit, and every test is named with the Given / When / Then pattern. Every test class
+carries a `Category` trait, so the two kinds can be run — and reported — separately:
+
+```bash
+dotnet test src/ArturRios.Util.sln --filter "Category=Unit"
+dotnet test src/ArturRios.Util.sln --filter "Category=Functional"
+```
+
+Unit tests exercise the code in isolation against test doubles. Functional tests read and write real files on disk and drive `HttpGateway` against a real HTTP server on the loopback interface. CI runs the two as separate jobs,
+and both must pass before a pull request can be merged.
 
 ## Versioning
 
