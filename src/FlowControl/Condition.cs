@@ -13,6 +13,12 @@ namespace ArturRios.Util.FlowControl;
 /// </remarks>
 public class Condition
 {
+    /// <summary>
+    /// The error <see cref="ToProcessOutput"/> reports for a condition that failed with an empty or
+    /// whitespace message.
+    /// </summary>
+    public const string BlankFailureMessage = "A condition was not satisfied.";
+
     private readonly List<string> _failedConditions = [];
     private bool? _expression;
 
@@ -100,15 +106,21 @@ public class Condition
     /// <summary>
     /// Converts the condition failures into a <see cref="ProcessOutput"/> instance.
     /// </summary>
-    /// <returns>A <see cref="ProcessOutput"/> with errors populated when the condition is not satisfied.</returns>
+    /// <returns>
+    /// A <see cref="ProcessOutput"/> carrying one error per failed condition, in order, when the condition is
+    /// not satisfied; its <see cref="ProcessOutput.Success"/> always agrees with <see cref="IsSatisfied"/>.
+    /// </returns>
+    /// <remarks>
+    /// <see cref="ProcessOutput"/> drops empty and whitespace errors, so a condition that failed with such a
+    /// message used to convert into a successful output. A blank message is therefore reported as
+    /// <see cref="BlankFailureMessage"/> instead.
+    /// </remarks>
     public ProcessOutput ToProcessOutput()
     {
         var output = new ProcessOutput();
 
-        if (!IsSatisfied)
-        {
-            output.AddErrors(_failedConditions.ToList());
-        }
+        output.AddErrors(_failedConditions.Select(error =>
+            string.IsNullOrWhiteSpace(error) ? BlankFailureMessage : error));
 
         return output;
     }

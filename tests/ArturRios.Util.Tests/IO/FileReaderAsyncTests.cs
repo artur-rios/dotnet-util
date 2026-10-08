@@ -410,4 +410,18 @@ public class FileReaderAsyncTests
 
         Assert.Equal(synchronous, asynchronous);
     }
+
+    [Fact]
+    public async Task GivenCamelCaseJsonFile_WhenReadAndDeserializeAsync_ThenPropertiesBindRegardlessOfCase()
+    {
+        using var file = new TempFile("{\"name\":\"Alice\",\"age\":30,\"home\":{\"street\":\"Main\",\"number\":100}}");
+
+        var result = await FileReaderAsync.ReadAndDeserializeAsync<Person>(file);
+
+        Assert.NotNull(result);
+        Assert.Equal("Alice", result.Name);
+        Assert.Equal(30, result.Age);
+        Assert.Equal("Main", result.Home.Street);
+        Assert.Equal(100, result.Home.Number);
+    }
 }

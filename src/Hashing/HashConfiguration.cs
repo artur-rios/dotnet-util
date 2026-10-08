@@ -14,7 +14,11 @@
 /// <param name="degreeOfParallelism">Number of threads (lanes) to use; defaults to <see cref="DefaultDegreeOfParallelism"/>. Recommended value is number of CPU cores x 2.</param>
 /// <param name="numberOfIterations">Number of iterations; defaults to <see cref="DefaultNumberOfIterations"/>.</param>
 /// <param name="memoryToUseInKb">Memory size in kilobytes; defaults to <see cref="DefaultMemoryToUseInKb"/>.</param>
-/// <exception cref="ArgumentOutOfRangeException">Any supplied value is less than one.</exception>
+/// <exception cref="ArgumentOutOfRangeException">
+/// Any supplied value is less than one, or the memory is smaller than four kilobytes per lane
+/// (<c>4 × degreeOfParallelism</c>), which Argon2 cannot run with: the hash used to fail only later, inside
+/// <see cref="Hash"/>, with an <see cref="AggregateException"/>.
+/// </exception>
 public class HashConfiguration(
     int? degreeOfParallelism = null,
     int? numberOfIterations = null,
@@ -50,8 +54,9 @@ public class HashConfiguration(
     /// <summary>
     /// Gets the configured memory usage in kilobytes.
     /// </summary>
-    public int MemoryToUseInKb { get; } =
-        Positive(memoryToUseInKb ?? DefaultMemoryToUseInKb, nameof(memoryToUseInKb));
+    public int MemoryToUseInKb { get; } = EnoughForLanes(
+        Positive(memoryToUseInKb ?? DefaultMemoryToUseInKb, nameof(memoryToUseInKb)),
+        degreeOfParallelism ?? DefaultDegreeOfParallelism);
 
     /// <summary>
     /// Rejects cost parameters Argon2 cannot honour.
@@ -61,5 +66,21 @@ public class HashConfiguration(
         ArgumentOutOfRangeException.ThrowIfLessThan(value, 1, parameterName);
 
         return value;
+    }
+
+    /// <summary>
+    /// Rejects a memory size too small to give every lane the four 1 KB blocks Argon2 requires.
+    /// </summary>
+    private static int EnoughForLanes(int memoryToUseInKb, int degreeOfParallelism)
+    {
+        var minimum = 4L * degreeOfParallelism;
+
+        if (memoryToUseInKb < minimum)
+        {
+            throw new ArgumentOutOfRangeException(nameof(memoryToUseInKb), memoryToUseInKb,
+                $"Memory must be at least 4 KB per degree of parallelism ({minimum} KB for {degreeOfParallelism}).");
+        }
+
+        return memoryToUseInKb;
     }
 }
