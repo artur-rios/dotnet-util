@@ -9,7 +9,10 @@ namespace ArturRios.Util.Text;
 /// <remarks>
 /// These are vectorized equivalents of the corresponding patterns in
 /// <see cref="RegularExpressions.RegexCollection"/> and agree with them on every input: both are ASCII
-/// only. They deliberately do not use <see cref="char.IsDigit(char)"/>, <see cref="char.IsLower(char)"/>
+/// only. The one exception is
+/// <see cref="RegularExpressions.RegexCollection.HasNumberLowerAndUpperCharPattern"/>, whose <c>\d</c> also
+/// accepts non-ASCII decimal digits that <see cref="HasNumber(string)"/> and <see cref="Classify(string)"/>
+/// ignore. They deliberately do not use <see cref="char.IsDigit(char)"/>, <see cref="char.IsLower(char)"/>
 /// or <see cref="char.IsUpper(char)"/>, which are Unicode-aware and would report, for example, the
 /// Arabic-Indic digit three as a digit and the German sharp s as a lowercase letter.
 /// </remarks>

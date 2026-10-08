@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using ArturRios.Util.Http;
 
 namespace ArturRios.Util.IO;
 
@@ -92,12 +93,17 @@ public static class FileReaderAsync
     /// <c>null</c>, which would be indistinguishable from a genuine null payload.
     /// </exception>
     /// <exception cref="OperationCanceledException"><paramref name="cancellationToken"/> was canceled.</exception>
+    /// <remarks>
+    /// Property names are matched without regard to case, exactly as <see cref="HttpOutput{TBody}"/>
+    /// binds a response body, so the same JSON document binds the same way whether it arrives over HTTP or is
+    /// read from disk.
+    /// </remarks>
     public static async Task<T?> ReadAndDeserializeAsync<T>(string path, CancellationToken cancellationToken = default)
     {
         FileReader.ValidatePath(path);
 
         await using var stream = File.OpenRead(path);
 
-        return await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken).ConfigureAwait(false);
+        return await JsonSerializer.DeserializeAsync<T>(stream, JsonDefaults.Options, cancellationToken).ConfigureAwait(false);
     }
 }

@@ -48,4 +48,34 @@ public class HashConfigurationTests
     {
         Assert.Throws<ArgumentOutOfRangeException>(() => new HashConfiguration(memoryToUseInKb: value));
     }
+
+    [Theory]
+    [InlineData(1, 3)]
+    [InlineData(4, 15)]
+    [InlineData(16, 63)]
+    public void GivenLessThanFourKilobytesPerLane_WhenConstructed_ThenThrowArgumentOutOfRangeException(int lanes, int memory)
+    {
+        var exception = Assert.Throws<ArgumentOutOfRangeException>(
+            () => new HashConfiguration(degreeOfParallelism: lanes, memoryToUseInKb: memory));
+
+        Assert.Equal("memoryToUseInKb", exception.ParamName);
+    }
+
+    [Fact]
+    public void GivenOnlyASmallMemoryAndTheDefaultLanes_WhenConstructed_ThenThrowArgumentOutOfRangeException()
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(() => new HashConfiguration(memoryToUseInKb: 32));
+    }
+
+    [Theory]
+    [InlineData(1, 4)]
+    [InlineData(4, 16)]
+    public void GivenExactlyFourKilobytesPerLane_WhenHashing_ThenTheConfigurationIsUsable(int lanes, int memory)
+    {
+        var configuration = new HashConfiguration(degreeOfParallelism: lanes, numberOfIterations: 1, memoryToUseInKb: memory);
+
+        var hash = Hash.EncodeWithSalt("secret", new byte[16], configuration);
+
+        Assert.NotEmpty(hash);
+    }
 }

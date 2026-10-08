@@ -3,7 +3,7 @@ using System.Text.Json;
 namespace ArturRios.Util.Http;
 
 /// <summary>
-/// The <see cref="JsonSerializerOptions"/> shared by everything in this namespace.
+/// The <see cref="JsonSerializerOptions"/> shared by everything in this library that reads or writes JSON.
 /// </summary>
 /// <remarks>
 /// Property matching is case insensitive so that a server answering in camelCase binds to PascalCase
@@ -13,7 +13,8 @@ namespace ArturRios.Util.Http;
 internal static class JsonDefaults
 {
     /// <summary>
-    /// Options used by <see cref="HttpExtensions"/> and <see cref="HttpOutput{TBody}"/>.
+    /// Options used by <see cref="HttpExtensions"/>, <see cref="HttpOutput{TBody}"/>,
+    /// <see cref="IO.FileReader"/> and <see cref="IO.FileReaderAsync"/>.
     /// </summary>
     internal static readonly JsonSerializerOptions Options = new()
     {
