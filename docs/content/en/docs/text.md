@@ -115,7 +115,8 @@ Normalize before storing or comparing addresses, so two spellings of one mailbox
 
 ### Notes on behavior
 
-- The checks are **ASCII only**, matching the regexes exactly. They deliberately avoid `char.IsDigit` and
+- The checks are **ASCII only**, matching the regexes exactly (except `HasNumberLowerAndUpperChar()`, whose `\d`
+  also accepts non-ASCII digits). They deliberately avoid `char.IsDigit` and
   `char.IsLower`, which are Unicode-aware and would report the Arabic-Indic digit three as a digit and the
   German sharp s as a lowercase letter. `Any(char.IsDigit)` is also about twice as slow as the regex.
 - `CharacterChecks.Classify` tolerates newlines. `RegexCollection.HasNumberLowerAndUpperChar()` does not,

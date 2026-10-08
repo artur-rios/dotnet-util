@@ -28,12 +28,15 @@ classDiagram
         class HttpOutput~TBody~ {
             +HttpStatusCode StatusCode
             +HttpResponseHeaders Headers
+            +HttpContentHeaders ContentHeaders
+            +string? RawBody
             +TBody? Body
+            +bool IsSuccess
             +Task ReadContentAsync(CancellationToken)
         }
         class HttpExtensions {
             <<static>>
-            +StringContent ToJsonStringContent(object @object)
+            +StringContent ToJsonStringContent~TPayload~(TPayload value)
         }
         class HttpStatusCodes {
             <<static>>
@@ -59,11 +62,11 @@ classDiagram
             +const int BadGateway
             +const int ServiceUnavailable
             +const int GatewayTimeout
-            +int[] Success
-            +int[] Redirection
-            +int[] ClientError
-            +int[] ServerError
-            +int[] All
+            +ImmutableArray~int~ Success
+            +ImmutableArray~int~ Redirection
+            +ImmutableArray~int~ ClientError
+            +ImmutableArray~int~ ServerError
+            +ImmutableArray~int~ All
         }
     }
     HttpGateway --> HttpOutput : returns

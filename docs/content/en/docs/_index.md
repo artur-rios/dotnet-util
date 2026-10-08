@@ -12,7 +12,8 @@ Utilities for common development tasks in .NET: console output helpers, flow con
 
 ```dotnet add package ArturRios.Util```
 
-The package targets **net10.0** and depends on [`ArturRios.Output`](https://www.nuget.org/packages/ArturRios.Output), which provides result envelopes.
+The package targets **net10.0** and depends on [`ArturRios.Output`](https://www.nuget.org/packages/ArturRios.Output) (result envelopes) and
+[`Konscious.Security.Cryptography.Argon2`](https://www.nuget.org/packages/Konscious.Security.Cryptography.Argon2) (the Argon2id implementation).
 
 ## Quickstart
 
@@ -136,32 +137,6 @@ Full API reference, class diagrams, and usage examples:
 - [Random](random/)
 - [Regular Expressions](regular-expressions/)
 - [Text](text/)
-
-## Testing
-
-The test suite is xUnit, and every test is named with the Given / When / Then pattern. Every test class
-carries a `Category` trait, so the two kinds can be run — and reported — separately:
-
-```bash
-dotnet test src/ArturRios.Util.sln --filter "Category=Unit"
-dotnet test src/ArturRios.Util.sln --filter "Category=Functional"
-```
-
-Unit tests exercise the code in isolation against test doubles. Functional tests read and write real files on disk and drive `HttpGateway` against a real HTTP server on the loopback interface. CI runs the two as separate jobs,
-and both must pass before a pull request can be merged.
-
-## Versioning
-
-Semantic Versioning (SemVer). Breaking changes result in a new major version. New methods or non-breaking behavior
-changes increment the minor version; fixes or tweaks increment the patch.
-
-## Build, test and publish
-
-Use the official [.NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/) to build, test and publish the project and Git for source control.
-If you want, optional helper toolsets I built to facilitate these tasks are available:
-
-- [Dotnet Tools](https://github.com/artur-rios/dotnet-tools)
-- [Python Dotnet Tools](https://github.com/artur-rios/python-dotnet-tools)
 
 ## Legal Details
 

@@ -1,16 +1,17 @@
 # Dotnet Util
 
 [![Docs](https://img.shields.io/badge/docs-website-blue)](https://artur-rios.github.io/dotnet-util)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/artur-rios/dotnet-util/blob/main/LICENSE)
 [![NuGet](https://img.shields.io/nuget/v/ArturRios.Util.svg)](https://www.nuget.org/packages/ArturRios.Util)
 
-Utilities for common development tasks in .NET: console output helpers, flow control (conditions, retries, and waiters), hashing (Argon2id), file I/O helpers, HTTP client helpers, math utilities, random values and strings, regex helpers, and small collections.
+Utilities for common development tasks in .NET: console output helpers, flow control (conditions, retries, and waiters), hashing (Argon2id), file I/O helpers, HTTP client helpers, math utilities, random values and strings, regex helpers, text and email helpers, and small collections.
 
 ## Installation
 
 ```dotnet add package ArturRios.Util```
 
-The package targets **net10.0** and depends on [`ArturRios.Output`](https://www.nuget.org/packages/ArturRios.Output), which provides result envelopes.
+The package targets **net10.0** and depends on [`ArturRios.Output`](https://www.nuget.org/packages/ArturRios.Output) (result envelopes) and
+[`Konscious.Security.Cryptography.Argon2`](https://www.nuget.org/packages/Konscious.Security.Cryptography.Argon2) (the Argon2id implementation).
 
 ## Quickstart
 
@@ -135,99 +136,20 @@ Full API reference, class diagrams, and usage examples:
 - [Regular Expressions](https://artur-rios.github.io/dotnet-util/docs/regular-expressions/)
 - [Text](https://artur-rios.github.io/dotnet-util/docs/text/)
 
-## Upgrading to 2.0
+## Upgrading
 
-2.0 fixes several correctness bugs. Most call sites need no change, but the following behave differently.
+- From 1.x to 2.0: [Upgrading from 1.x to 2.0](https://github.com/artur-rios/dotnet-util/blob/main/CHANGELOG.md#upgrading-from-1x-to-20)
 
-**Correctness fixes that change results**
+## Changelog
 
-- `PrimeUtils.IsPrimeNumber(long)` rejects negative values. It previously reinterpreted the bits as
-  `ulong`, so `IsPrimeNumber(-59L)` returned `true`.
-- `PrimeUtils.IsPrimeNumber(BigInteger)` uses Miller-Rabin above 2^64 instead of trial division, which
-  never returned for a large operand. Below 2^64 the answer is still exact; above it, a "prime" verdict is
-  probabilistic with an error probability below 4^-40.
-- `Retry.MaxAttempts(n)` now means *n total executions*. It previously ran `n + 1` times, and consumed its
-  own configuration, so a reused instance had no attempts left. Add one to your argument to keep the old
-  execution count.
-- `CustomRandom.NumberFromSystemRandom` treats `end` as **inclusive**, matching `NumberFromRng`. Pass
-  `end - 1` to keep the old exclusive behavior.
-- `Characters.Special` gained the backtick, tilde and backslash, completing the ASCII punctuation set. This
-  changes the alphabet `CustomRandom.Text` draws from and what `HasSpecialChar` reports.
-- `HttpOutput` and `HttpGateway` serialize with `System.Text.Json` instead of `Newtonsoft.Json`; property
-  matching on deserialization stays case insensitive. The `Newtonsoft.Json` dependency is gone.
-- `Condition` reports duplicate failure messages once per failing condition instead of collapsing them, and
-  `FailsWith` throws `InvalidOperationException` when no `True`/`False` precedes it.
+Notable changes in each release are recorded in [CHANGELOG.md](https://github.com/artur-rios/dotnet-util/blob/main/CHANGELOG.md). Releases follow
+[Semantic Versioning](https://semver.org/).
 
-**Signature and type changes**
+## Contributing
 
-- `JitteredWaiter.Wait()` is **removed**; use `WaitAsync(CancellationToken)`. Waits are now capped at
-  `maxWaitMilliseconds` (30 s by default) rather than overflowing past ~20 retries.
-- `HttpOutput.ReadContent()` is **removed**; use `ReadContentAsync(CancellationToken)`. `StatusCode`,
-  `Headers` and `Body` are read-only, and `ContentHeaders`, `RawBody` and `IsSuccess` are new.
-- `HttpStatusCodes` groups are `ImmutableArray<int>` rather than `int[]`.
-- `PrimeGenerator<T>` is constrained to `IBinaryInteger<T>`. An unsupported `T` is now a compile error
-  instead of a constructor `ArgumentException`.
-- `ConditionFailedException.Errors` is a property rather than a public field.
-- `FileReaderAsync` methods take an optional `CancellationToken`.
-
-**Newly enforced validation**
-
-- `Retry.MaxAttempts` and `DelayMilliseconds`, `JitteredWaiter`'s constructor, and `HashConfiguration`'s
-  cost parameters all reject out-of-range values.
-- `Hash` rejects empty text and salts shorter than 8 bytes, and `Hash.TextMatches` compares in constant
-  time and accepts the `HashConfiguration` the hash was produced with.
-- `CustomRandom` rejects an inverted range, and a single-value range equal to `differentFrom`, instead of
-  looping forever. `CustomRandom.Text` gives up with `InvalidOperationException` when `differentFrom`
-  excludes everything it can produce.
-- `ReadAsDictionary` throws on duplicate header names instead of silently dropping a column.
-
-## Testing
-
-The test suite is xUnit, and every test is named with the Given / When / Then pattern. Every test class
-carries a `Category` trait, so the two kinds can be run — and reported — separately:
-
-```bash
-dotnet test src/ArturRios.Util.sln --filter "Category=Unit"
-dotnet test src/ArturRios.Util.sln --filter "Category=Functional"
-```
-
-Unit tests exercise the code in isolation against test doubles. Functional tests read and write real files on disk and drive `HttpGateway` against a real HTTP server on the loopback interface. CI runs the two as separate jobs,
-and both must pass before a pull request can be merged.
-
-## Branching and releases
-
-`develop` is the integration branch and the base for all new work; `main` only holds released code.
-
-1. Branch off `develop` — `feature/<name>` for features, `fix/<name>` for fixes (`chore/`, `refactor/`, `docs/`,
-   `ci/`, `test/`, `perf/` and `build/` are accepted too) — and open a pull request back into `develop`.
-2. To release, cut `release/<version>` from `develop`, set `<Version>` in `src/ArturRios.Util.csproj` to that version
-   and open a pull request into `main`. Only `release/*` branches can be merged into `main`.
-3. Once it is merged, tag the merge commit on `main` with the version. Pushing the tag publishes the package to
-   nuget.org and GitHub Packages:
-
-   ```bash
-   git switch main && git pull
-   git tag <version> && git push origin <version>
-   ```
-
-4. Open a pull request from `main` into `develop` to bring the release back into the integration branch.
-
-Pull requests into `develop` and `main` must pass the tests and the branch policy check. Only the repository owner can
-push version tags, and the publish workflow rejects tags that do not point at a commit on `main`.
-
-## Versioning
-
-Semantic Versioning (SemVer). Breaking changes result in a new major version. New methods or non-breaking behavior
-changes increment the minor version; fixes or tweaks increment the patch.
-
-## Build, test and publish
-
-Use the official [.NET CLI](https://learn.microsoft.com/en-us/dotnet/core/tools/) to build, test and publish the project and Git for source control.
-If you want, optional helper toolsets I built to facilitate these tasks are available:
-
-- [Dotnet Tools](https://github.com/artur-rios/dotnet-tools)
-- [Python Dotnet Tools](https://github.com/artur-rios/python-dotnet-tools)
+Building from source, running the tests, the branching model and the release process are described in
+[CONTRIBUTING.md](https://github.com/artur-rios/dotnet-util/blob/main/CONTRIBUTING.md).
 
 ## Legal Details
 
-This project is licensed under the [MIT License](https://en.wikipedia.org/wiki/MIT_License). A copy of the license is available at [LICENSE](./LICENSE) in the repository.
+This project is licensed under the [MIT License](https://en.wikipedia.org/wiki/MIT_License). A copy of the license is available at [LICENSE](https://github.com/artur-rios/dotnet-util/blob/main/LICENSE) in the repository.

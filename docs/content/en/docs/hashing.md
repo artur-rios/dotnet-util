@@ -8,7 +8,7 @@ description: >-
 ## Features
 
 - `Hash`: static helpers for Argon2id password hashing — encode with a provided or randomly generated salt, and verify plaintext against a stored hash. Verification is constant time and accepts the same optional `HashConfiguration` used to produce the hash, so non-default cost parameters can be verified. Salts must be at least 8 bytes.
-- `HashConfiguration`: configures Argon2id cost parameters — degree of parallelism, number of iterations, and memory usage in KB; each must be at least 1. The defaults are deliberately expensive (600 MB across 16 lanes per hash), which suits a login path but not a service hashing many secrets at once. Changing them invalidates existing hashes.
+- `HashConfiguration`: configures Argon2id cost parameters — degree of parallelism, number of iterations, and memory usage in KB; each must be at least 1, and the memory at least 4 KB per degree of parallelism, the minimum Argon2 can run with. The defaults are deliberately expensive (600 MB across 16 lanes per hash), which suits a login path but not a service hashing many secrets at once. Changing them invalidates existing hashes.
 
 ## Class Diagram
 
@@ -61,12 +61,10 @@ byte[] hash = Hash.EncodeWithSalt("my-secret-password", salt);
 ### Custom cost parameters
 
 ```csharp
-var config = new HashConfiguration
-{
-    DegreeOfParallelism = 4,
-    NumberOfIterations  = 3,
-    MemoryToUseInKb     = 65536
-};
+var config = new HashConfiguration(
+    degreeOfParallelism: 4,
+    numberOfIterations: 3,
+    memoryToUseInKb: 65536);
 
 byte[] hash = Hash.EncodeWithRandomSalt("my-secret-password", out byte[] salt, config);
 ```

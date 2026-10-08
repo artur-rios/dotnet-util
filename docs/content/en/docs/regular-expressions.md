@@ -10,7 +10,8 @@ description: >-
 - `RegexCollection`: source-generated compiled regex methods for common patterns — email address, contains a digit, contains a lowercase letter, contains an uppercase letter, contains all three (digit + lowercase + uppercase).
 - `RegexExtensions`: `Remove` extension method on `Regex` that strips all pattern matches from a string.
 
-Every pattern is ASCII only, anchored with `\z` where it is anchored at all, and compiled with a
+Every pattern except `HasNumberLowerAndUpperCharPattern` (whose `\d` matches any Unicode decimal digit) is ASCII
+only. Every pattern is anchored with `\z` where it is anchored at all, and compiled with a
 `MatchTimeoutMilliseconds` ceiling so no input can make a match run unbounded. For faster character class
 checks, results that name which requirement failed, or email normalization, see [Text](../text/).
 
@@ -38,7 +39,7 @@ classDiagram
             +string Remove(Regex regex, string @string)
         }
     }
-    RegexExtensions ..> RegexCollection : extends
+    RegexExtensions ..> RegexCollection : used with
 ```
 
 ## Usage
