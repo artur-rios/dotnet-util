@@ -6,8 +6,9 @@
 # BASE_REF set (and HEAD_SHA, YGGDRASIL_DIR). Without them -- on your machine -- pass the two refs as arguments:
 #   sh ci/branch-policy.sh release/2.2.0 main
 #
-# The packed projects are found the way ci/pack.sh finds them: the projects of its SOLUTION that are packable (a
-# <PackageId> or <IsPackable>true</IsPackable>, and not <IsPackable>false</IsPackable>; a test project is not). Their
+# The packed projects are found the way ci/pack.sh finds them: the projects of its SOLUTION that are packable (one
+# with <IsPackable>false</IsPackable>, or a Microsoft.NET.Test.Sdk reference that makes a test project unpackable by
+# itself, is left out; any other project is packed, with or without a <PackageId>). Their
 # <Version> is read from the project, else from the nearest Directory.Build.props up to the repository's root.
 # Only a pull request into main from release/<major>.<minor>.<patch> is checked; anything else is already judged by
 # scripts/branch-policy.sh. A library whose packages have versions of their own does not use this check.
@@ -32,7 +33,7 @@ fi
 solution_dir=$(dirname "$solution")
 case $solution in
   *.csproj) projects=$solution ;;
-  *) projects=$(grep -oE '"[^"]+\.csproj"' "$solution" | tr -d '"' | sed "s|\\\\|/|g; s|^|$solution_dir/|") ;;
+  *) projects=$(grep -oE '"[^"]+\.csproj"' "$solution" | tr -d '"' | sed "s|[\]|/|g; s|^|$solution_dir/|") ;;
 esac
 
 # The <Version> in the text on its standard input, empty when there is none.
@@ -45,8 +46,7 @@ status=0
 for project in $projects; do
   [ -f "$project" ] || continue
   text=$(tr -d '\r' < "$project")
-  if printf '%s\n' "$text" | grep -q '<IsPackable>[[:space:]]*false' ||
-     ! printf '%s\n' "$text" | grep -qE '<PackageId>|<IsPackable>[[:space:]]*true'; then
+  if printf '%s\n' "$text" | grep -qE '<IsPackable>[[:space:]]*false|Microsoft\.NET\.Test\.Sdk'; then
     continue
   fi
   found=$(printf '%s\n' "$text" | version_of)
