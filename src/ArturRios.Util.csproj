@@ -14,7 +14,7 @@
     <Nullable>enable</Nullable>
     <PackageId>ArturRios.Util</PackageId>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageProjectUrl>https://artur-rios.github.io/dotnet-util</PackageProjectUrl>
+    <PackageProjectUrl>https://docs.artur-rios.tech/dotnet-util</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>utilities</PackageTags>
     <RepositoryUrl>https://github.com/artur-rios/dotnet-util</RepositoryUrl>
