@@ -76,8 +76,9 @@ run time:
   update that changes nothing for callers.
 
 The version lives in one place, `<Version>` in `src/ArturRios.Util.csproj`, which `dotnet pack` uses as the package
-version. It is set by hand on `develop` just before a release (see [Releasing](#releasing)), and CI holds it to the release: packing
-(`ci/pack.sh`) requires it to match the tag.
+version. It is set by hand on `develop` just before a release (see [Releasing](#releasing)), and CI holds it to the release: the branch
+policy check (`ci/branch-policy.sh`) requires it to match the `release/<version>` branch name, and packing (`ci/pack.sh`)
+requires it to match the tag.
 
 ## Releasing
 
@@ -86,7 +87,8 @@ version. It is set by hand on `develop` just before a release (see [Releasing](#
    `## [Unreleased]` in [CHANGELOG.md](./CHANGELOG.md) to `## [<version>] - <yyyy-mm-dd>` above a fresh, empty
    `## [Unreleased]`, and update the compare links at the bottom.
 2. Cut `release/<version>` from the updated `develop`, push it and open a pull request into `main`. Only `release/*`
-   branches can be merged into `main`, and the branch policy check rejects a branch that carries a commit `develop` does not have.
+   branches can be merged into `main`, and the branch policy check rejects a branch that carries a commit `develop` does not have or whose `<Version>` in the csproj is
+   not the branch's version.
 3. Once its checks have passed, the owner merges it with a merge commit. Then tag the merge commit on `main` with the version,
    annotated. Pushing the tag publishes the package to nuget.org:
 
