@@ -20,6 +20,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `HashConfiguration` rejects a memory size below 4 KB per degree of parallelism with
   `ArgumentOutOfRangeException` when it is constructed. Argon2 cannot run with less, and such a configuration used to
   fail only when hashing, with an `AggregateException`.
+- The package's project URL is the documentation site's new address, `https://docs.artur-rios.tech/dotnet-util`, since the
+  site moved from GitHub Pages.
 
 ### Fixed
 

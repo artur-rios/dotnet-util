@@ -6,9 +6,11 @@
 > its issues and pull requests are not followed. If you want to contribute, email me at
 > arturdev@duck.com.
 
-[![Docs](https://img.shields.io/badge/docs-website-blue)](https://artur-rios.github.io/dotnet-util)
+[![Docs](https://img.shields.io/badge/docs-website-blue)](https://docs.artur-rios.tech/dotnet-util)
 [![License: Attribution](https://img.shields.io/badge/License-Attribution-blue.svg)](https://github.com/artur-rios/dotnet-util/blob/main/LICENSE)
 [![NuGet](https://img.shields.io/nuget/v/ArturRios.Util.svg)](https://www.nuget.org/packages/ArturRios.Util)
+
+This repository lives at <https://git.techcraftsmen.net/artur-rios/dotnet-util>. The GitHub repository is a read-only mirror of it.
 
 Utilities for common development tasks in .NET: console output helpers, flow control (conditions, retries, and waiters), hashing (Argon2id), file I/O helpers, HTTP client helpers, math utilities, random values and strings, regex helpers, text and email helpers, and small collections.
 
@@ -131,16 +133,16 @@ The package targets **net10.0** and depends on [`ArturRios.Output`](https://www.
 
 Full API reference, class diagrams, and usage examples:
 
-- [Collections](https://artur-rios.github.io/dotnet-util/docs/collections/)
-- [Console](https://artur-rios.github.io/dotnet-util/docs/console/)
-- [Flow Control](https://artur-rios.github.io/dotnet-util/docs/flow-control/)
-- [Hashing](https://artur-rios.github.io/dotnet-util/docs/hashing/)
-- [Http](https://artur-rios.github.io/dotnet-util/docs/http/)
-- [IO](https://artur-rios.github.io/dotnet-util/docs/io/)
-- [Math](https://artur-rios.github.io/dotnet-util/docs/math/)
-- [Random](https://artur-rios.github.io/dotnet-util/docs/random/)
-- [Regular Expressions](https://artur-rios.github.io/dotnet-util/docs/regular-expressions/)
-- [Text](https://artur-rios.github.io/dotnet-util/docs/text/)
+- [Collections](https://docs.artur-rios.tech/dotnet-util/docs/collections/)
+- [Console](https://docs.artur-rios.tech/dotnet-util/docs/console/)
+- [Flow Control](https://docs.artur-rios.tech/dotnet-util/docs/flow-control/)
+- [Hashing](https://docs.artur-rios.tech/dotnet-util/docs/hashing/)
+- [Http](https://docs.artur-rios.tech/dotnet-util/docs/http/)
+- [IO](https://docs.artur-rios.tech/dotnet-util/docs/io/)
+- [Math](https://docs.artur-rios.tech/dotnet-util/docs/math/)
+- [Random](https://docs.artur-rios.tech/dotnet-util/docs/random/)
+- [Regular Expressions](https://docs.artur-rios.tech/dotnet-util/docs/regular-expressions/)
+- [Text](https://docs.artur-rios.tech/dotnet-util/docs/text/)
 
 ## Upgrading
 
