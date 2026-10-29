@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-10-29
+
 ### Added
 
 - `Condition.BlankFailureMessage`, the error `ToProcessOutput` reports for a condition that failed with a blank
@@ -224,7 +226,8 @@ Several of the fixes in this release change results or signatures; what to chang
 - `CustomRandom` random numbers and strings, configured with `RandomStringOptions`.
 - `RegexCollection` and regex extension methods.
 
-[Unreleased]: https://github.com/artur-rios/dotnet-util/compare/2.1.0...HEAD
+[Unreleased]: https://github.com/artur-rios/dotnet-util/compare/2.2.0...HEAD
+[2.2.0]: https://github.com/artur-rios/dotnet-util/compare/2.1.0...2.2.0
 [2.1.0]: https://github.com/artur-rios/dotnet-util/compare/v2.0.0...2.1.0
 [2.0.0]: https://github.com/artur-rios/dotnet-util/compare/v1.6.0...v2.0.0
 [1.6.0]: https://github.com/artur-rios/dotnet-util/compare/v1.5.0...v1.6.0
