@@ -50,8 +50,9 @@ classDiagram
     }
     namespace FlowControl_Waiter {
         class JitteredWaiter {
-            -const int FixedWaitDelay
+            +const int DefaultMaxWaitMilliseconds
             +int MaxRetryCount
+            +int MaxWaitMilliseconds
             -int Count
             +bool CanRetry
             +Task WaitAsync(CancellationToken)

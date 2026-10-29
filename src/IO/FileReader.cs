@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using ArturRios.Util.Http;
 
 namespace ArturRios.Util.IO;
 
@@ -79,11 +80,16 @@ public static class FileReader
     /// <typeparamref name="T"/>. An unreadable file is reported rather than silently turned into
     /// <c>null</c>, which would be indistinguishable from a genuine null payload.
     /// </exception>
+    /// <remarks>
+    /// Property names are matched without regard to case, exactly as <see cref="HttpOutput{TBody}"/>
+    /// binds a response body, so the same JSON document binds the same way whether it arrives over HTTP or is
+    /// read from disk.
+    /// </remarks>
     public static T? ReadAndDeserialize<T>(string path)
     {
         ValidatePath(path);
 
-        return JsonSerializer.Deserialize<T>(File.ReadAllText(path));
+        return JsonSerializer.Deserialize<T>(File.ReadAllText(path), JsonDefaults.Options);
     }
 
     /// <summary>

@@ -377,4 +377,18 @@ public class FileReaderTests
 
         Assert.Empty(FileReader.ReadLines(file));
     }
+
+    [Fact]
+    public void GivenCamelCaseJsonFile_WhenReadAndDeserialize_ThenPropertiesBindRegardlessOfCase()
+    {
+        using var file = new TempFile("{\"name\":\"Alice\",\"age\":30,\"home\":{\"street\":\"Main\",\"number\":100}}");
+
+        var result = FileReader.ReadAndDeserialize<Person>(file);
+
+        Assert.NotNull(result);
+        Assert.Equal("Alice", result.Name);
+        Assert.Equal(30, result.Age);
+        Assert.Equal("Main", result.Home.Street);
+        Assert.Equal(100, result.Home.Number);
+    }
 }

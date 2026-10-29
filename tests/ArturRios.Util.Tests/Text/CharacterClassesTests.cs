@@ -102,4 +102,15 @@ public class CharacterClassesTests
 
         Assert.Equal(CharacterClasses.Digit | CharacterClasses.Lower | CharacterClasses.Upper, span.Classify());
     }
+
+    [Fact]
+    public void GivenNonAsciiDigit_WhenClassify_ThenOnlyTheCompositeRegexCountsItAsDocumented()
+    {
+        // Pins the one documented divergence: the composite pattern's \d is Unicode-aware, Classify is not.
+        const string value = "abcABC\u0663";
+        var required = CharacterClasses.Digit | CharacterClasses.Lower | CharacterClasses.Upper;
+
+        Assert.Matches(RegexCollection.HasNumberLowerAndUpperChar(), value);
+        Assert.Equal(CharacterClasses.Digit, value.Missing(required));
+    }
 }

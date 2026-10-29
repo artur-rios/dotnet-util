@@ -86,5 +86,5 @@ public static class HttpStatusCodes
     /// <summary>
     /// Convenience property containing every status code declared by this type.
     /// </summary>
-    public static ImmutableArray<int> All { get; } = [..Success, ..Redirection, ..ClientError, ..ServerError];
+    public static ImmutableArray<int> All { get; } = [.. Success, .. Redirection, .. ClientError, .. ServerError];
 }

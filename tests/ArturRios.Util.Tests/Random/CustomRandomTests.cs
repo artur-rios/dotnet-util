@@ -1,7 +1,7 @@
 namespace ArturRios.Util.Tests.Random;
 
-using ArturRios.Util.Random;
 using ArturRios.Util.Collections;
+using ArturRios.Util.Random;
 
 [Trait("Category", "Unit")]
 public class CustomRandomTests
@@ -11,9 +11,9 @@ public class CustomRandomTests
     {
         const int start = 5;
         const int end = 10;
-        
+
         var value = CustomRandom.NumberFromRng(start, end);
-        
+
         Assert.InRange(value, start, end);
     }
 
@@ -23,9 +23,9 @@ public class CustomRandomTests
         const int start = 1;
         const int end = 3;
         const int excluded = 2;
-        
+
         var value = CustomRandom.NumberFromRng(start, end, excluded);
-        
+
         Assert.InRange(value, start, end);
         Assert.NotEqual(excluded, value);
     }
@@ -35,7 +35,7 @@ public class CustomRandomTests
     {
         const int start = 0;
         const int end = 100;
-        
+
         var value = CustomRandom.NumberFromSystemRandom(start, end);
 
         Assert.InRange(value, start, end);
@@ -47,7 +47,7 @@ public class CustomRandomTests
         const int start = 10;
         const int end = 20;
         const int excluded = 15;
-        
+
         var value = CustomRandom.NumberFromSystemRandom(start, end, excluded);
 
         Assert.InRange(value, start, end);
@@ -58,9 +58,9 @@ public class CustomRandomTests
     public void GivenOptions_WhenText_ThenReturnStringWithRequestedLength()
     {
         var options = new RandomStringOptions { Length = 25 };
-        
+
         var result = CustomRandom.Text(options);
-        
+
         Assert.Equal(options.Length, result.Length);
     }
 
@@ -75,9 +75,9 @@ public class CustomRandomTests
             IncludeDigits = true,
             IncludeSpecialCharacters = true
         };
-        
+
         var result = CustomRandom.Text(options);
-        
+
         Assert.Contains(result, c => Characters.LowerLetters.Contains(c));
         Assert.Contains(result, c => Characters.UpperLetters.Contains(c));
         Assert.Contains(result, c => Characters.Digits.Contains(c));

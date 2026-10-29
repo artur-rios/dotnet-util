@@ -39,6 +39,9 @@ public static partial class RegexCollection
 
     /// <summary>Pattern that validates a string contains at least one lowercase, one uppercase and one digit.</summary>
     /// <remarks>
+    /// Unlike the other patterns here, this one is not ASCII only: <c>\d</c> matches any Unicode decimal
+    /// digit, so <c>"abcABC٣"</c> (ending in the Arabic-Indic digit three) matches, while
+    /// <see cref="HasNumberPattern"/> and <see cref="Text.CharacterChecks"/> find no digit in it.
     /// Anchored with <c>\z</c> so a trailing newline is not accepted, and <c>.</c> does not match a newline,
     /// so any input spanning more than one line is rejected. Use
     /// <see cref="Text.CharacterChecks.Missing(string, Text.CharacterClasses)"/> when newlines should be

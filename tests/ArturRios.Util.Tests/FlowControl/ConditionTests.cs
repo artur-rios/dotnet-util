@@ -142,4 +142,33 @@ public class ConditionTests
 
         Assert.Equal(["original"], condition.FailedConditions);
     }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData("\t\n")]
+    public void GivenConditionFailingWithABlankMessage_WhenConvertingToProcessOutput_ThenTheOutputIsNotASuccess(string error)
+    {
+        var condition = Condition.Create.True(false).FailsWith(error);
+
+        var output = condition.ToProcessOutput();
+
+        Assert.False(condition.IsSatisfied);
+        Assert.False(output.Success);
+        Assert.Equal([Condition.BlankFailureMessage], output.Errors);
+    }
+
+    [Fact]
+    public void GivenFailedConditions_WhenConvertingToProcessOutput_ThenTheOutputCarriesEveryMessageInOrder()
+    {
+        var condition = Condition.Create
+            .True(false).FailsWith("first")
+            .True(true).FailsWith("skipped")
+            .False(true).FailsWith("second");
+
+        var output = condition.ToProcessOutput();
+
+        Assert.False(output.Success);
+        Assert.Equal(["first", "second"], output.Errors);
+    }
 }
