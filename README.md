@@ -1,16 +1,8 @@
 # Dotnet Util
 
-> [!NOTE]
-> This is the real, open-source code of dotnet-util. Its home is Forgejo, at
-> https://git.techcraftsmen.net/artur-rios/dotnet-util; the copy on GitHub is a read-only mirror, for viewing only, and
-> its issues and pull requests are not followed. If you want to contribute, email me at
-> arturdev@duck.com.
-
 [![Docs](https://img.shields.io/badge/docs-website-blue)](https://docs.artur-rios.tech/dotnet-util)
 [![License: Attribution](https://img.shields.io/badge/License-Attribution-blue.svg)](https://github.com/artur-rios/dotnet-util/blob/main/LICENSE)
 [![NuGet](https://img.shields.io/nuget/v/ArturRios.Util.svg)](https://www.nuget.org/packages/ArturRios.Util)
-
-This repository lives at <https://git.techcraftsmen.net/artur-rios/dotnet-util>. The GitHub repository is a read-only mirror of it.
 
 Utilities for common development tasks in .NET: console output helpers, flow control (conditions, retries, and waiters), hashing (Argon2id), file I/O helpers, HTTP client helpers, math utilities, random values and strings, regex helpers, text and email helpers, and small collections.
 
@@ -157,6 +149,9 @@ Notable changes in each release are recorded in [CHANGELOG.md](https://github.co
 
 Building from source, running the tests, the branching model and the release process are described in
 [CONTRIBUTING.md](https://github.com/artur-rios/dotnet-util/blob/main/CONTRIBUTING.md).
+
+The GitHub repository is a read-only mirror for the real, open-source code of dotnet-util. Its home is Forgejo, at
+https://git.techcraftsmen.net/artur-rios/dotnet-util. If you want to contribute, e-mail me at arturdev@duck.com.
 
 ## Legal Details
 
