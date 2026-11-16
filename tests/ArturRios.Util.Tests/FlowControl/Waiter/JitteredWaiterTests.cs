@@ -1,12 +1,13 @@
-using System.Diagnostics;
 using ArturRios.Util.FlowControl.Waiter;
+using ArturRios.Util.Tests.Setup;
+using Microsoft.Extensions.Time.Testing;
 
 namespace ArturRios.Util.Tests.FlowControl.Waiter;
 
 /// <summary>
 /// The waiter's bookkeeping and its use of the schedule. The schedule itself is checked without sleeping in
-/// <see cref="BackoffTests"/>, so these tests keep every real wait to a millisecond or two by setting a low
-/// ceiling, except where the length of the wait is what they prove.
+/// <see cref="BackoffTests"/>. The tests about how long a wait lasts time it by a fake clock and assert the exact
+/// delay; the tests about counting keep every real wait to a millisecond or two by setting a low ceiling.
 /// </summary>
 [Trait("Category", "Unit")]
 public class JitteredWaiterTests
@@ -33,19 +34,56 @@ public class JitteredWaiterTests
     [Fact]
     public async Task GivenACeilingBelowTheFirstWait_WhenWaitAsync_ThenWaitTheCeiling()
     {
-        // The first wait is the fixed 500 ms, capped here to 80 ms: long enough to measure, short enough to wait.
+        // The first wait is the fixed 500 ms, capped here to 80 ms.
         const int ceiling = 80;
 
-        var waiter = new JitteredWaiter(maxRetryCount: 1, maxWaitMilliseconds: ceiling);
+        var clock = new FakeTimeProvider();
+        var waiter = new JitteredWaiter(maxRetryCount: 1, maxWaitMilliseconds: ceiling, clock);
 
-        var stopwatch = Stopwatch.StartNew();
+        var wait = waiter.WaitAsync(TestContext.Current.CancellationToken);
 
-        await waiter.WaitAsync(TestContext.Current.CancellationToken);
+        clock.Advance(TimeSpan.FromMilliseconds(ceiling - 1));
 
-        stopwatch.Stop();
+        Assert.False(wait.IsCompleted);
 
-        // Timers may fire up to a clock tick early; nothing bounds how late a loaded machine runs them.
-        Assert.True(stopwatch.ElapsedMilliseconds >= ceiling - 20, $"waited only {stopwatch.ElapsedMilliseconds} ms");
+        clock.Advance(TimeSpan.FromMilliseconds(1));
+
+        // Bounded, so a wait the clock failed to end fails the test instead of hanging it.
+        await wait.WaitAsync(TimeSpan.FromSeconds(10), TestContext.Current.CancellationToken);
+    }
+
+    [Fact]
+    public async Task GivenAFakeClock_WhenWaitAsyncForEveryRetry_ThenEachWaitFollowsTheBackoffSchedule()
+    {
+        // About a minute of backoff, timed by the clock in no real time. The ranges are BackoffTests' schedule.
+        var clock = new RecordingTimeProvider();
+        var waiter = new JitteredWaiter(6, JitteredWaiter.DefaultMaxWaitMilliseconds, clock);
+
+        while (waiter.CanRetry)
+        {
+            var wait = waiter.WaitAsync(TestContext.Current.CancellationToken);
+
+            await clock.AdvanceThroughNextTimerAsync(TestContext.Current.CancellationToken);
+            await wait;
+        }
+
+        var waits = clock.DueTimes.Select(dueTime => dueTime.TotalMilliseconds).ToArray();
+
+        Assert.Equal(6, waits.Length);
+        Assert.Equal(500, waits[0]);
+        Assert.InRange(waits[1], 1250, 1999);
+        Assert.InRange(waits[2], 2250, 3999);
+        Assert.InRange(waits[3], 4250, 7999);
+        Assert.InRange(waits[4], 8250, 15999);
+        Assert.InRange(waits[5], 16250, JitteredWaiter.DefaultMaxWaitMilliseconds);
+    }
+
+    [Fact]
+    public void GivenANullTimeProvider_WhenConstructed_ThenThrowArgumentNullException()
+    {
+        var exception = Assert.Throws<ArgumentNullException>(() => new JitteredWaiter(3, 250, null!));
+
+        Assert.Equal("timeProvider", exception.ParamName);
     }
 
     [Fact]
@@ -93,15 +131,24 @@ public class JitteredWaiterTests
     public async Task GivenHighRetryCount_WhenAttemptIndexWouldOverflow_ThenClampInsteadOfThrowing()
     {
         // The old implementation computed Math.Pow(2, n) * 1000 through Convert.ToInt32 and threw an
-        // OverflowException at attempt 22, long after the waits had already grown to days.
-        var waiter = new JitteredWaiter(maxRetryCount: 100, maxWaitMilliseconds: TokenWaitMilliseconds);
+        // OverflowException at attempt 22, long after the waits had already grown to days. A fake clock keeps the
+        // default ceiling, so the waits are seen to saturate at it, in no real time.
+        var clock = new RecordingTimeProvider();
+        var waiter = new JitteredWaiter(100, JitteredWaiter.DefaultMaxWaitMilliseconds, clock);
 
         for (var attempt = 0; attempt < 60; attempt++)
         {
-            await waiter.WaitAsync(TestContext.Current.CancellationToken);
+            var wait = waiter.WaitAsync(TestContext.Current.CancellationToken);
+
+            clock.Advance(TimeSpan.FromMilliseconds(JitteredWaiter.DefaultMaxWaitMilliseconds));
+
+            await wait;
         }
 
         Assert.True(waiter.CanRetry);
+        Assert.Equal(60, clock.DueTimes.Count);
+        Assert.All(clock.DueTimes.Skip(6),
+            dueTime => Assert.Equal(TimeSpan.FromMilliseconds(JitteredWaiter.DefaultMaxWaitMilliseconds), dueTime));
     }
 
     [Fact]
@@ -147,13 +194,21 @@ public class JitteredWaiterTests
     [Fact]
     public async Task GivenTokenCancelledMidWait_WhenWaitAsync_ThenStopWaitingEarly()
     {
-        // The first wait lasts 500 ms. Had it run to the end, WaitAsync would have returned normally instead of
-        // throwing, so the exception alone proves the wait was cut short; no clock is needed.
-        var waiter = new JitteredWaiter(5);
+        // The first wait lasts 500 ms, and the clock never reaches it: only the cancellation can end it.
+        var clock = new FakeTimeProvider();
+        var waiter = new JitteredWaiter(5, JitteredWaiter.DefaultMaxWaitMilliseconds, clock);
 
-        using var cancellation = new CancellationTokenSource(TimeSpan.FromMilliseconds(20));
+        using var cancellation = new CancellationTokenSource();
 
-        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => waiter.WaitAsync(cancellation.Token));
+        var wait = waiter.WaitAsync(cancellation.Token);
+
+        clock.Advance(TimeSpan.FromMilliseconds(499));
+
+        Assert.False(wait.IsCompleted);
+
+        await cancellation.CancelAsync();
+
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => wait);
     }
 
     [Theory]
