@@ -12,13 +12,18 @@
 /// </remarks>
 /// <param name="maxRetryCount">Maximum number of retries allowed; must not be negative.</param>
 /// <param name="maxWaitMilliseconds">
-/// Upper bound applied to a single wait, in milliseconds. Defaults to
-/// <see cref="DefaultMaxWaitMilliseconds"/> (30 seconds); must be greater than zero.
+/// Upper bound applied to a single wait, in milliseconds, such as <see cref="DefaultMaxWaitMilliseconds"/>
+/// (30 seconds); must be greater than zero.
+/// </param>
+/// <param name="timeProvider">
+/// The clock the waits are timed by. <see cref="TimeProvider.System"/> waits in real time; a fake clock, such as
+/// <c>Microsoft.Extensions.Time.Testing.FakeTimeProvider</c>, ends a wait when it is advanced past it.
 /// </param>
 /// <exception cref="ArgumentOutOfRangeException">
 /// <paramref name="maxRetryCount"/> is negative, or <paramref name="maxWaitMilliseconds"/> is not positive.
 /// </exception>
-public class JitteredWaiter(int maxRetryCount, int maxWaitMilliseconds = JitteredWaiter.DefaultMaxWaitMilliseconds)
+/// <exception cref="ArgumentNullException"><paramref name="timeProvider"/> is <see langword="null"/>.</exception>
+public class JitteredWaiter(int maxRetryCount, int maxWaitMilliseconds, TimeProvider timeProvider)
 {
     /// <summary>
     /// Default ceiling for a single wait: 30 seconds.
@@ -26,6 +31,24 @@ public class JitteredWaiter(int maxRetryCount, int maxWaitMilliseconds = Jittere
     public const int DefaultMaxWaitMilliseconds = 30_000;
 
     private readonly Lock _lock = new();
+
+    private readonly TimeProvider _timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
+
+    /// <summary>
+    /// Creates a waiter timed by the system clock, <see cref="TimeProvider.System"/>.
+    /// </summary>
+    /// <param name="maxRetryCount">Maximum number of retries allowed; must not be negative.</param>
+    /// <param name="maxWaitMilliseconds">
+    /// Upper bound applied to a single wait, in milliseconds. Defaults to
+    /// <see cref="DefaultMaxWaitMilliseconds"/> (30 seconds); must be greater than zero.
+    /// </param>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// <paramref name="maxRetryCount"/> is negative, or <paramref name="maxWaitMilliseconds"/> is not positive.
+    /// </exception>
+    public JitteredWaiter(int maxRetryCount, int maxWaitMilliseconds = DefaultMaxWaitMilliseconds)
+        : this(maxRetryCount, maxWaitMilliseconds, TimeProvider.System)
+    {
+    }
 
     /// <summary>
     /// Maximum number of retries permitted.
@@ -58,7 +81,8 @@ public class JitteredWaiter(int maxRetryCount, int maxWaitMilliseconds = Jittere
     }
 
     /// <summary>
-    /// Asynchronously waits based on the current retry attempt using exponential backoff with jitter.
+    /// Asynchronously waits based on the current retry attempt using exponential backoff with jitter, timed by the
+    /// waiter's clock.
     /// </summary>
     /// <param name="cancellationToken">Cancels the wait.</param>
     /// <exception cref="MaxRetriesReachedException">Thrown when called more times than <see cref="MaxRetryCount"/>.</exception>
@@ -77,6 +101,8 @@ public class JitteredWaiter(int maxRetryCount, int maxWaitMilliseconds = Jittere
             currentRetryAttempt = Count++;
         }
 
-        await Task.Delay(Backoff.DelayFor(currentRetryAttempt, MaxWaitMilliseconds), cancellationToken).ConfigureAwait(false);
+        var delay = TimeSpan.FromMilliseconds(Backoff.DelayFor(currentRetryAttempt, MaxWaitMilliseconds));
+
+        await Task.Delay(delay, _timeProvider, cancellationToken).ConfigureAwait(false);
     }
 }

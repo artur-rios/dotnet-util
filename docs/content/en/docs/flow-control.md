@@ -9,8 +9,8 @@ description: >-
 
 - `Condition`: fluent condition aggregator; collects failure messages in order — repeats included — and can throw `ConditionFailedException` or convert to a process output. `FailsWith` throws `InvalidOperationException` when no `True`/`False` precedes it.
 - `ConditionFailedException`: exception carrying all collected error messages as `string[]`.
-- `Retry`: simple retry with configurable max attempts and fixed delay; supports `Action`, `Func<T>` and the asynchronous `ExecuteAsync` overloads, a `When` predicate to restrict which exceptions are retried, and `JitteredBackoff` to space attempts with the same exponential-plus-jitter schedule as `JitteredWaiter`. `MaxAttempts(n)` runs the operation at most `n` times in total, and a configured instance is reusable.
-- `JitteredWaiter`: exponential backoff with jitter, capped at `maxWaitMilliseconds` (30 s by default); `WaitAsync` accepts a `CancellationToken`, exposes `CanRetry` and throws `MaxRetriesReachedException` when retries are exhausted.
+- `Retry`: simple retry with configurable max attempts and fixed delay; supports `Action`, `Func<T>` and the asynchronous `ExecuteAsync` overloads, a `When` predicate to restrict which exceptions are retried, and `JitteredBackoff` to space attempts with the same exponential-plus-jitter schedule as `JitteredWaiter`, and `UseTimeProvider` to time the delays by a `TimeProvider` other than the system clock. `MaxAttempts(n)` runs the operation at most `n` times in total, and a configured instance is reusable.
+- `JitteredWaiter`: exponential backoff with jitter, capped at `maxWaitMilliseconds` (30 s by default), timed by the system clock or by a `TimeProvider` passed to its constructor; `WaitAsync` accepts a `CancellationToken`, exposes `CanRetry` and throws `MaxRetriesReachedException` when retries are exhausted.
 - `MaxRetriesReachedException`: exception thrown when `JitteredWaiter` exceeds its retry limit.
 
 ## Class Diagram
@@ -36,12 +36,14 @@ classDiagram
         class Retry {
             -int _delayMilliseconds
             -int _maxAttempts
+            -TimeProvider _timeProvider
             +static Retry New
             +Retry MaxAttempts(int maxAttempts)
             +Retry DelayMilliseconds(int delayMilliseconds)
             +Retry JitteredBackoff(int maxWaitMilliseconds)
             +Retry When(Func~Exception, bool~ predicate)
             +Retry When~TException~()
+            +Retry UseTimeProvider(TimeProvider timeProvider)
             +void Execute(Action action)
             +T Execute~T~(Func~T~ func)
             +Task ExecuteAsync(Func~CancellationToken, Task~ operation, CancellationToken)
@@ -50,6 +52,8 @@ classDiagram
     }
     namespace FlowControl_Waiter {
         class JitteredWaiter {
+            +JitteredWaiter(int maxRetryCount, int maxWaitMilliseconds)
+            +JitteredWaiter(int maxRetryCount, int maxWaitMilliseconds, TimeProvider timeProvider)
             +const int DefaultMaxWaitMilliseconds
             +int MaxRetryCount
             +int MaxWaitMilliseconds
@@ -133,4 +137,25 @@ while (waiter.CanRetry)
         await waiter.WaitAsync();
     }
 }
+```
+
+### Timing the waits by another clock
+
+`Retry` and `JitteredWaiter` wait in real time by default (`TimeProvider.System`). Give them another
+`TimeProvider` and they wait on it instead: a fake clock such as `FakeTimeProvider`, from the package
+`Microsoft.Extensions.TimeProvider.Testing`, ends each wait when it is advanced past it, so a test can check the exact
+delays without sleeping through them. Both the asynchronous and the blocking `Execute` paths wait on it, and
+cancellation still ends an asynchronous wait early.
+
+```csharp
+using Microsoft.Extensions.Time.Testing;
+
+var clock = new FakeTimeProvider();
+
+var waiter = new JitteredWaiter(maxRetryCount: 5, JitteredWaiter.DefaultMaxWaitMilliseconds, clock);
+var wait = waiter.WaitAsync();
+clock.Advance(TimeSpan.FromMilliseconds(500)); // the first wait is 500 ms: it ends here
+await wait;
+
+var retry = Retry.New.MaxAttempts(3).DelayMilliseconds(200).UseTimeProvider(clock);
 ```
