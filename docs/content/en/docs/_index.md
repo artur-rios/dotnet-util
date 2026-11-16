@@ -38,6 +38,7 @@ The package targets **net10.0** and depends on [`ArturRios.Output`](https://www.
   ```csharp
   using ArturRios.Util.FlowControl;
   using ArturRios.Util.FlowControl.Waiter;
+  using Microsoft.Extensions.Time.Testing; // FakeTimeProvider, from the test package Microsoft.Extensions.TimeProvider.Testing
 
   Condition.Create
     .True(user is not null).FailsWith("User is required")
@@ -53,6 +54,11 @@ The package targets **net10.0** and depends on [`ArturRios.Output`](https://www.
       try { await TryOperationAsync(); break; }
       catch { await waiter.WaitAsync(); }
   }
+
+  // Both wait in real time by default. In a test, a FakeTimeProvider times the waits: advance it to end each one.
+  var fakeClock = new FakeTimeProvider();
+  var testRetry = Retry.New.MaxAttempts(3).DelayMilliseconds(200).UseTimeProvider(fakeClock);
+  var testWaiter = new JitteredWaiter(5, JitteredWaiter.DefaultMaxWaitMilliseconds, fakeClock);
   ```
 
 - **Hashing**

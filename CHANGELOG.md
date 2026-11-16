@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- `Retry.UseTimeProvider(TimeProvider)` and a `JitteredWaiter(maxRetryCount, maxWaitMilliseconds, timeProvider)`
+  constructor: the waits are timed by the given clock instead of the system clock, so a test can pass a fake clock,
+  such as `FakeTimeProvider`, and check the exact delays without waiting in real time. `Retry`'s blocking `Execute`
+  waits on the clock too, and cancellation still ends an asynchronous wait. Without them, both wait in real time
+  exactly as before (`TimeProvider.System`).
+
 ## [2.2.1] - 2026-11-14
 
 ### Changed

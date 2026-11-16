@@ -1,5 +1,5 @@
-using System.Diagnostics;
 using ArturRios.Util.FlowControl;
+using ArturRios.Util.Tests.Setup;
 
 namespace ArturRios.Util.Tests.FlowControl;
 
@@ -118,21 +118,134 @@ public class RetryTests
     }
 
     [Fact]
-    public void GivenConfiguredDelay_WhenRetrying_ThenWaitBetweenAttempts()
+    public async Task GivenConfiguredDelay_WhenRetrying_ThenWaitBetweenAttempts()
     {
         const int delayMilliseconds = 120;
 
-        var stopwatch = Stopwatch.StartNew();
+        var clock = new RecordingTimeProvider();
+        var executions = 0;
 
-        Assert.Throws<InvalidOperationException>(() => Retry.New
+        var run = Task.Run(() => Assert.Throws<InvalidOperationException>(() => Retry.New
             .MaxAttempts(3)
             .DelayMilliseconds(delayMilliseconds)
-            .Execute(() => throw new InvalidOperationException("always fails")));
+            .UseTimeProvider(clock)
+            .Execute(() =>
+            {
+                Interlocked.Increment(ref executions);
 
-        stopwatch.Stop();
+                throw new InvalidOperationException("always fails");
+            })), TestContext.Current.CancellationToken);
 
-        // Three attempts means two delays; allow generous slack for scheduling.
-        Assert.InRange(stopwatch.ElapsedMilliseconds, delayMilliseconds * 2 - 40, delayMilliseconds * 2 + 3000);
+        // The second attempt waits for the clock to reach the delay, and not a millisecond less.
+        await clock.NextTimerAsync(TestContext.Current.CancellationToken);
+        clock.Advance(TimeSpan.FromMilliseconds(delayMilliseconds - 1));
+
+        Assert.Equal(1, Volatile.Read(ref executions));
+
+        clock.Advance(TimeSpan.FromMilliseconds(1));
+        await clock.AdvanceThroughNextTimerAsync(TestContext.Current.CancellationToken);
+        await run;
+
+        // Three attempts means two delays.
+        Assert.Equal(3, executions);
+        Assert.Equal([TimeSpan.FromMilliseconds(delayMilliseconds), TimeSpan.FromMilliseconds(delayMilliseconds)],
+            clock.DueTimes);
+    }
+
+    [Fact]
+    public async Task GivenConfiguredDelay_WhenExecuteAsyncRetries_ThenWaitExactlyTheDelayBetweenAttempts()
+    {
+        const int delayMilliseconds = 120;
+
+        var clock = new RecordingTimeProvider();
+        var executions = 0;
+
+        var run = Assert.ThrowsAsync<InvalidOperationException>(() => Retry.New
+            .MaxAttempts(3)
+            .DelayMilliseconds(delayMilliseconds)
+            .UseTimeProvider(clock)
+            .ExecuteAsync(_ =>
+            {
+                Interlocked.Increment(ref executions);
+
+                throw new InvalidOperationException("always fails");
+            }, TestContext.Current.CancellationToken));
+
+        await clock.NextTimerAsync(TestContext.Current.CancellationToken);
+        clock.Advance(TimeSpan.FromMilliseconds(delayMilliseconds - 1));
+
+        Assert.Equal(1, Volatile.Read(ref executions));
+
+        clock.Advance(TimeSpan.FromMilliseconds(1));
+        await clock.AdvanceThroughNextTimerAsync(TestContext.Current.CancellationToken);
+        await run;
+
+        Assert.Equal(3, executions);
+        Assert.Equal([TimeSpan.FromMilliseconds(delayMilliseconds), TimeSpan.FromMilliseconds(delayMilliseconds)],
+            clock.DueTimes);
+    }
+
+    [Fact]
+    public async Task GivenTheDefaultBackoffAndAFakeClock_WhenExecuteAsyncRetries_ThenEachDelayFollowsTheSchedule()
+    {
+        // Several seconds of backoff at the default ceiling, timed by the clock in no real time.
+        var clock = new RecordingTimeProvider();
+
+        var run = Assert.ThrowsAsync<InvalidOperationException>(() => Retry.New
+            .MaxAttempts(4)
+            .JitteredBackoff()
+            .UseTimeProvider(clock)
+            .ExecuteAsync(_ => throw new InvalidOperationException("always fails"), TestContext.Current.CancellationToken));
+
+        for (var delay = 0; delay < 3; delay++)
+        {
+            await clock.AdvanceThroughNextTimerAsync(TestContext.Current.CancellationToken);
+        }
+
+        await run;
+
+        var delays = clock.DueTimes.Select(dueTime => dueTime.TotalMilliseconds).ToArray();
+
+        Assert.Equal(3, delays.Length);
+        Assert.Equal(500, delays[0]);
+        Assert.InRange(delays[1], 1250, 1999);
+        Assert.InRange(delays[2], 2250, 3999);
+    }
+
+    [Fact]
+    public async Task GivenAFakeClock_WhenTheTokenIsCancelledMidDelay_ThenStopWaitingAndNeverRetry()
+    {
+        var clock = new RecordingTimeProvider();
+        var executions = 0;
+
+        using var cancellation = new CancellationTokenSource();
+
+        var run = Assert.ThrowsAnyAsync<OperationCanceledException>(() => Retry.New
+            .MaxAttempts(3)
+            .DelayMilliseconds(5000)
+            .UseTimeProvider(clock)
+            .ExecuteAsync(_ =>
+            {
+                Interlocked.Increment(ref executions);
+
+                throw new InvalidOperationException("always fails");
+            }, cancellation.Token));
+
+        // The clock stops a millisecond short of the delay: only the cancellation can end it.
+        await clock.NextTimerAsync(TestContext.Current.CancellationToken);
+        clock.Advance(TimeSpan.FromMilliseconds(4999));
+        await cancellation.CancelAsync();
+        await run;
+
+        Assert.Equal(1, executions);
+    }
+
+    [Fact]
+    public void GivenANullTimeProvider_WhenConfigured_ThenThrowArgumentNullException()
+    {
+        var exception = Assert.Throws<ArgumentNullException>(() => Retry.New.UseTimeProvider(null!));
+
+        Assert.Equal("timeProvider", exception.ParamName);
     }
 
     [Fact]
@@ -310,22 +423,25 @@ public class RetryTests
     }
 
     [Fact]
-    public void GivenJitteredBackoff_WhenRetrying_ThenWaitTheCappedBackoffBetweenAttempts()
+    public async Task GivenJitteredBackoff_WhenRetrying_ThenWaitTheCappedBackoffBetweenAttempts()
     {
         // The schedule itself is checked without sleeping in BackoffTests; this proves Execute sleeps by it.
         const int ceiling = 60;
 
-        var stopwatch = Stopwatch.StartNew();
+        var clock = new RecordingTimeProvider();
 
-        Assert.Throws<InvalidOperationException>(() => Retry.New
+        var run = Task.Run(() => Assert.Throws<InvalidOperationException>(() => Retry.New
             .MaxAttempts(3)
             .JitteredBackoff(maxWaitMilliseconds: ceiling)
-            .Execute(() => throw new InvalidOperationException("always fails")));
+            .UseTimeProvider(clock)
+            .Execute(() => throw new InvalidOperationException("always fails"))), TestContext.Current.CancellationToken);
 
-        stopwatch.Stop();
+        await clock.AdvanceThroughNextTimerAsync(TestContext.Current.CancellationToken);
+        await clock.AdvanceThroughNextTimerAsync(TestContext.Current.CancellationToken);
+        await run;
 
         // Three attempts, two waits; both backoff waits exceed the ceiling, so each is the ceiling.
-        Assert.True(stopwatch.ElapsedMilliseconds >= 2 * ceiling - 20, $"waited only {stopwatch.ElapsedMilliseconds} ms");
+        Assert.Equal([TimeSpan.FromMilliseconds(ceiling), TimeSpan.FromMilliseconds(ceiling)], clock.DueTimes);
     }
 
     [Fact]
@@ -333,61 +449,66 @@ public class RetryTests
     {
         const int ceiling = 60;
 
+        var clock = new RecordingTimeProvider();
         var executions = 0;
 
-        var stopwatch = Stopwatch.StartNew();
-
-        await Assert.ThrowsAsync<InvalidOperationException>(() => Retry.New
+        var run = Assert.ThrowsAsync<InvalidOperationException>(() => Retry.New
             .MaxAttempts(3)
             .JitteredBackoff(maxWaitMilliseconds: ceiling)
+            .UseTimeProvider(clock)
             .ExecuteAsync(_ =>
             {
-                executions++;
+                Interlocked.Increment(ref executions);
 
                 throw new InvalidOperationException("always fails");
             }, TestContext.Current.CancellationToken));
 
-        stopwatch.Stop();
+        await clock.AdvanceThroughNextTimerAsync(TestContext.Current.CancellationToken);
+        await clock.AdvanceThroughNextTimerAsync(TestContext.Current.CancellationToken);
+        await run;
 
         Assert.Equal(3, executions);
-        Assert.True(stopwatch.ElapsedMilliseconds >= 2 * ceiling - 20, $"waited only {stopwatch.ElapsedMilliseconds} ms");
+        Assert.Equal([TimeSpan.FromMilliseconds(ceiling), TimeSpan.FromMilliseconds(ceiling)], clock.DueTimes);
     }
 
     [Fact]
-    public void GivenJitteredBackoffThenFixedDelay_WhenConfigured_ThenTheLastCallWins()
+    public async Task GivenJitteredBackoffThenFixedDelay_WhenConfigured_ThenTheLastCallWins()
     {
-        var stopwatch = Stopwatch.StartNew();
+        var clock = new RecordingTimeProvider();
 
-        Assert.Throws<InvalidOperationException>(() => Retry.New
-            .MaxAttempts(3)
-            .JitteredBackoff(maxWaitMilliseconds: 5000)
-            .DelayMilliseconds(0)
-            .Execute(() => throw new InvalidOperationException("always fails")));
-
-        stopwatch.Stop();
+        // Run apart and bounded, so that a wait the clock is never advanced through fails the test instead of
+        // hanging it.
+        await Task.Run(() => Assert.Throws<InvalidOperationException>(() => Retry.New
+                .MaxAttempts(3)
+                .JitteredBackoff(maxWaitMilliseconds: 5000)
+                .DelayMilliseconds(0)
+                .UseTimeProvider(clock)
+                .Execute(() => throw new InvalidOperationException("always fails"))), TestContext.Current.CancellationToken)
+            .WaitAsync(TimeSpan.FromSeconds(10), TestContext.Current.CancellationToken);
 
         // The backoff would have waited 500 ms and then at least 1250 ms; the fixed delay of zero replaced it.
-        Assert.True(stopwatch.ElapsedMilliseconds < 1000, $"waited {stopwatch.ElapsedMilliseconds} ms");
+        Assert.Empty(clock.DueTimes);
     }
 
     [Fact]
-    public void GivenFixedDelayThenJitteredBackoff_WhenConfigured_ThenTheLastCallWins()
+    public async Task GivenFixedDelayThenJitteredBackoff_WhenConfigured_ThenTheLastCallWins()
     {
         const int ceiling = 60;
 
-        var stopwatch = Stopwatch.StartNew();
+        var clock = new RecordingTimeProvider();
 
-        Assert.Throws<InvalidOperationException>(() => Retry.New
+        var run = Task.Run(() => Assert.Throws<InvalidOperationException>(() => Retry.New
             .MaxAttempts(2)
             .DelayMilliseconds(5000)
             .JitteredBackoff(maxWaitMilliseconds: ceiling)
-            .Execute(() => throw new InvalidOperationException("always fails")));
+            .UseTimeProvider(clock)
+            .Execute(() => throw new InvalidOperationException("always fails"))), TestContext.Current.CancellationToken);
 
-        stopwatch.Stop();
+        await clock.AdvanceThroughNextTimerAsync(TestContext.Current.CancellationToken);
+        await run;
 
         // The fixed delay would have waited 5 s; the backoff, capped at the ceiling, replaced it.
-        Assert.True(stopwatch.ElapsedMilliseconds >= ceiling - 20, $"waited only {stopwatch.ElapsedMilliseconds} ms");
-        Assert.True(stopwatch.ElapsedMilliseconds < 4000, $"waited {stopwatch.ElapsedMilliseconds} ms");
+        Assert.Equal([TimeSpan.FromMilliseconds(ceiling)], clock.DueTimes);
     }
 
     [Theory]
@@ -408,6 +529,7 @@ public class RetryTests
         Assert.Same(retry, retry.JitteredBackoff());
         Assert.Same(retry, retry.When(_ => true));
         Assert.Same(retry, retry.When<TimeoutException>());
+        Assert.Same(retry, retry.UseTimeProvider(TimeProvider.System));
         Assert.NotSame(Retry.New, Retry.New);
     }
 

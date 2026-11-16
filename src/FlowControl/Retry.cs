@@ -7,7 +7,8 @@ namespace ArturRios.Util.FlowControl;
 /// </summary>
 /// <remarks>
 /// <para>
-/// Configure using <see cref="MaxAttempts"/>, <see cref="DelayMilliseconds"/> and <see cref="When"/>, then call
+/// Configure using <see cref="MaxAttempts"/>, <see cref="DelayMilliseconds"/> and <see cref="When"/> (and
+/// <see cref="UseTimeProvider"/> to time the delays by another clock), then call
 /// one of the <c>Execute</c> or <c>ExecuteAsync</c> overloads. The last exception is rethrown once the attempts
 /// are exhausted.
 /// </para>
@@ -26,6 +27,7 @@ public class Retry
     private int _delayMilliseconds;
     private int _maxAttempts = 1;
     private int? _backoffCeilingMilliseconds;
+    private TimeProvider _timeProvider = TimeProvider.System;
 
     /// <summary>
     /// Creates a new <see cref="Retry"/> instance. Syntactic sugar for <c>new Retry()</c>.
@@ -84,6 +86,25 @@ public class Retry
 
         _backoffCeilingMilliseconds = maxWaitMilliseconds;
         _delayMilliseconds = 0;
+
+        return this;
+    }
+
+    /// <summary>
+    /// Times the delays between attempts by <paramref name="timeProvider"/> instead of the system clock.
+    /// </summary>
+    /// <param name="timeProvider">
+    /// The clock to wait on. Defaults to <see cref="TimeProvider.System"/>, which waits in real time. A fake clock,
+    /// such as <c>Microsoft.Extensions.Time.Testing.FakeTimeProvider</c>, ends a delay when it is advanced past it,
+    /// on both the <c>Execute</c> and the <c>ExecuteAsync</c> paths.
+    /// </param>
+    /// <returns>The configured <see cref="Retry"/> instance.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="timeProvider"/> is <c>null</c>.</exception>
+    public Retry UseTimeProvider(TimeProvider timeProvider)
+    {
+        ArgumentNullException.ThrowIfNull(timeProvider);
+
+        _timeProvider = timeProvider;
 
         return this;
     }
@@ -167,7 +188,7 @@ public class Retry
 
                 if (delay > 0)
                 {
-                    Thread.Sleep(delay);
+                    Sleep(delay);
                 }
             }
         }
@@ -231,10 +252,30 @@ public class Retry
 
                 if (delay > 0)
                 {
-                    await Task.Delay(delay, cancellationToken).ConfigureAwait(false);
+                    await Task.Delay(TimeSpan.FromMilliseconds(delay), _timeProvider, cancellationToken).ConfigureAwait(false);
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// Blocks the calling thread for <paramref name="delayMilliseconds"/>, as timed by the configured clock.
+    /// </summary>
+    /// <remarks>
+    /// The system clock sleeps, exactly as <see cref="Execute{T}"/> always has. Any other clock blocks on a delay
+    /// created on it, which completes from that clock's timer, so a fake clock ends the wait when it is advanced.
+    /// Nothing that delay continues needs the blocked thread, so waiting on it cannot deadlock.
+    /// </remarks>
+    private void Sleep(int delayMilliseconds)
+    {
+        if (ReferenceEquals(_timeProvider, TimeProvider.System))
+        {
+            Thread.Sleep(delayMilliseconds);
+
+            return;
+        }
+
+        Task.Delay(TimeSpan.FromMilliseconds(delayMilliseconds), _timeProvider).GetAwaiter().GetResult();
     }
 
     /// <summary>
