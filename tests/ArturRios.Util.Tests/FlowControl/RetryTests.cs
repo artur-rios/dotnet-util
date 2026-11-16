@@ -230,7 +230,7 @@ public class RetryTests
                 return executions < 3
                     ? throw new InvalidOperationException("not yet")
                     : Task.FromResult(executions);
-            });
+            }, TestContext.Current.CancellationToken);
 
         Assert.Equal(3, result);
         Assert.Equal(3, executions);
@@ -248,7 +248,7 @@ public class RetryTests
                 executions++;
 
                 throw new InvalidOperationException("always fails");
-            }));
+            }, TestContext.Current.CancellationToken));
 
         Assert.Equal(4, executions);
     }
@@ -303,49 +303,54 @@ public class RetryTests
     public async Task GivenNullAsyncOperation_WhenExecuteAsync_ThenThrowArgumentNullException()
     {
         await Assert.ThrowsAsync<ArgumentNullException>(() =>
-            Retry.New.ExecuteAsync((Func<CancellationToken, Task>)null!));
+            Retry.New.ExecuteAsync((Func<CancellationToken, Task>)null!, TestContext.Current.CancellationToken));
 
         await Assert.ThrowsAsync<ArgumentNullException>(() =>
-            Retry.New.ExecuteAsync((Func<CancellationToken, Task<int>>)null!));
+            Retry.New.ExecuteAsync((Func<CancellationToken, Task<int>>)null!, TestContext.Current.CancellationToken));
     }
 
     [Fact]
-    public void GivenJitteredBackoff_WhenRetrying_ThenWaitAndGrowBetweenAttempts()
+    public void GivenJitteredBackoff_WhenRetrying_ThenWaitTheCappedBackoffBetweenAttempts()
     {
+        // The schedule itself is checked without sleeping in BackoffTests; this proves Execute sleeps by it.
+        const int ceiling = 60;
+
         var stopwatch = Stopwatch.StartNew();
 
         Assert.Throws<InvalidOperationException>(() => Retry.New
             .MaxAttempts(3)
-            .JitteredBackoff(maxWaitMilliseconds: 200)
+            .JitteredBackoff(maxWaitMilliseconds: ceiling)
             .Execute(() => throw new InvalidOperationException("always fails")));
 
         stopwatch.Stop();
 
-        // Two waits, each capped at 200 ms and each at least a few milliseconds.
-        Assert.InRange(stopwatch.ElapsedMilliseconds, 20, 3000);
+        // Three attempts, two waits; both backoff waits exceed the ceiling, so each is the ceiling.
+        Assert.True(stopwatch.ElapsedMilliseconds >= 2 * ceiling - 20, $"waited only {stopwatch.ElapsedMilliseconds} ms");
     }
 
     [Fact]
-    public async Task GivenJitteredBackoff_WhenExecuteAsync_ThenWaitBetweenAttempts()
+    public async Task GivenJitteredBackoff_WhenExecuteAsync_ThenWaitTheCappedBackoffBetweenAttempts()
     {
+        const int ceiling = 60;
+
         var executions = 0;
 
         var stopwatch = Stopwatch.StartNew();
 
         await Assert.ThrowsAsync<InvalidOperationException>(() => Retry.New
             .MaxAttempts(3)
-            .JitteredBackoff(maxWaitMilliseconds: 150)
+            .JitteredBackoff(maxWaitMilliseconds: ceiling)
             .ExecuteAsync(_ =>
             {
                 executions++;
 
                 throw new InvalidOperationException("always fails");
-            }));
+            }, TestContext.Current.CancellationToken));
 
         stopwatch.Stop();
 
         Assert.Equal(3, executions);
-        Assert.InRange(stopwatch.ElapsedMilliseconds, 20, 3000);
+        Assert.True(stopwatch.ElapsedMilliseconds >= 2 * ceiling - 20, $"waited only {stopwatch.ElapsedMilliseconds} ms");
     }
 
     [Fact]
@@ -354,15 +359,35 @@ public class RetryTests
         var stopwatch = Stopwatch.StartNew();
 
         Assert.Throws<InvalidOperationException>(() => Retry.New
-            .MaxAttempts(2)
+            .MaxAttempts(3)
             .JitteredBackoff(maxWaitMilliseconds: 5000)
             .DelayMilliseconds(0)
             .Execute(() => throw new InvalidOperationException("always fails")));
 
         stopwatch.Stop();
 
-        // The backoff would have waited at least 500 ms; the fixed delay of zero replaced it.
-        Assert.InRange(stopwatch.ElapsedMilliseconds, 0, 400);
+        // The backoff would have waited 500 ms and then at least 1250 ms; the fixed delay of zero replaced it.
+        Assert.True(stopwatch.ElapsedMilliseconds < 1000, $"waited {stopwatch.ElapsedMilliseconds} ms");
+    }
+
+    [Fact]
+    public void GivenFixedDelayThenJitteredBackoff_WhenConfigured_ThenTheLastCallWins()
+    {
+        const int ceiling = 60;
+
+        var stopwatch = Stopwatch.StartNew();
+
+        Assert.Throws<InvalidOperationException>(() => Retry.New
+            .MaxAttempts(2)
+            .DelayMilliseconds(5000)
+            .JitteredBackoff(maxWaitMilliseconds: ceiling)
+            .Execute(() => throw new InvalidOperationException("always fails")));
+
+        stopwatch.Stop();
+
+        // The fixed delay would have waited 5 s; the backoff, capped at the ceiling, replaced it.
+        Assert.True(stopwatch.ElapsedMilliseconds >= ceiling - 20, $"waited only {stopwatch.ElapsedMilliseconds} ms");
+        Assert.True(stopwatch.ElapsedMilliseconds < 4000, $"waited {stopwatch.ElapsedMilliseconds} ms");
     }
 
     [Theory]
@@ -371,6 +396,111 @@ public class RetryTests
     public void GivenNonPositiveBackoffCeiling_WhenConfigured_ThenThrowArgumentOutOfRangeException(int ceiling)
     {
         Assert.Throws<ArgumentOutOfRangeException>(() => Retry.New.JitteredBackoff(ceiling));
+    }
+
+    [Fact]
+    public void GivenTheFluentSetters_WhenCalled_ThenReturnTheSameInstance()
+    {
+        var retry = Retry.New;
+
+        Assert.Same(retry, retry.MaxAttempts(2));
+        Assert.Same(retry, retry.DelayMilliseconds(0));
+        Assert.Same(retry, retry.JitteredBackoff());
+        Assert.Same(retry, retry.When(_ => true));
+        Assert.Same(retry, retry.When<TimeoutException>());
+        Assert.NotSame(Retry.New, Retry.New);
+    }
+
+    [Fact]
+    public async Task GivenFailingVoidAsyncOperation_WhenExecuteAsync_ThenRetryUntilItSucceeds()
+    {
+        var executions = 0;
+
+        await Retry.New
+            .MaxAttempts(3)
+            .ExecuteAsync(_ =>
+            {
+                executions++;
+
+                return executions < 3 ? throw new InvalidOperationException("not yet") : Task.CompletedTask;
+            }, TestContext.Current.CancellationToken);
+
+        Assert.Equal(3, executions);
+    }
+
+    [Fact]
+    public async Task GivenToken_WhenExecuteAsync_ThenPassItToTheOperation()
+    {
+        using var cancellation = new CancellationTokenSource();
+
+        CancellationToken received = default;
+
+        await Retry.New.ExecuteAsync(token =>
+        {
+            received = token;
+
+            return Task.CompletedTask;
+        }, cancellation.Token);
+
+        Assert.Equal(cancellation.Token, received);
+    }
+
+    [Fact]
+    public async Task GivenExceptionPredicate_WhenExecuteAsyncFailsWithAnUnmatchedException_ThenRethrowWithoutRetrying()
+    {
+        var executions = 0;
+
+        await Assert.ThrowsAsync<InvalidOperationException>(() => Retry.New
+            .MaxAttempts(5)
+            .When(exception => exception is TimeoutException)
+            .ExecuteAsync(_ =>
+            {
+                executions++;
+
+                throw new InvalidOperationException("not retryable");
+            }, TestContext.Current.CancellationToken));
+
+        Assert.Equal(1, executions);
+    }
+
+    [Fact]
+    public async Task GivenOperationCancellingItself_WhenExecuteAsync_ThenNeverRetryEvenIfThePredicateWouldMatch()
+    {
+        var executions = 0;
+
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => Retry.New
+            .MaxAttempts(5)
+            .When(_ => true)
+            .ExecuteAsync(_ =>
+            {
+                executions++;
+
+                throw new TaskCanceledException();
+            }, TestContext.Current.CancellationToken));
+
+        Assert.Equal(1, executions);
+    }
+
+    [Fact]
+    public async Task GivenOneInstanceSharedByConcurrentCallers_WhenExecuteAsync_ThenEachCallGetsTheFullAttemptBudget()
+    {
+        var retry = Retry.New.MaxAttempts(3);
+
+        var executions = new int[8];
+
+        var calls = Enumerable.Range(0, executions.Length).Select(caller => Task.Run(() =>
+            Assert.ThrowsAsync<InvalidOperationException>(() => retry.ExecuteAsync<int>(async _ =>
+            {
+                Interlocked.Increment(ref executions[caller]);
+
+                await Task.Yield();
+
+                throw new InvalidOperationException("always fails");
+            }, TestContext.Current.CancellationToken))));
+
+        await Task.WhenAll(calls);
+
+        Assert.All(executions, count => Assert.Equal(3, count));
     }
 
     private int TestMethod(int maxAttempts)

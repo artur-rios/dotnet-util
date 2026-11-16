@@ -100,9 +100,7 @@ public class ConditionTests
         var exception = Assert.Throws<ConditionFailedException>(condition.ThrowIfNotSatisfied);
 
         Assert.Equal(["first failure", "second failure"], exception.Errors);
-        Assert.Contains("first failure", exception.Message);
-        Assert.Contains("second failure", exception.Message);
-        Assert.Contains("2", exception.Message);
+        Assert.Equal("A total of 2 conditions failed: first failure; second failure", exception.Message);
     }
 
     [Fact]
@@ -156,6 +154,38 @@ public class ConditionTests
         Assert.False(condition.IsSatisfied);
         Assert.False(output.Success);
         Assert.Equal([Condition.BlankFailureMessage], output.Errors);
+    }
+
+    [Fact]
+    public void GivenNewCondition_WhenInspected_ThenItIsSatisfiedWithNoFailures()
+    {
+        var condition = Condition.Create;
+
+        Assert.True(condition.IsSatisfied);
+        Assert.Empty(condition.FailedConditions);
+        Assert.True(condition.ToProcessOutput().Success);
+        Assert.NotSame(condition, Condition.Create);
+
+        condition.ThrowIfNotSatisfied();
+    }
+
+    [Fact]
+    public void GivenAnExpressionWithoutFailsWith_WhenInspected_ThenNothingIsRecorded()
+    {
+        // Only FailsWith records a failure; a false expression on its own is not one.
+        var condition = Condition.Create.True(false);
+
+        Assert.True(condition.IsSatisfied);
+    }
+
+    [Fact]
+    public void GivenTheFluentMethods_WhenCalled_ThenReturnTheSameInstance()
+    {
+        var condition = Condition.Create;
+
+        Assert.Same(condition, condition.True(true));
+        Assert.Same(condition, condition.False(true));
+        Assert.Same(condition, condition.FailsWith("recorded"));
     }
 
     [Fact]

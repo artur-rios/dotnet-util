@@ -12,7 +12,7 @@ namespace ArturRios.Util.Tests.Functional;
 [Trait("Category", "Functional")]
 public sealed class HttpGatewayOverLoopbackTests : IAsyncLifetime
 {
-    private readonly HttpListener _listener = new();
+    private HttpListener _listener = new();
     private readonly CancellationTokenSource _shutdown = new();
     private readonly List<RecordedRequest> _received = [];
     private Task _serverLoop = Task.CompletedTask;
@@ -21,20 +21,17 @@ public sealed class HttpGatewayOverLoopbackTests : IAsyncLifetime
     private Func<RecordedRequest, (HttpStatusCode Status, string Body, string ContentType)> _responder =
         _ => (HttpStatusCode.OK, "{}", "application/json");
 
-    public Task InitializeAsync()
+    public ValueTask InitializeAsync()
     {
-        var port = FreeTcpPort();
-
-        _listener.Prefixes.Add($"http://127.0.0.1:{port}/");
-        _listener.Start();
+        var port = StartListenerOnAFreePort();
 
         _serverLoop = Task.Run(ServeAsync);
         _client = new HttpClient { BaseAddress = new Uri($"http://127.0.0.1:{port}/") };
 
-        return Task.CompletedTask;
+        return ValueTask.CompletedTask;
     }
 
-    public async Task DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
         await _shutdown.CancelAsync();
 
@@ -59,7 +56,7 @@ public sealed class HttpGatewayOverLoopbackTests : IAsyncLifetime
     {
         _responder = _ => (HttpStatusCode.OK, """{"Message":"hello","Value":42}""", "application/json");
 
-        var output = await new HttpGateway(_client).GetAsync<SampleDto>("api/items");
+        var output = await new HttpGateway(_client).GetAsync<SampleDto>("api/items", TestContext.Current.CancellationToken);
 
         Assert.True(output.IsSuccess);
         Assert.Equal(HttpStatusCode.OK, output.StatusCode);
@@ -74,12 +71,12 @@ public sealed class HttpGatewayOverLoopbackTests : IAsyncLifetime
     {
         _responder = _ => (HttpStatusCode.Created, """{"Message":"created","Value":1}""", "application/json");
 
-        var output = await new HttpGateway(_client).PostAsync<SampleDto>("api/items", new SampleDto("new", 7));
+        var output = await new HttpGateway(_client).PostAsync<SampleDto>("api/items", new SampleDto("new", 7), TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.Created, output.StatusCode);
         Assert.True(output.IsSuccess);
 
-        var request = Assert.Single(_received);
+        var request = Assert.Single(Received());
 
         Assert.Equal("POST", request.Method);
         Assert.Equal("/api/items", request.Path);
@@ -92,7 +89,7 @@ public sealed class HttpGatewayOverLoopbackTests : IAsyncLifetime
     {
         _responder = _ => (HttpStatusCode.OK, """{"message":"lower","value":3}""", "application/json");
 
-        var output = await new HttpGateway(_client).GetAsync<SampleDto>("api/items");
+        var output = await new HttpGateway(_client).GetAsync<SampleDto>("api/items", TestContext.Current.CancellationToken);
 
         Assert.NotNull(output.Body);
         Assert.Equal("lower", output.Body!.Message);
@@ -104,7 +101,7 @@ public sealed class HttpGatewayOverLoopbackTests : IAsyncLifetime
     {
         _responder = _ => (HttpStatusCode.InternalServerError, "<html><body>boom</body></html>", "text/html");
 
-        var output = await new HttpGateway(_client).GetAsync<SampleDto>("api/items");
+        var output = await new HttpGateway(_client).GetAsync<SampleDto>("api/items", TestContext.Current.CancellationToken);
 
         Assert.False(output.IsSuccess);
         Assert.Equal(HttpStatusCode.InternalServerError, output.StatusCode);
@@ -117,7 +114,7 @@ public sealed class HttpGatewayOverLoopbackTests : IAsyncLifetime
     {
         _responder = _ => (HttpStatusCode.NoContent, string.Empty, "application/json");
 
-        var output = await new HttpGateway(_client).DeleteAsync<SampleDto>("api/items/1");
+        var output = await new HttpGateway(_client).DeleteAsync<SampleDto>("api/items/1", TestContext.Current.CancellationToken);
 
         Assert.True(output.IsSuccess);
         Assert.Equal(HttpStatusCode.NoContent, output.StatusCode);
@@ -132,10 +129,10 @@ public sealed class HttpGatewayOverLoopbackTests : IAsyncLifetime
 
         var gateway = new HttpGateway(_client);
 
-        await gateway.PutAsync<SampleDto>("api/items/1", new SampleDto("put", 1));
-        await gateway.PatchAsync<SampleDto>("api/items/1", new SampleDto("patch", 2));
+        await gateway.PutAsync<SampleDto>("api/items/1", new SampleDto("put", 1), TestContext.Current.CancellationToken);
+        await gateway.PatchAsync<SampleDto>("api/items/1", new SampleDto("patch", 2), TestContext.Current.CancellationToken);
 
-        Assert.Equal(new[] { "PUT", "PATCH" }, _received.Select(x => x.Method));
+        Assert.Equal(new[] { "PUT", "PATCH" }, Received().Select(x => x.Method));
     }
 
     [Fact]
@@ -143,9 +140,9 @@ public sealed class HttpGatewayOverLoopbackTests : IAsyncLifetime
     {
         _responder = _ => (HttpStatusCode.OK, """{"Message":"ok","Value":0}""", "application/json");
 
-        await new HttpGateway(_client).PostAsync<SampleDto>("api/items");
+        await new HttpGateway(_client).PostAsync<SampleDto>("api/items", cancellationToken: TestContext.Current.CancellationToken);
 
-        var request = Assert.Single(_received);
+        var request = Assert.Single(Received());
 
         Assert.Equal(string.Empty, request.Body);
     }
@@ -195,6 +192,35 @@ public sealed class HttpGatewayOverLoopbackTests : IAsyncLifetime
         }
     }
 
+    /// <summary>
+    /// Starts the listener on a port the system reports as free. HttpListener cannot bind port 0, so the port
+    /// is found with a TcpListener first; another process can take it in between, in which case the start
+    /// fails, closing the listener, and a new listener tries another free port.
+    /// </summary>
+    private int StartListenerOnAFreePort()
+    {
+        const int attempts = 5;
+
+        for (var attempt = 1; ; attempt++)
+        {
+            var port = FreeTcpPort();
+
+            _listener.Prefixes.Add($"http://127.0.0.1:{port}/");
+
+            try
+            {
+                _listener.Start();
+
+                return port;
+            }
+            catch (HttpListenerException) when (attempt < attempts)
+            {
+                // The port was taken after it was found free. A listener that failed to start is closed.
+                _listener = new HttpListener();
+            }
+        }
+    }
+
     private static int FreeTcpPort()
     {
         using var socket = new System.Net.Sockets.TcpListener(IPAddress.Loopback, 0);
@@ -206,6 +232,17 @@ public sealed class HttpGatewayOverLoopbackTests : IAsyncLifetime
         socket.Stop();
 
         return port;
+    }
+
+    /// <summary>
+    /// The requests the server has received so far, read under the lock the server loop writes them under.
+    /// </summary>
+    private RecordedRequest[] Received()
+    {
+        lock (_received)
+        {
+            return [.. _received];
+        }
     }
 
     private sealed record RecordedRequest(string Method, string Path, string ContentType, string Body);

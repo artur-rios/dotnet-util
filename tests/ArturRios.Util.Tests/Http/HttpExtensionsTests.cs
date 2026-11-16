@@ -17,7 +17,7 @@ public class HttpExtensionsTests
         Assert.NotNull(content);
         Assert.Equal(MediaTypeNames.Application.Json, content.Headers.ContentType!.MediaType);
 
-        var json = await content.ReadAsStringAsync();
+        var json = await content.ReadAsStringAsync(TestContext.Current.CancellationToken);
 
         Assert.Contains("\"Name\":\"Alice\"", json);
         Assert.Contains("\"Age\":30", json);
@@ -29,7 +29,7 @@ public class HttpExtensionsTests
     {
         object payload = new Person { Name = "Alice", Age = 30, Home = new Address { Street = "Main", Number = 1 } };
 
-        var json = await payload.ToJsonStringContent().ReadAsStringAsync();
+        var json = await payload.ToJsonStringContent().ReadAsStringAsync(TestContext.Current.CancellationToken);
 
         Assert.Contains("\"Name\":\"Alice\"", json);
     }
@@ -37,7 +37,7 @@ public class HttpExtensionsTests
     [Fact]
     public async Task GivenAnonymousObject_WhenToJsonStringContent_ThenSerializeItsMembers()
     {
-        var json = await new { Value = 1, Nested = new { Flag = true } }.ToJsonStringContent().ReadAsStringAsync();
+        var json = await new { Value = 1, Nested = new { Flag = true } }.ToJsonStringContent().ReadAsStringAsync(TestContext.Current.CancellationToken);
 
         Assert.Contains("\"Value\":1", json);
         Assert.Contains("\"Flag\":true", json);
@@ -46,7 +46,7 @@ public class HttpExtensionsTests
     [Fact]
     public async Task GivenCollection_WhenToJsonStringContent_ThenSerializeAsAJsonArray()
     {
-        var json = await new[] { 1, 2, 3 }.ToJsonStringContent().ReadAsStringAsync();
+        var json = await new[] { 1, 2, 3 }.ToJsonStringContent().ReadAsStringAsync(TestContext.Current.CancellationToken);
 
         Assert.Equal("[1,2,3]", json);
     }
@@ -56,7 +56,7 @@ public class HttpExtensionsTests
     {
         Person? payload = null;
 
-        var json = await payload.ToJsonStringContent().ReadAsStringAsync();
+        var json = await payload.ToJsonStringContent().ReadAsStringAsync(TestContext.Current.CancellationToken);
 
         Assert.Equal("null", json);
     }

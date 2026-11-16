@@ -19,7 +19,7 @@ public class HttpOutputTests
 
         var output = new HttpOutput<Person?>(response);
 
-        await output.ReadContentAsync();
+        await output.ReadContentAsync(TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, output.StatusCode);
         Assert.NotNull(output.Body);
@@ -37,7 +37,7 @@ public class HttpOutputTests
 
         var output = new HttpOutput<Person?>(response);
 
-        await output.ReadContentAsync();
+        await output.ReadContentAsync(TestContext.Current.CancellationToken);
 
         Assert.Null(output.Body);
     }
@@ -49,7 +49,7 @@ public class HttpOutputTests
         // syntax error let this escape all the way out of HttpGateway.
         var output = OutputFor<Person?>(HttpStatusCode.OK, "[1, 2, 3]");
 
-        await output.ReadContentAsync();
+        await output.ReadContentAsync(TestContext.Current.CancellationToken);
 
         Assert.Null(output.Body);
         Assert.Equal("[1, 2, 3]", output.RawBody);
@@ -60,7 +60,7 @@ public class HttpOutputTests
     {
         var output = OutputFor<Person?>(HttpStatusCode.OK, "{\"name\":\"john\",\"age\":\"not a number\"}");
 
-        await output.ReadContentAsync();
+        await output.ReadContentAsync(TestContext.Current.CancellationToken);
 
         Assert.Null(output.Body);
     }
@@ -70,7 +70,7 @@ public class HttpOutputTests
     {
         var output = OutputFor<Person?>(HttpStatusCode.BadGateway, "<html><body>502 Bad Gateway</body></html>");
 
-        await output.ReadContentAsync();
+        await output.ReadContentAsync(TestContext.Current.CancellationToken);
 
         Assert.Null(output.Body);
         Assert.Equal("<html><body>502 Bad Gateway</body></html>", output.RawBody);
@@ -82,7 +82,7 @@ public class HttpOutputTests
     {
         var output = OutputFor<Person?>(HttpStatusCode.NoContent, string.Empty);
 
-        await output.ReadContentAsync();
+        await output.ReadContentAsync(TestContext.Current.CancellationToken);
 
         Assert.Null(output.Body);
         Assert.Equal(string.Empty, output.RawBody);
@@ -94,7 +94,7 @@ public class HttpOutputTests
     {
         var output = OutputFor<int>(HttpStatusCode.OK, string.Empty);
 
-        await output.ReadContentAsync();
+        await output.ReadContentAsync(TestContext.Current.CancellationToken);
 
         Assert.Equal(0, output.Body);
     }
@@ -104,21 +104,56 @@ public class HttpOutputTests
     {
         var output = OutputFor<Person?>(HttpStatusCode.OK, "{\"name\":\"john\",\"age\":30}");
 
-        await output.ReadContentAsync();
+        await output.ReadContentAsync(TestContext.Current.CancellationToken);
 
         Assert.NotNull(output.Body);
         Assert.Equal("john", output.Body!.Name);
     }
 
     [Theory]
-    [InlineData(HttpStatusCode.OK, true)]
-    [InlineData(HttpStatusCode.NoContent, true)]
-    [InlineData(HttpStatusCode.MovedPermanently, false)]
-    [InlineData(HttpStatusCode.NotFound, false)]
-    [InlineData(HttpStatusCode.InternalServerError, false)]
-    public void GivenStatusCode_WhenIsSuccess_ThenReportWhetherItIs2xx(HttpStatusCode statusCode, bool expected)
+    [InlineData(100, false)]
+    [InlineData(199, false)]
+    [InlineData(200, true)]
+    [InlineData(204, true)]
+    [InlineData(299, true)]
+    [InlineData(300, false)]
+    [InlineData(301, false)]
+    [InlineData(404, false)]
+    [InlineData(500, false)]
+    public void GivenStatusCode_WhenIsSuccess_ThenReportWhetherItIs2xx(int statusCode, bool expected)
     {
-        Assert.Equal(expected, OutputFor<Person?>(statusCode, "{}").IsSuccess);
+        Assert.Equal(expected, OutputFor<Person?>((HttpStatusCode)statusCode, "{}").IsSuccess);
+    }
+
+    [Fact]
+    public void GivenContentNotYetRead_WhenConstructed_ThenRawBodyAndBodyAreUnset()
+    {
+        var output = OutputFor<Person?>(HttpStatusCode.OK, "{\"name\":\"john\",\"age\":30}");
+
+        Assert.Equal(HttpStatusCode.OK, output.StatusCode);
+        Assert.Null(output.RawBody);
+        Assert.Null(output.Body);
+    }
+
+    [Fact]
+    public async Task GivenJsonNullLiteral_WhenReadContentAsync_ThenBodyIsNullAndRawBodyKeepsTheLiteral()
+    {
+        var output = OutputFor<Person?>(HttpStatusCode.OK, "null");
+
+        await output.ReadContentAsync(TestContext.Current.CancellationToken);
+
+        Assert.Null(output.Body);
+        Assert.Equal("null", output.RawBody);
+    }
+
+    [Fact]
+    public async Task GivenStringBodyType_WhenReadContentAsync_ThenDeserializeTheJsonString()
+    {
+        var output = OutputFor<string>(HttpStatusCode.OK, "\"plain\"");
+
+        await output.ReadContentAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal("plain", output.Body);
     }
 
     // Cancellation of the body read is covered by HttpGatewayTests: an in-memory StringContent completes
@@ -136,7 +171,7 @@ public class HttpOutputTests
 
         var output = new HttpOutput<Person?>(response);
 
-        await output.ReadContentAsync();
+        await output.ReadContentAsync(TestContext.Current.CancellationToken);
 
         Assert.Equal("abc123", output.Headers.GetValues("X-Trace-Id").Single());
         Assert.Equal("application/json", output.ContentHeaders.ContentType!.MediaType);

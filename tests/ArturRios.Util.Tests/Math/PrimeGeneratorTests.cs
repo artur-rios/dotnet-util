@@ -61,6 +61,100 @@ public class PrimeGeneratorTests
     }
 
     [Fact]
+    public void GivenInt128Generator_WhenNextCalledRepeatedly_ThenReturnPrimesInOrder()
+    {
+        // Wider than eight bytes, so every candidate is tested through the BigInteger overload.
+        var generator = new PrimeGenerator<Int128>();
+
+        foreach (var expected in s_firstTenPrimes)
+        {
+            Assert.Equal((Int128)expected, generator.Next());
+        }
+    }
+
+    [Fact]
+    public void GivenUInt128Generator_WhenNextCalledRepeatedly_ThenReturnPrimesInOrder()
+    {
+        var generator = new PrimeGenerator<UInt128>();
+
+        foreach (var expected in s_firstTenPrimes)
+        {
+            Assert.Equal((UInt128)expected, generator.Next());
+        }
+    }
+
+    [Fact]
+    public void GivenNativeIntegerGenerators_WhenNextCalledRepeatedly_ThenReturnPrimesInOrder()
+    {
+        var signed = new PrimeGenerator<nint>();
+        var unsigned = new PrimeGenerator<nuint>();
+
+        foreach (var expected in s_firstTenPrimes)
+        {
+            Assert.Equal((nint)expected, signed.Next());
+            Assert.Equal((nuint)expected, unsigned.Next());
+        }
+    }
+
+    [Fact]
+    public void GivenIntGenerator_WhenNextCalledManyTimes_ThenEveryResultIsThePrimeAfterThePreviousOne()
+    {
+        var generator = new PrimeGenerator<int>();
+
+        var previous = 1;
+
+        for (var count = 0; count < 2000; count++)
+        {
+            var next = generator.Next();
+
+            Assert.True(PrimeUtils.IsPrimeNumber(next));
+            Assert.DoesNotContain(Enumerable.Range(previous + 1, next - previous - 1), PrimeUtils.IsPrimeNumber);
+
+            previous = next;
+        }
+
+        // The 2000th prime.
+        Assert.Equal(17389, previous);
+    }
+
+    [Fact]
+    public void GivenShortGenerator_WhenExceedingLargestPrimeInRange_ThenThrowOverflowException()
+    {
+        var generator = new PrimeGenerator<short>();
+
+        short last = 0;
+
+        Assert.Throws<OverflowException>((Action)(() =>
+        {
+            while (true)
+            {
+                last = generator.Next();
+            }
+        }));
+
+        // 32749 is the largest prime that fits in a short.
+        Assert.Equal((short)32749, last);
+    }
+
+    [Fact]
+    public async Task GivenOneGeneratorSharedByConcurrentCallers_WhenNextCalled_ThenEveryPrimeIsHandedOutExactlyOnce()
+    {
+        const int callers = 8;
+        const int callsPerCaller = 250;
+
+        var generator = new PrimeGenerator<long>();
+
+        var batches = await Task.WhenAll(Enumerable.Range(0, callers).Select(_ => Task.Run(() =>
+            Enumerable.Range(0, callsPerCaller).Select(_ => generator.Next()).ToArray(),
+            TestContext.Current.CancellationToken)));
+
+        var reference = new PrimeGenerator<long>();
+        var expected = Enumerable.Range(0, callers * callsPerCaller).Select(_ => reference.Next());
+
+        Assert.Equal(expected, batches.SelectMany(batch => batch).Order());
+    }
+
+    [Fact]
     public void GivenTwoGenerators_WhenNextCalledIndependently_ThenEachKeepsItsOwnSequence()
     {
         var first = new PrimeGenerator<int>();
@@ -165,7 +259,6 @@ public class PrimeGeneratorTests
         // The generator stays parked on its last prime instead of restarting the sequence.
         Assert.Throws<OverflowException>(() => generator.Next());
     }
-
 
     [Fact]
     public void GivenSbyteGenerator_WhenExceedingLargestPrimeInRange_ThenThrowOverflowException()

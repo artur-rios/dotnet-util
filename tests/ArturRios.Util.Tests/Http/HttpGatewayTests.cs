@@ -36,7 +36,7 @@ public class HttpGatewayTests
 
         var gateway = new HttpGateway(client);
 
-        var output = await gateway.GetAsync<SampleDto>("api/test");
+        var output = await gateway.GetAsync<SampleDto>("api/test", TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, output.StatusCode);
         Assert.NotNull(output.Body);
@@ -62,7 +62,7 @@ public class HttpGatewayTests
 
         var gateway = new HttpGateway(client);
 
-        var output = await gateway.PostAsync<SampleDto>("api/items", new { Name = "abc" });
+        var output = await gateway.PostAsync<SampleDto>("api/items", new { Name = "abc" }, TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.Created, output.StatusCode);
         Assert.NotNull(output.Body);
@@ -81,7 +81,7 @@ public class HttpGatewayTests
 
         var gateway = new HttpGateway(client);
 
-        var output = await gateway.PatchAsync<object>("api/patch");
+        var output = await gateway.PatchAsync<object>("api/patch", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.NoContent, output.StatusCode);
         Assert.Null(output.Body);
@@ -103,7 +103,7 @@ public class HttpGatewayTests
 
         var gateway = new HttpGateway(client);
 
-        var output = await gateway.PutAsync<SampleDto>("api/put", new { X = 7 });
+        var output = await gateway.PutAsync<SampleDto>("api/put", new { X = 7 }, TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, output.StatusCode);
         Assert.NotNull(output.Body);
@@ -120,7 +120,7 @@ public class HttpGatewayTests
 
         var gateway = new HttpGateway(client);
 
-        var output = await gateway.DeleteAsync<SampleDto>("api/items/1");
+        var output = await gateway.DeleteAsync<SampleDto>("api/items/1", TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, output.StatusCode);
         Assert.Equal("deleted", output.Body!.Message);
@@ -139,7 +139,7 @@ public class HttpGatewayTests
             Content = new StringContent("{\"error\":\"nope\"}", Encoding.UTF8, "application/json")
         });
 
-        var output = await new HttpGateway(client).GetAsync<SampleDto>("api/test");
+        var output = await new HttpGateway(client).GetAsync<SampleDto>("api/test", TestContext.Current.CancellationToken);
 
         Assert.Equal(statusCode, output.StatusCode);
         Assert.False(output.IsSuccess);
@@ -154,7 +154,7 @@ public class HttpGatewayTests
             Content = new StringContent("[1, 2, 3]", Encoding.UTF8, "application/json")
         });
 
-        var output = await new HttpGateway(client).GetAsync<SampleDto>("api/test");
+        var output = await new HttpGateway(client).GetAsync<SampleDto>("api/test", TestContext.Current.CancellationToken);
 
         Assert.Null(output.Body);
         Assert.Equal("[1, 2, 3]", output.RawBody);
@@ -168,7 +168,7 @@ public class HttpGatewayTests
             Content = new StringContent("<html><body>502</body></html>", Encoding.UTF8, "text/html")
         });
 
-        var output = await new HttpGateway(client).GetAsync<SampleDto>("api/test");
+        var output = await new HttpGateway(client).GetAsync<SampleDto>("api/test", TestContext.Current.CancellationToken);
 
         Assert.Null(output.Body);
         Assert.False(output.IsSuccess);
@@ -189,7 +189,7 @@ public class HttpGatewayTests
             return response;
         });
 
-        var output = await new HttpGateway(client).GetAsync<SampleDto>("api/test");
+        var output = await new HttpGateway(client).GetAsync<SampleDto>("api/test", TestContext.Current.CancellationToken);
 
         Assert.Equal("abc123", output.Headers.GetValues("X-Trace-Id").Single());
         Assert.Equal("application/json", output.ContentHeaders.ContentType!.MediaType);
@@ -232,7 +232,7 @@ public class HttpGatewayTests
     {
         var client = new HttpClient(new ThrowingHandler()) { BaseAddress = new Uri("https://example.test/") };
 
-        await Assert.ThrowsAsync<HttpRequestException>(() => new HttpGateway(client).GetAsync<SampleDto>("api/test"));
+        await Assert.ThrowsAsync<HttpRequestException>(() => new HttpGateway(client).GetAsync<SampleDto>("api/test", TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -245,12 +245,12 @@ public class HttpGatewayTests
             Content = new StringContent("{}", Encoding.UTF8, "application/json")
         });
 
-        var output = await new HttpGateway(client).GetAsync<SampleDto>("api/test");
+        var output = await new HttpGateway(client).GetAsync<SampleDto>("api/test", TestContext.Current.CancellationToken);
 
         Assert.NotNull(captured);
 
         // Reading a disposed response's content throws; the buffered output is unaffected.
-        await Assert.ThrowsAsync<ObjectDisposedException>(() => captured!.Content.ReadAsStringAsync());
+        await Assert.ThrowsAsync<ObjectDisposedException>(() => captured!.Content.ReadAsStringAsync(TestContext.Current.CancellationToken));
         Assert.Equal("{}", output.RawBody);
     }
 
@@ -262,7 +262,7 @@ public class HttpGatewayTests
             Content = new StringContent("{\"message\":\"hello\",\"value\":42}", Encoding.UTF8, "application/json")
         });
 
-        var output = await new HttpGateway(client).GetAsync<SampleDto>("api/test");
+        var output = await new HttpGateway(client).GetAsync<SampleDto>("api/test", TestContext.Current.CancellationToken);
 
         Assert.NotNull(output.Body);
         Assert.Equal("hello", output.Body!.Message);
@@ -272,7 +272,135 @@ public class HttpGatewayTests
     [Fact]
     public void GivenNullClient_WhenConstructed_ThenThrowArgumentNullException()
     {
-        Assert.Throws<ArgumentNullException>(() => new HttpGateway(null!));
+        var exception = Assert.Throws<ArgumentNullException>(() => new HttpGateway(null!));
+
+        Assert.Equal("client", exception.ParamName);
+    }
+
+    [Fact]
+    public void GivenClient_WhenConstructed_ThenExposeIt()
+    {
+        var client = CreateClient(_ => new HttpResponseMessage(HttpStatusCode.OK));
+
+        Assert.Same(client, new HttpGateway(client).Client);
+    }
+
+    /// <summary>
+    /// Sends <paramref name="method"/> through the gateway method of the same name, with
+    /// <paramref name="payload"/> for the verbs that take one.
+    /// </summary>
+    private static Task<HttpOutput<SampleDto?>> Send(HttpGateway gateway, string method, string route, object? payload) =>
+        method switch
+        {
+            "GET" => gateway.GetAsync<SampleDto>(route),
+            "POST" => gateway.PostAsync<SampleDto>(route, payload),
+            "PUT" => gateway.PutAsync<SampleDto>(route, payload),
+            "PATCH" => gateway.PatchAsync<SampleDto>(route, payload),
+            "DELETE" => gateway.DeleteAsync<SampleDto>(route),
+            _ => throw new ArgumentOutOfRangeException(nameof(method), method, null)
+        };
+
+    [Theory]
+    [InlineData("GET")]
+    [InlineData("POST")]
+    [InlineData("PUT")]
+    [InlineData("PATCH")]
+    [InlineData("DELETE")]
+    public async Task GivenEveryVerb_WhenSending_ThenUseThatMethodOnTheRouteRelativeToTheBaseAddress(string method)
+    {
+        HttpRequestMessage? captured = null;
+
+        var client = CreateClient(request =>
+        {
+            captured = request;
+
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent("{\"Message\":\"ok\",\"Value\":7}", Encoding.UTF8, "application/json")
+            };
+        });
+
+        var output = await Send(new HttpGateway(client), method, "api/items/7", new { Name = "abc" });
+
+        Assert.NotNull(captured);
+        Assert.Equal(method, captured!.Method.Method);
+        Assert.Equal(new Uri("https://example.test/api/items/7"), captured.RequestUri);
+        Assert.Equal(new SampleDto("ok", 7), output.Body);
+    }
+
+    [Theory]
+    [InlineData("POST")]
+    [InlineData("PUT")]
+    [InlineData("PATCH")]
+    public async Task GivenNoPayload_WhenSendingAVerbThatTakesOne_ThenSendNoBodyInsteadOfTheJsonNullLiteral(string method)
+    {
+        HttpRequestMessage? captured = null;
+
+        var client = CreateClient(request =>
+        {
+            captured = request;
+
+            return new HttpResponseMessage(HttpStatusCode.OK);
+        });
+
+        await Send(new HttpGateway(client), method, "api/items", payload: null);
+
+        Assert.Equal(method, captured!.Method.Method);
+        Assert.Null(captured.Content);
+    }
+
+    [Fact]
+    public async Task GivenPatchRequest_WhenSendingPayload_ThenSerializeItAsJson()
+    {
+        string? capturedRequestBody = null;
+        string? capturedMediaType = null;
+
+        var client = CreateClient(request =>
+        {
+            capturedRequestBody = request.Content?.ReadAsStringAsync().GetAwaiter().GetResult();
+            capturedMediaType = request.Content?.Headers.ContentType?.MediaType;
+
+            return new HttpResponseMessage(HttpStatusCode.OK);
+        });
+
+        await new HttpGateway(client).PatchAsync<SampleDto>("api/items/1", new { Value = 3 }, TestContext.Current.CancellationToken);
+
+        Assert.Equal("{\"Value\":3}", capturedRequestBody);
+        Assert.Equal("application/json", capturedMediaType);
+    }
+
+    [Fact]
+    public async Task GivenAbsoluteRoute_WhenGetAsync_ThenIgnoreTheBaseAddress()
+    {
+        Uri? requested = null;
+
+        var client = CreateClient(request =>
+        {
+            requested = request.RequestUri;
+
+            return new HttpResponseMessage(HttpStatusCode.OK);
+        });
+
+        await new HttpGateway(client).GetAsync<SampleDto>("https://other.test/status", TestContext.Current.CancellationToken);
+
+        Assert.Equal(new Uri("https://other.test/status"), requested);
+    }
+
+    [Fact]
+    public async Task GivenCancelledToken_WhenPutPatchOrDeleteAsync_ThenThrowOperationCanceledException()
+    {
+        var gateway = new HttpGateway(CreateClient(_ => new HttpResponseMessage(HttpStatusCode.OK)));
+
+        using var cancellation = new CancellationTokenSource();
+
+        await cancellation.CancelAsync();
+
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() =>
+            gateway.PutAsync<SampleDto>("api/test", new { Value = 1 }, cancellation.Token));
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() =>
+            gateway.PatchAsync<SampleDto>("api/test", new { Value = 1 }, cancellation.Token));
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() =>
+            gateway.DeleteAsync<SampleDto>("api/test", cancellation.Token));
     }
 
     private sealed class ThrowingHandler : HttpMessageHandler

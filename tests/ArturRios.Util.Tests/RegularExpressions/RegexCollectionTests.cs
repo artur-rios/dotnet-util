@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using ArturRios.Util.RegularExpressions;
 
 namespace ArturRios.Util.Tests.RegularExpressions;
@@ -29,7 +30,17 @@ public class RegexCollectionTests
         "joão@hostname.com",
         "mä@hostname.com",
         "中文@hostname.com",
-        "ma@hostname.com\n"
+        "ma@hostname.com\n",
+        ".ma@hostname.com",
+        "ma.@hostname.com",
+        "m..a@hostname.com",
+        "ma@[256.0.0.1]",
+        "ma@[1.2.3]",
+        "ma@[01.2.3.4]",
+        "ma@hostname.c0m",
+        "ma@" + new string('a', 64) + ".com",
+        "ma@hostname." + new string('a', 64),
+        "ma@hostname.com "
     ];
 
     public static TheoryData<string> ValidEmails =>
@@ -56,7 +67,13 @@ public class RegexCollectionTests
         "ma@hostname.comcom",
         "MA@hostname.coMCom",
         "ma@[192.168.1.1]",
-        "ma@[10.0.0.255]"
+        "ma@[10.0.0.255]",
+        "ma@[0.0.0.0]",
+        "ma@[255.255.255.255]",
+        "!#$%&'*+-/=?^_`{|}~@hostname.com",
+        "ma@" + new string('a', 63) + ".com",
+        "ma@hostname." + new string('a', 63),
+        "a@b.co"
     ];
 
     [Theory]
@@ -156,5 +173,58 @@ public class RegexCollectionTests
         var result = RegexCollection.HasNumberLowerAndUpperChar().IsMatch(@string);
 
         Assert.False(result);
+    }
+
+    [Theory]
+    [InlineData(nameof(RegexCollection.Email), RegexCollection.EmailPattern)]
+    [InlineData(nameof(RegexCollection.HasNumber), RegexCollection.HasNumberPattern)]
+    [InlineData(nameof(RegexCollection.HasLowerChar), RegexCollection.HasLowerCharPattern)]
+    [InlineData(nameof(RegexCollection.HasUpperChar), RegexCollection.HasUpperCharPattern)]
+    [InlineData(nameof(RegexCollection.HasNumberLowerAndUpperChar), RegexCollection.HasNumberLowerAndUpperCharPattern)]
+    public void GivenEveryRegex_WhenInspected_ThenItIsBuiltFromItsPatternWithTheMatchTimeout(string name, string pattern)
+    {
+        var regex = name switch
+        {
+            nameof(RegexCollection.Email) => RegexCollection.Email(),
+            nameof(RegexCollection.HasNumber) => RegexCollection.HasNumber(),
+            nameof(RegexCollection.HasLowerChar) => RegexCollection.HasLowerChar(),
+            nameof(RegexCollection.HasUpperChar) => RegexCollection.HasUpperChar(),
+            _ => RegexCollection.HasNumberLowerAndUpperChar()
+        };
+
+        Assert.Equal(pattern, regex.ToString());
+        Assert.Equal(RegexOptions.None, regex.Options);
+        Assert.Equal(TimeSpan.FromMilliseconds(RegexCollection.MatchTimeoutMilliseconds), regex.MatchTimeout);
+        Assert.Equal(100, RegexCollection.MatchTimeoutMilliseconds);
+    }
+
+    [Theory]
+    [InlineData("aB1")]
+    [InlineData("1aB")]
+    [InlineData("pass Word 9")]
+    [InlineData("abcABC\u0663")] // \d is Unicode-aware, as the pattern's documentation says
+    public void GivenStringWithEveryRequiredClass_WhenCompositeRegex_ThenMatch(string value)
+    {
+        Assert.Matches(RegexCollection.HasNumberLowerAndUpperChar(), value);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("aB\n1")]
+    [InlineData("aB1\n")]
+    public void GivenEmptyOrMultiLineString_WhenCompositeRegex_ThenNotMatch(string value)
+    {
+        Assert.DoesNotMatch(RegexCollection.HasNumberLowerAndUpperChar(), value);
+    }
+
+    [Theory]
+    [InlineData("\u0663")]
+    [InlineData("\u00e9")]
+    [InlineData("\u00c9")]
+    public void GivenNonAsciiCharacter_WhenSingleClassRegex_ThenNotMatch(string value)
+    {
+        Assert.DoesNotMatch(RegexCollection.HasNumber(), value);
+        Assert.DoesNotMatch(RegexCollection.HasLowerChar(), value);
+        Assert.DoesNotMatch(RegexCollection.HasUpperChar(), value);
     }
 }

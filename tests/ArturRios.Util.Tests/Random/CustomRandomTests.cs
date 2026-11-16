@@ -1,7 +1,8 @@
-namespace ArturRios.Util.Tests.Random;
-
 using ArturRios.Util.Collections;
 using ArturRios.Util.Random;
+using ArturRios.Util.Text;
+
+namespace ArturRios.Util.Tests.Random;
 
 [Trait("Category", "Unit")]
 public class CustomRandomTests
@@ -444,8 +445,9 @@ public class CustomRandomTests
     [Fact]
     public void GivenSingleValueRangeEqualToTheExcludedValue_WhenNumberFromRng_ThenThrowInsteadOfLoopingForever()
     {
-        Assert.Throws<ArgumentException>(() => CustomRandom.NumberFromRng(5, 5, 5));
-        Assert.Throws<ArgumentException>(() => CustomRandom.NumberFromSystemRandom(5, 5, 5));
+        Assert.Equal("differentFrom", Assert.Throws<ArgumentException>(() => CustomRandom.NumberFromRng(5, 5, 5)).ParamName);
+        Assert.Equal("differentFrom",
+            Assert.Throws<ArgumentException>(() => CustomRandom.NumberFromSystemRandom(5, 5, 5)).ParamName);
     }
 
     [Fact]
@@ -453,6 +455,52 @@ public class CustomRandomTests
     {
         Assert.Equal(5, CustomRandom.NumberFromRng(5, 5, 6));
         Assert.Equal(5, CustomRandom.NumberFromSystemRandom(5, 5, 6));
+    }
+
+    [Fact]
+    public void GivenTwoValueRangeWithOneExcluded_WhenNumberFromEitherSource_ThenAlwaysReturnTheOther()
+    {
+        // Half the first draws hit the excluded value, so the redraw loop runs on almost every other call.
+        for (var draw = 0; draw < 200; draw++)
+        {
+            Assert.Equal(1, CustomRandom.NumberFromRng(0, 1, differentFrom: 0));
+            Assert.Equal(1, CustomRandom.NumberFromSystemRandom(0, 1, differentFrom: 0));
+        }
+    }
+
+    [Fact]
+    public void GivenSingleValueRangeAndADifferentExcludedValue_WhenNumberFromEitherSource_ThenReturnTheOnlyValue()
+    {
+        Assert.Equal(7, CustomRandom.NumberFromRng(7, 7, differentFrom: 8));
+        Assert.Equal(7, CustomRandom.NumberFromSystemRandom(7, 7, differentFrom: 8));
+    }
+
+    [Fact]
+    public void GivenNewOptions_WhenInspected_ThenUseTheDocumentedDefaults()
+    {
+        var options = new RandomStringOptions();
+
+        Assert.Equal(10, options.Length);
+        Assert.True(options.IncludeLowercase);
+        Assert.True(options.IncludeUppercase);
+        Assert.True(options.IncludeDigits);
+        Assert.True(options.IncludeSpecialCharacters);
+    }
+
+    [Fact]
+    public void GivenDefaultOptions_WhenText_ThenReturnTenCharactersFromEveryClass()
+    {
+        var value = CustomRandom.Text(new RandomStringOptions());
+
+        Assert.Equal(10, value.Length);
+        Assert.Equal(CharacterClasses.Digit | CharacterClasses.Lower | CharacterClasses.Upper | CharacterClasses.Special,
+            value.Classify());
+    }
+
+    [Fact]
+    public void GivenNegativeLength_WhenText_ThenThrowArgumentException()
+    {
+        Assert.Throws<ArgumentException>(() => CustomRandom.Text(new RandomStringOptions { Length = -1 }));
     }
 
     [Fact]
