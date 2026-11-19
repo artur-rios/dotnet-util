@@ -81,7 +81,7 @@ public static class FileReaderAsync
     /// </summary>
     /// <typeparam name="T">Target type.</typeparam>
     /// <param name="path">Path to the JSON file.</param>
-    /// <param name="cancellationToken">Cancels the read and the deserialization.</param>
+    /// <param name="cancellationToken">Cancels reading the file.</param>
     /// <returns>
     /// The deserialized object, or <c>null</c> when the file contains the JSON literal <c>null</c>.
     /// </returns>
@@ -102,8 +102,10 @@ public static class FileReaderAsync
     {
         FileReader.ValidatePath(path);
 
-        await using var stream = File.OpenRead(path);
+        // Decoded as text, as ReadAndDeserialize decodes it, so a UTF-16 or UTF-32 file with a byte order mark
+        // reads the same way through both: deserializing the file's bytes accepts UTF-8 only.
+        var json = await File.ReadAllTextAsync(path, cancellationToken).ConfigureAwait(false);
 
-        return await JsonSerializer.DeserializeAsync<T>(stream, JsonDefaults.Options, cancellationToken).ConfigureAwait(false);
+        return JsonSerializer.Deserialize<T>(json, JsonDefaults.Options);
     }
 }

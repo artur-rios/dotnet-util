@@ -15,6 +15,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   waits on the clock too, and cancellation still ends an asynchronous wait. Without them, both wait in real time
   exactly as before (`TimeProvider.System`).
 
+### Changed
+
+- `ArturRios.Output` updated from 3.3.1 to 3.3.2.
+
+### Fixed
+
+- `EmailAddress.TryNormalize` and `IsValid` (and `RegexCollection.Email`, for an address already in punycode) accept an
+  internationalized top-level domain, as `IsValid` documents: `user@пример.рф` normalizes to
+  `user@xn--e1afmkfd.xn--p1ai`. The domain was punycoded and then held to a top-level domain of letters only, which
+  the `xn--` form of `.рф`, `.中国` or `.இந்தியா` is not, so the address was rejected. `RegexCollection.EmailPattern` is
+  a constant: code compiled against an earlier version keeps that version's pattern until it is rebuilt.
+- `FileReaderAsync.ReadAndDeserializeAsync` reads a UTF-16 or UTF-32 JSON file with a byte order mark, as
+  `FileReader.ReadAndDeserialize` does. It deserialized the file's bytes, which only UTF-8 can be, so a file saved
+  as "Unicode" by Notepad or by PowerShell 5's `Out-File` threw `JsonException`.
+
 ## [2.2.1] - 2026-11-14
 
 ### Changed

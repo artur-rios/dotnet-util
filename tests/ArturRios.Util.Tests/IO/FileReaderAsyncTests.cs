@@ -1,3 +1,4 @@
+using System.Text;
 using System.Text.Json;
 using ArturRios.Util.IO;
 using ArturRios.Util.Tests.Setup;
@@ -165,6 +166,35 @@ public class FileReaderAsyncTests
         Assert.Equal(30, result.Age);
         Assert.Equal("Main", result.Home.Street);
         Assert.Equal(100, result.Home.Number);
+    }
+
+    public static TheoryData<string> JsonEncodings => ["utf-8", "utf-8-bom", "utf-16le", "utf-16be", "utf-32le"];
+
+    private static Encoding EncodingNamed(string name) => name switch
+    {
+        "utf-8" => new UTF8Encoding(encoderShouldEmitUTF8Identifier: false),
+        "utf-8-bom" => new UTF8Encoding(encoderShouldEmitUTF8Identifier: true),
+        "utf-16le" => new UnicodeEncoding(bigEndian: false, byteOrderMark: true),
+        "utf-16be" => new UnicodeEncoding(bigEndian: true, byteOrderMark: true),
+        "utf-32le" => new UTF32Encoding(bigEndian: false, byteOrderMark: true),
+        _ => throw new ArgumentOutOfRangeException(nameof(name), name, null)
+    };
+
+    [Theory]
+    [MemberData(nameof(JsonEncodings))]
+    public async Task GivenAJsonFileWithAByteOrderMark_WhenReadAndDeserializeAsync_ThenItReadsAsTheSynchronousReaderDoes(
+        string encoding)
+    {
+        using var file = new TempFile(string.Empty);
+        File.WriteAllText(file, """{ "Name": "Zoë", "Age": 30 }""", EncodingNamed(encoding));
+
+        var result = await FileReaderAsync.ReadAndDeserializeAsync<Person>(file, TestContext.Current.CancellationToken);
+        var synchronous = FileReader.ReadAndDeserialize<Person>(file);
+
+        Assert.NotNull(result);
+        Assert.Equal("Zoë", result.Name);
+        Assert.Equal(30, result.Age);
+        Assert.Equal(synchronous?.Name, result.Name);
     }
 
     [Theory]

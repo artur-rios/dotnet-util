@@ -24,6 +24,19 @@ public class EmailAddressTests
         Assert.Equal("ma@xn--mnchen-3ya.de", result);
     }
 
+    [Theory]
+    [InlineData("user@пример.рф", "user@xn--e1afmkfd.xn--p1ai")]
+    [InlineData("user@例子.中国", "user@xn--fsqu00a.xn--fiqs8s")]
+    [InlineData("user@example.இந்தியா", "user@example.xn--xkc2dl3a5ee0h")]
+    public void GivenAnInternationalizedTopLevelDomain_WhenTryNormalize_ThenItIsAcceptedAndPunycoded(string value,
+        string expected)
+    {
+        var normalized = EmailAddress.TryNormalize(value, out var result);
+
+        Assert.True(normalized);
+        Assert.Equal(expected, result);
+    }
+
     [Fact]
     public void GivenIpLiteralDomain_WhenTryNormalize_ThenLeftUntouched()
     {
