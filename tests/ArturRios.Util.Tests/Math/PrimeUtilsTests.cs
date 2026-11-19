@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Numerics;
 using ArturRios.Util.Math;
 
@@ -16,6 +17,8 @@ public class PrimeUtilsTests
     [InlineData(97)]
     [InlineData(7919)]
     [InlineData(104729)]
+    [InlineData(46349)] // the first prime whose square exceeds int.MaxValue
+    [InlineData(int.MaxValue)] // 2^31-1, a Mersenne prime: the trial division runs to the top of its range
     public void GivenPrimeInt_WhenIsPrimeNumber_ThenReturnTrue(int value)
     {
         Assert.True(PrimeUtils.IsPrimeNumber(value));
@@ -32,6 +35,9 @@ public class PrimeUtilsTests
     [InlineData(9)]
     [InlineData(100)]
     [InlineData(7917)]
+    [InlineData(25)] // a square of a prime: the divisor equals the limit
+    [InlineData(46327 * 46337)] // two primes just below the square root of int.MaxValue
+    [InlineData(int.MaxValue - 1)]
     public void GivenNonPrimeInt_WhenIsPrimeNumber_ThenReturnFalse(int value)
     {
         Assert.False(PrimeUtils.IsPrimeNumber(value));
@@ -135,7 +141,7 @@ public class PrimeUtilsTests
     [InlineData("1000000", false)]
     public void GivenBigInteger_WhenIsPrimeNumber_ThenReturnExpected(string value, bool expected)
     {
-        var bigInteger = BigInteger.Parse(value);
+        var bigInteger = Parse(value);
 
         Assert.Equal(expected, PrimeUtils.IsPrimeNumber(bigInteger));
     }
@@ -150,9 +156,9 @@ public class PrimeUtilsTests
     [InlineData("1000000000000000000", "1000000000")] // 10^18 -> 10^9
     public void GivenPerfectSquare_WhenBigIntegerSqrt_ThenReturnExactRoot(string value, string expected)
     {
-        var result = PrimeUtils.BigIntegerSqrt(BigInteger.Parse(value));
+        var result = PrimeUtils.BigIntegerSqrt(Parse(value));
 
-        Assert.Equal(BigInteger.Parse(expected), result);
+        Assert.Equal(Parse(expected), result);
     }
 
     [Theory]
@@ -163,9 +169,9 @@ public class PrimeUtilsTests
     [InlineData("99", "9")]
     public void GivenNonPerfectSquare_WhenBigIntegerSqrt_ThenReturnFlooredRoot(string value, string expected)
     {
-        var result = PrimeUtils.BigIntegerSqrt(BigInteger.Parse(value));
+        var result = PrimeUtils.BigIntegerSqrt(Parse(value));
 
-        Assert.Equal(BigInteger.Parse(expected), result);
+        Assert.Equal(Parse(expected), result);
     }
 
     [Fact]
@@ -183,7 +189,7 @@ public class PrimeUtilsTests
     [InlineData("170141183460469231731687303715884105729", false)]
     public void GivenBigIntegerBeyondSixtyFourBits_WhenIsPrimeNumber_ThenReturnExpected(string value, bool expected)
     {
-        Assert.Equal(expected, PrimeUtils.IsPrimeNumber(BigInteger.Parse(value)));
+        Assert.Equal(expected, PrimeUtils.IsPrimeNumber(Parse(value)));
     }
 
     [Fact]
@@ -195,7 +201,7 @@ public class PrimeUtilsTests
 
         var work = Task.Run(() => PrimeUtils.IsPrimeNumber(mersenne521));
 
-        var finished = await Task.WhenAny(work, Task.Delay(TimeSpan.FromSeconds(10)));
+        var finished = await Task.WhenAny(work, Task.Delay(TimeSpan.FromSeconds(10), TestContext.Current.CancellationToken));
 
         Assert.Same(work, finished);
         Assert.True(await work);
@@ -204,17 +210,17 @@ public class PrimeUtilsTests
     [Fact]
     public void GivenLargeBigIntegerComposite_WhenIsPrimeNumber_ThenReturnFalse()
     {
-        // The product of two 100-bit primes: no small factor, so only the strong test can reject it.
-        var first = BigInteger.Parse("1267650600228229401496703205653");
-        var second = BigInteger.Parse("1267650600228229401496703205653");
+        // The square of 2^100+277, a 101-bit prime: no small factor, so only the strong test can reject it.
+        var prime = Parse("1267650600228229401496703205653");
 
-        Assert.False(PrimeUtils.IsPrimeNumber(first * second));
+        Assert.True(PrimeUtils.IsPrimeNumber(prime));
+        Assert.False(PrimeUtils.IsPrimeNumber(prime * prime));
     }
 
     [Fact]
     public void GivenNegativeBigInteger_WhenIsPrimeNumber_ThenReturnFalse()
     {
-        Assert.False(PrimeUtils.IsPrimeNumber(BigInteger.Parse("-18446744073709551557")));
+        Assert.False(PrimeUtils.IsPrimeNumber(Parse("-18446744073709551557")));
     }
 
     [Fact]
@@ -246,4 +252,76 @@ public class PrimeUtilsTests
             }
         }
     }
+
+    [Theory]
+    [InlineData(2047UL)] // strong pseudoprime to base 2
+    [InlineData(1373653UL)] // to bases 2 and 3
+    [InlineData(25326001UL)] // to bases 2, 3 and 5
+    [InlineData(3215031751UL)] // to bases 2, 3, 5 and 7
+    [InlineData(2152302898747UL)] // to the first five prime bases
+    [InlineData(3474749660383UL)] // to the first six
+    [InlineData(341550071728321UL)] // to the first eight
+    [InlineData(3825123056546413051UL)] // to the first eleven
+    public void GivenStrongPseudoprime_WhenIsPrimeNumber_ThenReturnFalse(ulong value)
+    {
+        // Each fools Miller-Rabin for a run of small bases, so only a witness set that is right for the whole
+        // 64-bit range rejects it.
+        Assert.False(PrimeUtils.IsPrimeNumber(value));
+        Assert.False(PrimeUtils.IsPrimeNumber(new BigInteger(value)));
+
+        if (value <= long.MaxValue)
+        {
+            Assert.False(PrimeUtils.IsPrimeNumber((long)value));
+        }
+    }
+
+    [Theory]
+    [InlineData("318665857834031151167461")] // strong pseudoprime to the first twelve prime bases
+    [InlineData("3317044064679887385961981")] // to the first thirteen
+    public void GivenStrongPseudoprimeBeyondSixtyFourBits_WhenIsPrimeNumber_ThenReturnFalse(string value)
+    {
+        Assert.False(PrimeUtils.IsPrimeNumber(Parse(value)));
+    }
+
+    [Theory]
+    [InlineData(561)]
+    [InlineData(1105)]
+    [InlineData(1729)]
+    [InlineData(41041)]
+    public void GivenCarmichaelNumber_WhenIsPrimeNumber_ThenReturnFalseForEveryOverload(int value)
+    {
+        Assert.False(PrimeUtils.IsPrimeNumber(value));
+        Assert.False(PrimeUtils.IsPrimeNumber((ulong)value));
+        Assert.False(PrimeUtils.IsPrimeNumber(new BigInteger(value)));
+    }
+
+    [Fact]
+    public void GivenMultipleOfASmallPrimeBeyondSixtyFourBits_WhenIsPrimeNumber_ThenReturnFalse()
+    {
+        // Rejected by the small-prime sieve before any Miller-Rabin round.
+        var twoToTheSixtyFour = BigInteger.One << 64;
+
+        Assert.False(PrimeUtils.IsPrimeNumber(twoToTheSixtyFour * 97 + 97));
+        Assert.False(PrimeUtils.IsPrimeNumber(twoToTheSixtyFour * 3));
+    }
+
+    [Fact]
+    public void GivenTheSmallestPrimesOfTheSixtyFourBitPath_WhenIsPrimeNumber_ThenReturnTrue()
+    {
+        // 2, 3 and 5 are settled by the small-prime check; 7 is the first candidate Miller-Rabin decides.
+        Assert.All([2UL, 3UL, 5UL, 7UL], value => Assert.True(PrimeUtils.IsPrimeNumber(value)));
+        Assert.All([4UL, 6UL, 15UL, 25UL, 49UL], value => Assert.False(PrimeUtils.IsPrimeNumber(value)));
+    }
+
+    [Fact]
+    public void GivenLargeNonPerfectSquare_WhenBigIntegerSqrt_ThenReturnFlooredRoot()
+    {
+        var root = BigInteger.Pow(10, 40) + 12345;
+
+        Assert.Equal(root, PrimeUtils.BigIntegerSqrt(root * root));
+        Assert.Equal(root, PrimeUtils.BigIntegerSqrt(root * root + 2 * root));
+        Assert.Equal(root - 1, PrimeUtils.BigIntegerSqrt(root * root - 1));
+    }
+
+    private static BigInteger Parse(string value) => BigInteger.Parse(value, CultureInfo.InvariantCulture);
 }

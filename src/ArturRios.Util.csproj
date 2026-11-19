@@ -18,11 +18,15 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>utilities</PackageTags>
     <RepositoryUrl>https://github.com/artur-rios/dotnet-util</RepositoryUrl>
-    <Version>2.2.1</Version>
+    <Version>2.3.0</Version>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ArturRios.Output" Version="3.3.1" />
+    <PackageReference Include="ArturRios.Output" Version="3.3.2" />
     <PackageReference Include="Konscious.Security.Cryptography.Argon2" Version="1.3.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- The tests check the backoff schedule (FlowControl/Waiter/Backoff.cs) directly instead of sleeping through it. -->
+    <InternalsVisibleTo Include="ArturRios.Util.Tests" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" Pack="true" PackagePath="" />

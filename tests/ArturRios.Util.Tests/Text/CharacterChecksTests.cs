@@ -133,11 +133,20 @@ public class CharacterChecksTests
         Assert.False(sharpS.HasLowerChar());
     }
 
-    [Fact]
-    public void GivenSpan_WhenHasNumber_ThenSameResultAsString()
+    [Theory]
+    [InlineData("")]
+    [InlineData("abc1")]
+    [InlineData("ABC")]
+    [InlineData("a!")]
+    [InlineData("\u0663\u00df")]
+    [InlineData("aB1!")]
+    public void GivenSpan_WhenEveryCheckRuns_ThenSameResultAsTheStringOverload(string value)
     {
-        ReadOnlySpan<char> span = "abc1".AsSpan();
+        var span = value.AsSpan();
 
-        Assert.True(span.HasNumber());
+        Assert.Equal(value.HasNumber(), span.HasNumber());
+        Assert.Equal(value.HasLowerChar(), span.HasLowerChar());
+        Assert.Equal(value.HasUpperChar(), span.HasUpperChar());
+        Assert.Equal(value.HasSpecialChar(), span.HasSpecialChar());
     }
 }

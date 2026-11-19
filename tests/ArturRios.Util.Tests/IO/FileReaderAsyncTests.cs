@@ -1,3 +1,4 @@
+using System.Text;
 using System.Text.Json;
 using ArturRios.Util.IO;
 using ArturRios.Util.Tests.Setup;
@@ -10,22 +11,11 @@ public class FileReaderAsyncTests
     [Fact]
     public async Task GivenValidPath_WhenReadAsync_ThenReturnFileContent()
     {
-        var path = FileTestHelper.CreateTempFile("Hello World");
+        using var file = new TempFile("Hello World");
 
-        try
-        {
-            var result = await FileReaderAsync.ReadAsync(path);
+        var result = await FileReaderAsync.ReadAsync(file, TestContext.Current.CancellationToken);
 
-            Assert.Equal("Hello World", result);
-        }
-
-        finally
-        {
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-            }
-        }
+        Assert.Equal("Hello World", result);
     }
 
     [Theory]
@@ -34,7 +24,7 @@ public class FileReaderAsyncTests
     [InlineData(" ")]
     public async Task GivenNullOrWhitespacePath_WhenReadAsync_ThenThrowArgumentException(string? path)
     {
-        var exception = await Assert.ThrowsAsync<ArgumentException>(() => FileReaderAsync.ReadAsync(path!));
+        var exception = await Assert.ThrowsAsync<ArgumentException>(() => FileReaderAsync.ReadAsync(path!, TestContext.Current.CancellationToken));
 
         Assert.Equal("path", exception.ParamName);
         Assert.Equal("Path cannot be null or whitespace (Parameter 'path')", exception.Message);
@@ -45,7 +35,7 @@ public class FileReaderAsyncTests
     {
         var missingPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".missing");
 
-        var exception = await Assert.ThrowsAsync<FileNotFoundException>(() => FileReaderAsync.ReadAsync(missingPath));
+        var exception = await Assert.ThrowsAsync<FileNotFoundException>(() => FileReaderAsync.ReadAsync(missingPath, TestContext.Current.CancellationToken));
 
         Assert.Equal($"The file at path '{missingPath}' does not exist", exception.Message);
     }
@@ -53,21 +43,11 @@ public class FileReaderAsyncTests
     [Fact]
     public async Task GivenValidPath_WhenReadLinesAsync_ThenReturnAllLines()
     {
-        var path = FileTestHelper.CreateTempFile("line1\nline2\nline3");
+        using var file = new TempFile("line1\nline2\nline3");
 
-        try
-        {
-            var lines = await FileReaderAsync.ReadLinesAsync(path);
+        var lines = await FileReaderAsync.ReadLinesAsync(file, TestContext.Current.CancellationToken);
 
-            Assert.Equal(["line1", "line2", "line3"], lines);
-        }
-        finally
-        {
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-            }
-        }
+        Assert.Equal(["line1", "line2", "line3"], lines);
     }
 
     [Theory]
@@ -76,7 +56,7 @@ public class FileReaderAsyncTests
     [InlineData(" ")]
     public async Task GivenNullOrWhitespacePath_WhenReadLinesAsync_ThenThrowArgumentException(string? path)
     {
-        var exception = await Assert.ThrowsAsync<ArgumentException>(() => FileReaderAsync.ReadLinesAsync(path!));
+        var exception = await Assert.ThrowsAsync<ArgumentException>(() => FileReaderAsync.ReadLinesAsync(path!, TestContext.Current.CancellationToken));
 
         Assert.Equal("path", exception.ParamName);
         Assert.Equal("Path cannot be null or whitespace (Parameter 'path')", exception.Message);
@@ -88,7 +68,7 @@ public class FileReaderAsyncTests
         var missingPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".missing");
 
         var exception =
-            await Assert.ThrowsAsync<FileNotFoundException>(() => FileReaderAsync.ReadLinesAsync(missingPath));
+            await Assert.ThrowsAsync<FileNotFoundException>(() => FileReaderAsync.ReadLinesAsync(missingPath, TestContext.Current.CancellationToken));
 
         Assert.Equal($"The file at path '{missingPath}' does not exist", exception.Message);
     }
@@ -98,25 +78,15 @@ public class FileReaderAsyncTests
     {
         var content = string.Join('\n', "Key1,Key2,Key3", "A,B,C", "D,E,F");
 
-        var path = FileTestHelper.CreateTempFile(content);
+        using var file = new TempFile(content);
 
-        try
-        {
-            var dict = await FileReaderAsync.ReadAsDictionaryAsync(path, ',');
+        var dict = await FileReaderAsync.ReadAsDictionaryAsync(file, ',', TestContext.Current.CancellationToken);
 
-            Assert.Equal(3, dict.Count);
+        Assert.Equal(3, dict.Count);
 
-            Assert.Equal(["A", "D"], dict["Key1"]);
-            Assert.Equal(["B", "E"], dict["Key2"]);
-            Assert.Equal(["C", "F"], dict["Key3"]);
-        }
-        finally
-        {
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-            }
-        }
+        Assert.Equal(["A", "D"], dict["Key1"]);
+        Assert.Equal(["B", "E"], dict["Key2"]);
+        Assert.Equal(["C", "F"], dict["Key3"]);
     }
 
     [Fact]
@@ -124,23 +94,13 @@ public class FileReaderAsyncTests
     {
         var content = string.Join('\n', "Key1,Key2,Key3", "A,B,C", "Z");
 
-        var path = FileTestHelper.CreateTempFile(content);
+        using var file = new TempFile(content);
 
-        try
-        {
-            var dict = await FileReaderAsync.ReadAsDictionaryAsync(path, ',');
+        var dict = await FileReaderAsync.ReadAsDictionaryAsync(file, ',', TestContext.Current.CancellationToken);
 
-            Assert.Equal(["A", "Z"], dict["Key1"]);
-            Assert.Equal(["B", ""], dict["Key2"]);
-            Assert.Equal(["C", ""], dict["Key3"]);
-        }
-        finally
-        {
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-            }
-        }
+        Assert.Equal(["A", "Z"], dict["Key1"]);
+        Assert.Equal(["B", ""], dict["Key2"]);
+        Assert.Equal(["C", ""], dict["Key3"]);
     }
 
     [Fact]
@@ -148,44 +108,24 @@ public class FileReaderAsyncTests
     {
         var content = string.Join('\n', "Key1,Key2", "1,2,3", "4,5,6");
 
-        var path = FileTestHelper.CreateTempFile(content);
+        using var file = new TempFile(content);
 
-        try
-        {
-            var dictionary = await FileReaderAsync.ReadAsDictionaryAsync(path, ',');
+        var dictionary = await FileReaderAsync.ReadAsDictionaryAsync(file, ',', TestContext.Current.CancellationToken);
 
-            Assert.Equal(["1", "4"], dictionary["Key1"]);
-            Assert.Equal(["2", "5"], dictionary["Key2"]);
-        }
-        finally
-        {
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-            }
-        }
+        Assert.Equal(["1", "4"], dictionary["Key1"]);
+        Assert.Equal(["2", "5"], dictionary["Key2"]);
     }
 
     [Fact]
     public async Task GivenFileWithOnlyHeader_WhenReadAsDictionaryAsync_ThenThrowException()
     {
-        var path = FileTestHelper.CreateTempFile("Header1,Header2,Header3");
+        using var file = new TempFile("Header1,Header2,Header3");
 
-        try
-        {
-            var exception =
-                await Assert.ThrowsAsync<InvalidOperationException>(() =>
-                    FileReaderAsync.ReadAsDictionaryAsync(path, ','));
+        var exception =
+            await Assert.ThrowsAsync<InvalidOperationException>(() =>
+                FileReaderAsync.ReadAsDictionaryAsync(file, ',', TestContext.Current.CancellationToken));
 
-            Assert.Equal("File must have at least a header and one data line", exception.Message);
-        }
-        finally
-        {
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-            }
-        }
+        Assert.Equal("File must have at least a header and one data line", exception.Message);
     }
 
     [Theory]
@@ -195,7 +135,7 @@ public class FileReaderAsyncTests
     public async Task GivenNullOrWhitespacePath_WhenReadAsDictionaryAsync_ThenThrowArgumentException(string? path)
     {
         var exception =
-            await Assert.ThrowsAsync<ArgumentException>(() => FileReaderAsync.ReadAsDictionaryAsync(path!, ','));
+            await Assert.ThrowsAsync<ArgumentException>(() => FileReaderAsync.ReadAsDictionaryAsync(path!, ',', TestContext.Current.CancellationToken));
 
         Assert.Equal("path", exception.ParamName);
     }
@@ -207,7 +147,7 @@ public class FileReaderAsyncTests
 
         var exception =
             await Assert.ThrowsAsync<FileNotFoundException>(() =>
-                FileReaderAsync.ReadAsDictionaryAsync(missingPath, ','));
+                FileReaderAsync.ReadAsDictionaryAsync(missingPath, ',', TestContext.Current.CancellationToken));
 
         Assert.Equal($"The file at path '{missingPath}' does not exist", exception.Message);
     }
@@ -217,25 +157,44 @@ public class FileReaderAsyncTests
     {
         var obj = new Person { Name = "Alice", Age = 30, Home = new Address { Street = "Main", Number = 100 } };
         var json = JsonSerializer.Serialize(obj);
-        var path = FileTestHelper.CreateTempFile(json);
+        using var file = new TempFile(json);
 
-        try
-        {
-            var result = await FileReaderAsync.ReadAndDeserializeAsync<Person>(path);
+        var result = await FileReaderAsync.ReadAndDeserializeAsync<Person>(file, TestContext.Current.CancellationToken);
 
-            Assert.NotNull(result);
-            Assert.Equal("Alice", result.Name);
-            Assert.Equal(30, result.Age);
-            Assert.Equal("Main", result.Home.Street);
-            Assert.Equal(100, result.Home.Number);
-        }
-        finally
-        {
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-            }
-        }
+        Assert.NotNull(result);
+        Assert.Equal("Alice", result.Name);
+        Assert.Equal(30, result.Age);
+        Assert.Equal("Main", result.Home.Street);
+        Assert.Equal(100, result.Home.Number);
+    }
+
+    public static TheoryData<string> JsonEncodings => ["utf-8", "utf-8-bom", "utf-16le", "utf-16be", "utf-32le"];
+
+    private static Encoding EncodingNamed(string name) => name switch
+    {
+        "utf-8" => new UTF8Encoding(encoderShouldEmitUTF8Identifier: false),
+        "utf-8-bom" => new UTF8Encoding(encoderShouldEmitUTF8Identifier: true),
+        "utf-16le" => new UnicodeEncoding(bigEndian: false, byteOrderMark: true),
+        "utf-16be" => new UnicodeEncoding(bigEndian: true, byteOrderMark: true),
+        "utf-32le" => new UTF32Encoding(bigEndian: false, byteOrderMark: true),
+        _ => throw new ArgumentOutOfRangeException(nameof(name), name, null)
+    };
+
+    [Theory]
+    [MemberData(nameof(JsonEncodings))]
+    public async Task GivenAJsonFileWithAByteOrderMark_WhenReadAndDeserializeAsync_ThenItReadsAsTheSynchronousReaderDoes(
+        string encoding)
+    {
+        using var file = new TempFile(string.Empty);
+        File.WriteAllText(file, """{ "Name": "Zoë", "Age": 30 }""", EncodingNamed(encoding));
+
+        var result = await FileReaderAsync.ReadAndDeserializeAsync<Person>(file, TestContext.Current.CancellationToken);
+        var synchronous = FileReader.ReadAndDeserialize<Person>(file);
+
+        Assert.NotNull(result);
+        Assert.Equal("Zoë", result.Name);
+        Assert.Equal(30, result.Age);
+        Assert.Equal(synchronous?.Name, result.Name);
     }
 
     [Theory]
@@ -245,7 +204,7 @@ public class FileReaderAsyncTests
     public async Task GivenNullOrWhitespacePath_WhenReadAndDeserializeAsync_ThenThrowArgumentException(string? path)
     {
         var exception =
-            await Assert.ThrowsAsync<ArgumentException>(() => FileReaderAsync.ReadAndDeserializeAsync<Person>(path!));
+            await Assert.ThrowsAsync<ArgumentException>(() => FileReaderAsync.ReadAndDeserializeAsync<Person>(path!, TestContext.Current.CancellationToken));
 
         Assert.Equal("path", exception.ParamName);
     }
@@ -257,7 +216,7 @@ public class FileReaderAsyncTests
 
         var exception =
             await Assert.ThrowsAsync<FileNotFoundException>(() =>
-                FileReaderAsync.ReadAndDeserializeAsync<Person>(missingPath));
+                FileReaderAsync.ReadAndDeserializeAsync<Person>(missingPath, TestContext.Current.CancellationToken));
 
         Assert.Contains("does not exist", exception.Message);
     }
@@ -265,19 +224,9 @@ public class FileReaderAsyncTests
     [Fact]
     public async Task GivenInvalidJsonFile_WhenReadAndDeserializeAsync_ThenThrowJsonException()
     {
-        var path = FileTestHelper.CreateTempFile("{ invalid json }");
+        using var file = new TempFile("{ invalid json }");
 
-        try
-        {
-            await Assert.ThrowsAsync<JsonException>(() => FileReaderAsync.ReadAndDeserializeAsync<Person>(path));
-        }
-        finally
-        {
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-            }
-        }
+        await Assert.ThrowsAsync<JsonException>(() => FileReaderAsync.ReadAndDeserializeAsync<Person>(file, TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -286,7 +235,7 @@ public class FileReaderAsyncTests
         // A silent overwrite used to return a dictionary with fewer entries than the file has columns.
         using var file = TempFile.WithLines("name,value,name", "a,1,b");
 
-        var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => FileReaderAsync.ReadAsDictionaryAsync(file, ','));
+        var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => FileReaderAsync.ReadAsDictionaryAsync(file, ',', TestContext.Current.CancellationToken));
 
         Assert.Contains("duplicate", exception.Message, StringComparison.OrdinalIgnoreCase);
         Assert.Contains("'name'", exception.Message);
@@ -297,7 +246,7 @@ public class FileReaderAsyncTests
     {
         using var file = TempFile.WithLines("Name,name", "a,b");
 
-        var result = await FileReaderAsync.ReadAsDictionaryAsync(file, ',');
+        var result = await FileReaderAsync.ReadAsDictionaryAsync(file, ',', TestContext.Current.CancellationToken);
 
         Assert.Equal(["a"], result["Name"]);
         Assert.Equal(["b"], result["name"]);
@@ -308,7 +257,7 @@ public class FileReaderAsyncTests
     {
         using var file = TempFile.WithLines("name,,age", "a,b,30");
 
-        var result = await FileReaderAsync.ReadAsDictionaryAsync(file, ',');
+        var result = await FileReaderAsync.ReadAsDictionaryAsync(file, ',', TestContext.Current.CancellationToken);
 
         Assert.Equal(["b"], result[string.Empty]);
     }
@@ -319,7 +268,7 @@ public class FileReaderAsyncTests
         // Documented limitation: this is a plain split, not an RFC 4180 parser.
         using var file = TempFile.WithLines("a,b", "\"x,y\",z");
 
-        var result = await FileReaderAsync.ReadAsDictionaryAsync(file, ',');
+        var result = await FileReaderAsync.ReadAsDictionaryAsync(file, ',', TestContext.Current.CancellationToken);
 
         Assert.Equal(["\"x"], result["a"]);
         Assert.Equal(["y\""], result["b"]);
@@ -330,7 +279,7 @@ public class FileReaderAsyncTests
     {
         using var file = new TempFile(string.Empty);
 
-        await Assert.ThrowsAsync<InvalidOperationException>(() => FileReaderAsync.ReadAsDictionaryAsync(file, ','));
+        await Assert.ThrowsAsync<InvalidOperationException>(() => FileReaderAsync.ReadAsDictionaryAsync(file, ',', TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -338,7 +287,7 @@ public class FileReaderAsyncTests
     {
         using var file = TempFile.WithLines("header", "first", "second");
 
-        var result = await FileReaderAsync.ReadAsDictionaryAsync(file, ',');
+        var result = await FileReaderAsync.ReadAsDictionaryAsync(file, ',', TestContext.Current.CancellationToken);
 
         Assert.Equal(["first", "second"], result["header"]);
     }
@@ -351,7 +300,7 @@ public class FileReaderAsyncTests
         // The documentation used to promise null here; the serializer has always thrown.
         using var file = new TempFile(content);
 
-        await Assert.ThrowsAsync<JsonException>(() => FileReaderAsync.ReadAndDeserializeAsync<Person>(file));
+        await Assert.ThrowsAsync<JsonException>(() => FileReaderAsync.ReadAndDeserializeAsync<Person>(file, TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -359,7 +308,7 @@ public class FileReaderAsyncTests
     {
         using var file = new TempFile("null");
 
-        Assert.Null(await FileReaderAsync.ReadAndDeserializeAsync<Person>(file));
+        Assert.Null(await FileReaderAsync.ReadAndDeserializeAsync<Person>(file, TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -367,7 +316,7 @@ public class FileReaderAsyncTests
     {
         using var file = new TempFile("[1, 2, 3]");
 
-        await Assert.ThrowsAsync<JsonException>(() => FileReaderAsync.ReadAndDeserializeAsync<Person>(file));
+        await Assert.ThrowsAsync<JsonException>(() => FileReaderAsync.ReadAndDeserializeAsync<Person>(file, TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -375,7 +324,7 @@ public class FileReaderAsyncTests
     {
         using var file = new TempFile(string.Empty);
 
-        Assert.Equal(string.Empty, await FileReaderAsync.ReadAsync(file));
+        Assert.Equal(string.Empty, await FileReaderAsync.ReadAsync(file, TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -383,7 +332,7 @@ public class FileReaderAsyncTests
     {
         using var file = new TempFile(string.Empty);
 
-        Assert.Empty(await FileReaderAsync.ReadLinesAsync(file));
+        Assert.Empty(await FileReaderAsync.ReadLinesAsync(file, TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -405,7 +354,7 @@ public class FileReaderAsyncTests
     {
         using var file = TempFile.WithLines("a,b,c", "1,2,3", "4,5");
 
-        var asynchronous = await FileReaderAsync.ReadAsDictionaryAsync(file, ',');
+        var asynchronous = await FileReaderAsync.ReadAsDictionaryAsync(file, ',', TestContext.Current.CancellationToken);
         var synchronous = FileReader.ReadAsDictionary(file, ',');
 
         Assert.Equal(synchronous, asynchronous);
@@ -416,12 +365,41 @@ public class FileReaderAsyncTests
     {
         using var file = new TempFile("{\"name\":\"Alice\",\"age\":30,\"home\":{\"street\":\"Main\",\"number\":100}}");
 
-        var result = await FileReaderAsync.ReadAndDeserializeAsync<Person>(file);
+        var result = await FileReaderAsync.ReadAndDeserializeAsync<Person>(file, TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
         Assert.Equal("Alice", result.Name);
         Assert.Equal(30, result.Age);
         Assert.Equal("Main", result.Home.Street);
         Assert.Equal(100, result.Home.Number);
+    }
+
+    [Fact]
+    public async Task GivenAnotherSeparator_WhenReadAsDictionaryAsync_ThenSplitOnIt()
+    {
+        using var file = TempFile.WithLines("name;age", "Ana;30", "Bia,Silva;41");
+
+        var result = await FileReaderAsync.ReadAsDictionaryAsync(file, ';', TestContext.Current.CancellationToken);
+
+        Assert.Equal(["Ana", "Bia,Silva"], result["name"]);
+        Assert.Equal(["30", "41"], result["age"]);
+    }
+
+    [Fact]
+    public async Task GivenWindowsAndUnixLineEndings_WhenReadLinesAsync_ThenNeitherIsKeptInTheLines()
+    {
+        using var file = new TempFile("first\r\nsecond\nthird");
+
+        Assert.Equal(["first", "second", "third"], await FileReaderAsync.ReadLinesAsync(file, TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    public async Task GivenMissingFile_WhenReadAsync_ThenTheExceptionNamesTheFile()
+    {
+        var missingPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".missing");
+
+        var exception = await Assert.ThrowsAsync<FileNotFoundException>(() => FileReaderAsync.ReadAsync(missingPath, TestContext.Current.CancellationToken));
+
+        Assert.Equal(missingPath, exception.FileName);
     }
 }

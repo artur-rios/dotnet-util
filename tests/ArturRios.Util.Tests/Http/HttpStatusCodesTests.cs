@@ -1,3 +1,4 @@
+using System.Net;
 using ArturRios.Util.Http;
 
 namespace ArturRios.Util.Tests.Http;
@@ -95,12 +96,31 @@ public class HttpStatusCodesTests
         Assert.All(HttpStatusCodes.ServerError, code => Assert.InRange(code, 500, 599));
     }
 
-    [Fact]
-    public void GivenAllGroup_WhenCounted_ThenItIsTheSumOfTheFourBands()
+    [Theory]
+    [InlineData(HttpStatusCodes.Ok, HttpStatusCode.OK)]
+    [InlineData(HttpStatusCodes.Created, HttpStatusCode.Created)]
+    [InlineData(HttpStatusCodes.Accepted, HttpStatusCode.Accepted)]
+    [InlineData(HttpStatusCodes.NoContent, HttpStatusCode.NoContent)]
+    [InlineData(HttpStatusCodes.MovedPermanently, HttpStatusCode.MovedPermanently)]
+    [InlineData(HttpStatusCodes.Found, HttpStatusCode.Found)]
+    [InlineData(HttpStatusCodes.NotModified, HttpStatusCode.NotModified)]
+    [InlineData(HttpStatusCodes.TemporaryRedirect, HttpStatusCode.TemporaryRedirect)]
+    [InlineData(HttpStatusCodes.PermanentRedirect, HttpStatusCode.PermanentRedirect)]
+    [InlineData(HttpStatusCodes.BadRequest, HttpStatusCode.BadRequest)]
+    [InlineData(HttpStatusCodes.Unauthorized, HttpStatusCode.Unauthorized)]
+    [InlineData(HttpStatusCodes.Forbidden, HttpStatusCode.Forbidden)]
+    [InlineData(HttpStatusCodes.NotFound, HttpStatusCode.NotFound)]
+    [InlineData(HttpStatusCodes.MethodNotAllowed, HttpStatusCode.MethodNotAllowed)]
+    [InlineData(HttpStatusCodes.Conflict, HttpStatusCode.Conflict)]
+    [InlineData(HttpStatusCodes.UnprocessableEntity, HttpStatusCode.UnprocessableEntity)]
+    [InlineData(HttpStatusCodes.TooManyRequests, HttpStatusCode.TooManyRequests)]
+    [InlineData(HttpStatusCodes.InternalServerError, HttpStatusCode.InternalServerError)]
+    [InlineData(HttpStatusCodes.NotImplemented, HttpStatusCode.NotImplemented)]
+    [InlineData(HttpStatusCodes.BadGateway, HttpStatusCode.BadGateway)]
+    [InlineData(HttpStatusCodes.ServiceUnavailable, HttpStatusCode.ServiceUnavailable)]
+    [InlineData(HttpStatusCodes.GatewayTimeout, HttpStatusCode.GatewayTimeout)]
+    public void GivenADeclaredCode_WhenComparedWithTheFramework_ThenItHasTheStandardValue(int code, HttpStatusCode expected)
     {
-        var expected = HttpStatusCodes.Success.Length + HttpStatusCodes.Redirection.Length +
-                       HttpStatusCodes.ClientError.Length + HttpStatusCodes.ServerError.Length;
-
-        Assert.Equal(expected, HttpStatusCodes.All.Length);
+        Assert.Equal((int)expected, code);
     }
 }

@@ -95,12 +95,52 @@ public class CharacterClassesTests
         Assert.Equal(RegexCollection.HasNumberLowerAndUpperChar().IsMatch(value), value.Missing(required) == CharacterClasses.None);
     }
 
-    [Fact]
-    public void GivenSpan_WhenClassify_ThenSameResultAsString()
+    [Theory]
+    [InlineData("")]
+    [InlineData("aB1")]
+    [InlineData("aB1!")]
+    [InlineData("\u0663 \u00df")]
+    public void GivenSpan_WhenClassifyOrMissing_ThenSameResultAsTheStringOverload(string value)
     {
-        ReadOnlySpan<char> span = "aB1".AsSpan();
+        const CharacterClasses required = CharacterClasses.Digit | CharacterClasses.Special;
 
-        Assert.Equal(CharacterClasses.Digit | CharacterClasses.Lower | CharacterClasses.Upper, span.Classify());
+        Assert.Equal(value.Classify(), value.AsSpan().Classify());
+        Assert.Equal(value.Missing(required), value.AsSpan().Missing(required));
+    }
+
+    [Fact]
+    public void GivenNullString_WhenMissing_ThenEveryRequirementIsMissing()
+    {
+        string? value = null;
+
+        const CharacterClasses required = CharacterClasses.Lower | CharacterClasses.Upper;
+
+        Assert.Equal(required, value.Missing(required));
+    }
+
+    [Fact]
+    public void GivenNoRequirement_WhenMissing_ThenNothingIsMissing()
+    {
+        Assert.Equal(CharacterClasses.None, string.Empty.Missing(CharacterClasses.None));
+    }
+
+    [Fact]
+    public void GivenALongStringWithEveryClassUpFront_WhenClassify_ThenAllFlags()
+    {
+        // Classify stops reading once every class has been seen; the answer must not change because of it.
+        var value = "aB1!" + new string(' ', 10_000);
+
+        Assert.Equal(CharacterClasses.Digit | CharacterClasses.Lower | CharacterClasses.Upper | CharacterClasses.Special,
+            value.Classify());
+    }
+
+    [Fact]
+    public void GivenTheFlags_WhenInspected_ThenEachIsADistinctBit()
+    {
+        Assert.Equal(0, (int)CharacterClasses.None);
+        Assert.Equal([1, 2, 4, 8],
+            new[] { CharacterClasses.Digit, CharacterClasses.Lower, CharacterClasses.Upper, CharacterClasses.Special }
+                .Select(flag => (int)flag));
     }
 
     [Fact]

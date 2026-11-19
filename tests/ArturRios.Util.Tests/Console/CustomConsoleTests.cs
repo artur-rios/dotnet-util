@@ -2,7 +2,13 @@ using ArturRios.Util.Console;
 
 namespace ArturRios.Util.Tests.Console;
 
+/// <summary>
+/// These tests swap the process-wide <see cref="System.Console.Out"/>, so they run in a collection of their own that
+/// no other test class runs alongside: anything another test wrote to the console meanwhile would land in the
+/// captured output.
+/// </summary>
 [Trait("Category", "Unit")]
+[Collection(nameof(CustomConsoleTests))]
 public class CustomConsoleTests
 {
     private static string CaptureOutput(Action action)
@@ -92,3 +98,6 @@ public class CustomConsoleTests
         Assert.Equal($"aa{Environment.NewLine}bbb{Environment.NewLine}", output);
     }
 }
+
+[CollectionDefinition(nameof(CustomConsoleTests), DisableParallelization = true)]
+public class CustomConsoleTestsCollection;

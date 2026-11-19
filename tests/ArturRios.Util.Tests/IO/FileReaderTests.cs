@@ -10,22 +10,11 @@ public class FileReaderTests
     [Fact]
     public void GivenValidPath_WhenRead_ThenReturnFileContent()
     {
-        var path = FileTestHelper.CreateTempFile("Hello World");
+        using var file = new TempFile("Hello World");
 
-        try
-        {
-            var result = FileReader.Read(path);
+        var result = FileReader.Read(file);
 
-            Assert.Equal("Hello World", result);
-        }
-
-        finally
-        {
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-            }
-        }
+        Assert.Equal("Hello World", result);
     }
 
     [Theory]
@@ -53,21 +42,11 @@ public class FileReaderTests
     [Fact]
     public void GivenValidPath_WhenReadLines_ThenReturnAllLines()
     {
-        var path = FileTestHelper.CreateTempFile("line1\nline2\nline3");
+        using var file = new TempFile("line1\nline2\nline3");
 
-        try
-        {
-            var lines = FileReader.ReadLines(path);
+        var lines = FileReader.ReadLines(file);
 
-            Assert.Equal(["line1", "line2", "line3"], lines);
-        }
-        finally
-        {
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-            }
-        }
+        Assert.Equal(["line1", "line2", "line3"], lines);
     }
 
     [Theory]
@@ -97,25 +76,15 @@ public class FileReaderTests
     {
         var content = string.Join('\n', "Key1,Key2,Key3", "A,B,C", "D,E,F");
 
-        var path = FileTestHelper.CreateTempFile(content);
+        using var file = new TempFile(content);
 
-        try
-        {
-            var dict = FileReader.ReadAsDictionary(path, ',');
+        var dict = FileReader.ReadAsDictionary(file, ',');
 
-            Assert.Equal(3, dict.Count);
+        Assert.Equal(3, dict.Count);
 
-            Assert.Equal(["A", "D"], dict["Key1"]);
-            Assert.Equal(["B", "E"], dict["Key2"]);
-            Assert.Equal(["C", "F"], dict["Key3"]);
-        }
-        finally
-        {
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-            }
-        }
+        Assert.Equal(["A", "D"], dict["Key1"]);
+        Assert.Equal(["B", "E"], dict["Key2"]);
+        Assert.Equal(["C", "F"], dict["Key3"]);
     }
 
     [Fact]
@@ -123,23 +92,13 @@ public class FileReaderTests
     {
         var content = string.Join('\n', "Key1,Key2,Key3", "A,B,C", "Z");
 
-        var path = FileTestHelper.CreateTempFile(content);
+        using var file = new TempFile(content);
 
-        try
-        {
-            var dict = FileReader.ReadAsDictionary(path, ',');
+        var dict = FileReader.ReadAsDictionary(file, ',');
 
-            Assert.Equal(["A", "Z"], dict["Key1"]);
-            Assert.Equal(["B", ""], dict["Key2"]);
-            Assert.Equal(["C", ""], dict["Key3"]);
-        }
-        finally
-        {
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-            }
-        }
+        Assert.Equal(["A", "Z"], dict["Key1"]);
+        Assert.Equal(["B", ""], dict["Key2"]);
+        Assert.Equal(["C", ""], dict["Key3"]);
     }
 
     [Fact]
@@ -147,42 +106,22 @@ public class FileReaderTests
     {
         var content = string.Join('\n', "Key1,Key2", "1,2,3", "4,5,6");
 
-        var path = FileTestHelper.CreateTempFile(content);
+        using var file = new TempFile(content);
 
-        try
-        {
-            var dictionary = FileReader.ReadAsDictionary(path, ',');
+        var dictionary = FileReader.ReadAsDictionary(file, ',');
 
-            Assert.Equal(["1", "4"], dictionary["Key1"]);
-            Assert.Equal(["2", "5"], dictionary["Key2"]);
-        }
-        finally
-        {
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-            }
-        }
+        Assert.Equal(["1", "4"], dictionary["Key1"]);
+        Assert.Equal(["2", "5"], dictionary["Key2"]);
     }
 
     [Fact]
     public void GivenFileWithOnlyHeader_WhenReadAsDictionary_ThenThrowException()
     {
-        var path = FileTestHelper.CreateTempFile("Header1,Header2,Header3");
+        using var file = new TempFile("Header1,Header2,Header3");
 
-        try
-        {
-            var exception = Assert.Throws<InvalidOperationException>(() => FileReader.ReadAsDictionary(path, ','));
+        var exception = Assert.Throws<InvalidOperationException>(() => FileReader.ReadAsDictionary(file, ','));
 
-            Assert.Equal("File must have at least a header and one data line", exception.Message);
-        }
-        finally
-        {
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-            }
-        }
+        Assert.Equal("File must have at least a header and one data line", exception.Message);
     }
 
     [Theory]
@@ -212,25 +151,15 @@ public class FileReaderTests
     {
         var obj = new Person { Name = "Alice", Age = 30, Home = new Address { Street = "Main", Number = 100 } };
         var json = JsonSerializer.Serialize(obj);
-        var path = FileTestHelper.CreateTempFile(json);
+        using var file = new TempFile(json);
 
-        try
-        {
-            var result = FileReader.ReadAndDeserialize<Person>(path);
+        var result = FileReader.ReadAndDeserialize<Person>(file);
 
-            Assert.NotNull(result);
-            Assert.Equal("Alice", result.Name);
-            Assert.Equal(30, result.Age);
-            Assert.Equal("Main", result.Home.Street);
-            Assert.Equal(100, result.Home.Number);
-        }
-        finally
-        {
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-            }
-        }
+        Assert.NotNull(result);
+        Assert.Equal("Alice", result.Name);
+        Assert.Equal(30, result.Age);
+        Assert.Equal("Main", result.Home.Street);
+        Assert.Equal(100, result.Home.Number);
     }
 
     [Theory]
@@ -257,19 +186,9 @@ public class FileReaderTests
     [Fact]
     public void GivenInvalidJsonFile_WhenReadAndDeserialize_ThenThrowJsonException()
     {
-        var path = FileTestHelper.CreateTempFile("{ invalid json }");
+        using var file = new TempFile("{ invalid json }");
 
-        try
-        {
-            Assert.Throws<JsonException>(() => FileReader.ReadAndDeserialize<Person>(path));
-        }
-        finally
-        {
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-            }
-        }
+        Assert.Throws<JsonException>(() => FileReader.ReadAndDeserialize<Person>(file));
     }
 
     [Fact]
@@ -390,5 +309,53 @@ public class FileReaderTests
         Assert.Equal(30, result.Age);
         Assert.Equal("Main", result.Home.Street);
         Assert.Equal(100, result.Home.Number);
+    }
+
+    [Theory]
+    [InlineData(';')]
+    [InlineData('\t')]
+    [InlineData('|')]
+    public void GivenAnotherSeparator_WhenReadAsDictionary_ThenSplitOnIt(char separator)
+    {
+        using var file = TempFile.WithLines($"name{separator}age", $"Ana{separator}30", $"Bia,Silva{separator}41");
+
+        var result = FileReader.ReadAsDictionary(file, separator);
+
+        Assert.Equal(["Ana", "Bia,Silva"], result["name"]);
+        Assert.Equal(["30", "41"], result["age"]);
+    }
+
+    [Fact]
+    public void GivenWindowsAndUnixLineEndings_WhenReadLines_ThenNeitherIsKeptInTheLines()
+    {
+        using var file = new TempFile("first\r\nsecond\nthird");
+
+        Assert.Equal(["first", "second", "third"], FileReader.ReadLines(file));
+    }
+
+    [Fact]
+    public void GivenNonAsciiUtf8Content_WhenRead_ThenDecodeIt()
+    {
+        using var file = new TempFile("a\u00e7\u00e3o \u4f60\u597d");
+
+        Assert.Equal("a\u00e7\u00e3o \u4f60\u597d", FileReader.Read(file));
+    }
+
+    [Fact]
+    public void GivenMissingFile_WhenRead_ThenTheExceptionNamesTheFile()
+    {
+        var missingPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".missing");
+
+        Assert.Equal(missingPath, Assert.Throws<FileNotFoundException>(() => FileReader.Read(missingPath)).FileName);
+    }
+
+    [Fact]
+    public void GivenJsonArray_WhenReadAndDeserialize_ThenReturnTheCollection()
+    {
+        using var file = new TempFile("[{\"Name\":\"Ana\",\"Age\":30},{\"Name\":\"Bia\",\"Age\":41}]");
+
+        var result = FileReader.ReadAndDeserialize<List<Person>>(file);
+
+        Assert.Equal(["Ana", "Bia"], result!.Select(person => person.Name));
     }
 }
