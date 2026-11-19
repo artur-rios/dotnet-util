@@ -40,7 +40,11 @@ public class RegexCollectionTests
         "ma@hostname.c0m",
         "ma@" + new string('a', 64) + ".com",
         "ma@hostname." + new string('a', 64),
-        "ma@hostname.com "
+        "ma@hostname.com ",
+        "ma@hostname.xn--",
+        "ma@hostname.xn---p1ai",
+        "ma@hostname.xn--p1ai-",
+        "ma@hostname.xn--" + new string('a', 60)
     ];
 
     public static TheoryData<string> ValidEmails =>
@@ -73,7 +77,11 @@ public class RegexCollectionTests
         "!#$%&'*+-/=?^_`{|}~@hostname.com",
         "ma@" + new string('a', 63) + ".com",
         "ma@hostname." + new string('a', 63),
-        "a@b.co"
+        "a@b.co",
+        "ma@xn--e1afmkfd.xn--p1ai",
+        "ma@example.xn--fiqs8s",
+        "ma@hostname.XN--P1AI",
+        "ma@hostname.xn--" + new string('a', 59)
     ];
 
     [Theory]
